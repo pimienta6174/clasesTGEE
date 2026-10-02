@@ -143,7 +143,6 @@ tfoot td{background:var(--verde-claro)!important;font-weight:700;color:var(--azu
 .slide[data-title="Circuitos requeridos en vivienda"] table{font-size:25px}
 .slide[data-title="Circuitos requeridos en vivienda"] th,.slide[data-title="Circuitos requeridos en vivienda"] td{padding:10px 18px}
 .slide[data-title="Circuitos requeridos en vivienda"] .note{font-size:27px;margin-top:21px}
-.slide[data-title="Hallazgos de inspección"] .card p{font-size:27px}
 .slide[data-title="Taller y entregable"] li{font-size:34px;margin-bottom:21px}
 .slide[data-title="Taller y entregable"] .card li{font-size:29px;margin-bottom:13px}
 .slide[data-title="Taller y entregable"] .card{padding:34px 40px}
@@ -161,6 +160,14 @@ tfoot td{background:var(--verde-claro)!important;font-weight:700;color:var(--azu
 .slide[data-title="Mapa de la NTC 2050"] .card h3{font-size:29px!important}
 .slide[data-title="Mapa de la NTC 2050"] .card p{font-size:24px!important}
 .slide[data-title="Marco normativo"] .layer span{font-size:27px}
+.st{display:inline-block;font-weight:800;font-size:19px;letter-spacing:.04em;padding:3px 12px;border-radius:30px;color:#fff;white-space:nowrap}
+.st.c{background:#C0392B}.st.m{background:var(--naranja)}.st.n{background:#8A6A00}.st.ok{background:var(--verde-osc)}
+.sub-st{display:block;font-size:19px;font-weight:500;color:var(--gris);margin-top:2px;white-space:normal}
+.slide[data-title="Cuadro de cargas encontrado"] td,.slide[data-title="Cuadro de cargas encontrado"] th{padding:5px 10px}
+.slide[data-title="Cuadro de cargas encontrado"] td.c{white-space:nowrap}
+.slide[data-title="Cuadro de cargas encontrado"] .sub-st{font-size:17px;margin-top:0}
+.slide[data-title="Balanceo de líneas"] .formula{font-size:30px!important;padding:12px 26px!important;margin:8px 0}
+.slide[data-title="Carga demandada Art. 220"] td,.slide[data-title="Carga demandada Art. 220"] th{padding:5px 12px}
 /* Navegación */
 .hud{position:fixed;left:0;right:0;bottom:0;height:6px;background:rgba(255,255,255,.12);z-index:10}
 .hud i{display:block;height:100%;width:0;background:var(--verde);transition:width .3s}
@@ -216,8 +223,8 @@ body:hover .help{opacity:.8}
     <h2>Su encargo: <em>una casa ya construida</em> que hay que entender</h2>
     <p class="lead">Una vivienda unifamiliar funciona hoy, pero nadie tiene sus planos ni sus cuentas de carga. Ustedes son la firma consultora: antes de diseñar, <b>levantan lo que existe</b>.</p>
     <div class="grid g4" style="margin-top:50px">
-      <div class="mission on"><div class="no">MISIÓN 1</div><h3>Levantamiento y cuadro de cargas</h3><p>Qué hay instalado, cuánto consume y cómo está repartido.</p></div>
-      <div class="mission"><div class="no">MISIÓN 2</div><h3>Planos y canalizaciones</h3><p>Planta eléctrica, simbología y trazado de tuberías.</p></div>
+      <div class="mission on"><div class="no">MISIÓN 1</div><h3>Levantamiento y cuadro de cargas</h3><p>Qué hay instalado, cuánto consume y qué está mal.</p></div>
+      <div class="mission"><div class="no">MISIÓN 2</div><h3>Replanteo y planos</h3><p>Corregimos la instalación y la dibujamos: planta, simbología y tuberías.</p></div>
       <div class="mission"><div class="no">MISIÓN 3</div><h3>Iluminación (RETILAP)</h3><p>Niveles de iluminancia y confort visual.</p></div>
       <div class="mission"><div class="no">MISIÓN 4</div><h3>Pruebas e inspección</h3><p>Continuidad, aislamiento y verificación RETIE.</p></div>
     </div>
@@ -233,9 +240,9 @@ body:hover .help{opacity:.8}
       <div class="card"><div class="big">1</div><h3>Nombrar y explicar</h3><p>Qué son <b>L1, L2, neutro y tierra</b> en una acometida 120/240 V.</p></div>
       <div class="card"><div class="big">2</div><h3>Calcular</h3><p>Potencia aparente (<b>VA</b>), corriente (<b>A</b>) y factor de potencia de cada carga.</p></div>
       <div class="card"><div class="big">3</div><h3>Levantar</h3><p>Circuitos, tomas, luminarias y equipos de una casa que ya existe.</p></div>
-      <div class="card"><div class="big">4</div><h3>Armar el cuadro</h3><p>Cuadro de cargas con protección, calibre y <b>balanceo entre L1 y L2</b>.</p></div>
+      <div class="card"><div class="big">4</div><h3>Diagnosticar</h3><p>Cuadro de cargas, <b>balanceo entre L1 y L2</b> y matriz de hallazgos con severidad.</p></div>
     </div>
-    <div class="warn" style="margin-top:30px"><span class="lab">Entregable de la clase</span>Cuadro de cargas del caso (hoja de cálculo) con <b>carga instalada, carga demandada y corriente de la acometida</b>.</div>
+    <div class="warn" style="margin-top:30px"><span class="lab">Entregable de la clase</span>Cuadro de cargas <b>«tal como lo encontramos»</b> y <b>matriz de hallazgos</b>, con carga conectada, carga demandada, balanceo y corriente de la acometida.</div>
   </div>
 </section>
 
@@ -642,32 +649,50 @@ body:hover .help{opacity:.8}
   </div>
 </section>
 
-<!-- 18 · CUADRO DE CARGAS -->
-<section class="slide" data-title="Cuadro de cargas levantado">
+<!-- 17b · CLASIFICAR HALLAZGOS -->
+<section class="slide" data-title="Clasificar hallazgos">
   <div class="body">
-    <h2>Cuadro de cargas <em>levantado</em> (120/240 V)</h2>
+    <h2>¿Cómo clasificamos <em>lo que encontramos</em>?</h2>
+    <p class="lead">Un buen consultor no dice «está mal»: dice qué tipo de problema es y qué tan grave.</p>
+    <div class="grid g3">
+      <div class="card na"><h3>Incumplimiento</h3><p>La norma lo exige o lo prohíbe. <b>Se corrige sí o sí.</b></p><p style="color:var(--gris)">Ej.: baño sin GFCI; cable 12 AWG con breaker de 30 A.</p></div>
+      <div class="card am"><h3>Mala práctica</h3><p>La norma lo permite, pero baja la seguridad o la calidad del servicio. <b>Se recomienda corregir.</b></p><p style="color:var(--gris)">Ej.: alumbrado y tomas en el mismo breaker; dos aires en un solo circuito.</p></div>
+      <div class="card"><h3>Oportunidad de eficiencia</h3><p>No es falla: es ahorro de energía o de corriente. <b>Se propone.</b></p><p style="color:var(--gris)">Ej.: LED con FP 0,5; aire acondicionado convencional.</p></div>
+    </div>
+    <h3 style="margin-top:34px">Y la severidad de cada hallazgo</h3>
+    <div class="grid g3">
+      <div class="note" style="margin:0"><span class="st c">CRÍTICO</span> &nbsp;Riesgo inmediato de incendio o choque.</div>
+      <div class="note" style="margin:0"><span class="st m">MAYOR</span> &nbsp;Incumple o puede fallar en uso normal.</div>
+      <div class="note" style="margin:0"><span class="st n">MENOR</span> &nbsp;Mejora recomendada.</div>
+    </div>
+    <div class="warn" style="margin-top:21px"><span class="lab">Caso didáctico</span>La casa del taller tiene <b>deficiencias sembradas a propósito</b>. No es una vivienda real, aunque en Colombia hemos visto cosas parecidas.</div>
+  </div>
+</section>
+
+<!-- 18 · CUADRO DE CARGAS AS-FOUND -->
+<section class="slide" data-title="Cuadro de cargas encontrado">
+  <div class="body">
+    <h2>Cuadro de cargas <em>tal como lo encontramos</em></h2>
+    <p class="lead" style="margin-bottom:8px;font-size:26px"><b style="color:var(--naranja)">Tu turno:</b> ¿qué está mal en cada fila del tablero (120/240 V)? Anótenlo y luego descubran el estado.</p>
+    <div class="rvbox" id="rv6">
     <table style="font-size:22px">
-      <thead><tr><th>Cto</th><th>Descripción y ubicación</th><th class="c">Salidas</th><th class="r">Carga [VA]</th><th class="r">I [A]</th><th class="c">Breaker</th><th class="c">Cond.</th><th class="c">Línea</th></tr></thead>
+      <thead><tr><th>Cto</th><th>Lo que encontramos</th><th class="r">Carga [VA]</th><th class="r">I [A]</th><th class="c">Breaker</th><th class="c">Cond.</th><th class="c">Línea</th><th>Estado</th></tr></thead>
       <tbody>
-        <tr><td>C1</td><td>Alumbrado zonas sociales (8 × 30 VA)</td><td class="c">8</td><td class="r">240</td><td class="r">2,00</td><td class="c">1×15 A</td><td class="c">14 AWG</td><td class="c"><span class="l1">L1</span></td></tr>
-        <tr><td>C2</td><td>Alumbrado alcobas y baños (7 × 30 VA)</td><td class="c">7</td><td class="r">210</td><td class="r">1,75</td><td class="c">1×15 A</td><td class="c">14 AWG</td><td class="c"><span class="l1">L1</span></td></tr>
-        <tr><td>C3</td><td>Tomas generales sala, comedor y terraza (GFCI)</td><td class="c">7</td><td class="r">1260</td><td class="r">10,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l1">L1</span></td></tr>
-        <tr><td>C4</td><td>Tomas generales alcobas</td><td class="c">7</td><td class="r">1260</td><td class="r">10,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l2">L2</span></td></tr>
-        <tr><td>C5</td><td>Tomas de baños (GFCI)</td><td class="c">3</td><td class="r">540</td><td class="r">4,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l1">L1</span></td></tr>
-        <tr><td>C6</td><td>Pequeños artefactos cocina 1</td><td class="c">3</td><td class="r">1500</td><td class="r">12,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l2">L2</span></td></tr>
-        <tr><td>C7</td><td>Pequeños artefactos cocina 2</td><td class="c">3</td><td class="r">1500</td><td class="r">12,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l2">L2</span></td></tr>
-        <tr><td>C8</td><td>Nevera (circuito individual)</td><td class="c">1</td><td class="r">941</td><td class="r">7,84</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l2">L2</span></td></tr>
-        <tr><td>C9</td><td>Microondas</td><td class="c">1</td><td class="r">1263</td><td class="r">10,53</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l1">L1</span></td></tr>
-        <tr><td>C10</td><td>Lavadora-secadora (lavandería)</td><td class="c">1</td><td class="r">1667</td><td class="r">13,89</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l1">L1</span></td></tr>
-        <tr><td>C11</td><td>Horno de convección</td><td class="c">1</td><td class="r">2000</td><td class="r">8,33</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l12">L1+L2</span></td></tr>
-        <tr><td>C12</td><td>Cooktop de inducción</td><td class="c">1</td><td class="r">7200</td><td class="r">30,00</td><td class="c">2×40 A</td><td class="c">8 AWG</td><td class="c"><span class="l12">L1+L2</span></td></tr>
-        <tr><td>C13</td><td>A/A alcoba principal</td><td class="c">1</td><td class="r">1778</td><td class="r">7,41</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l12">L1+L2</span></td></tr>
-        <tr><td>C14</td><td>A/A alcoba 2</td><td class="c">1</td><td class="r">1778</td><td class="r">7,41</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l12">L1+L2</span></td></tr>
-        <tr><td>C15</td><td>A/A alcoba 3</td><td class="c">1</td><td class="r">1778</td><td class="r">7,41</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l12">L1+L2</span></td></tr>
+        <tr><td>F1</td><td>Alumbrado + tomas de sala, comedor y terraza</td><td class="r">1500</td><td class="r">12,50</td><td class="c">1×20 A</td><td class="c">14 AWG</td><td class="c"><span class="l1">L1</span></td><td class="ans"><span class="st m">MAYOR</span><span class="sub-st">14 AWG con breaker de 20 A</span></td></tr>
+        <tr><td>F2</td><td>Alumbrado + tomas de alcobas</td><td class="r">1470</td><td class="r">12,25</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l1">L1</span></td><td class="ans"><span class="st n">MENOR</span><span class="sub-st">Mezcla alumbrado y tomas</span></td></tr>
+        <tr><td>F3</td><td>Tomas de los baños (3), tomas comunes</td><td class="r">540</td><td class="r">4,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l1">L1</span></td><td class="ans"><span class="st m">MAYOR</span><span class="sub-st">Sin GFCI</span></td></tr>
+        <tr><td>F4</td><td>Cocina: nevera + microondas + 3 tomas del mesón + TV</td><td class="r">2911</td><td class="r">24,26</td><td class="c">1×30 A</td><td class="c">12 AWG</td><td class="c"><span class="l1">L1</span></td><td class="ans"><span class="st c">CRÍTICO</span><span class="sub-st">12 AWG con 30 A; sin GFCI</span></td></tr>
+        <tr><td>F5</td><td>Lavadora-secadora (lavandería)</td><td class="r">1667</td><td class="r">13,89</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l1">L1</span></td><td class="ans"><span class="st ok">CUMPLE</span></td></tr>
+        <tr><td>F6</td><td>Horno de convección</td><td class="r">2000</td><td class="r">8,33</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l12">L1+L2</span></td><td class="ans"><span class="st ok">CUMPLE</span></td></tr>
+        <tr><td>F7</td><td>Cooktop de inducción</td><td class="r">7200</td><td class="r">30,00</td><td class="c">2×40 A</td><td class="c">12 AWG</td><td class="c"><span class="l12">L1+L2</span></td><td class="ans"><span class="st c">CRÍTICO</span><span class="sub-st">12 AWG soporta máx. 20 A</span></td></tr>
+        <tr><td>F8</td><td>A/A alcoba principal</td><td class="r">1778</td><td class="r">7,41</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l12">L1+L2</span></td><td class="ans"><span class="st ok">CUMPLE</span></td></tr>
+        <tr><td>F9</td><td>A/A de alcobas 2 y 3, compartidos</td><td class="r">3556</td><td class="r">14,82</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c"><span class="l12">L1+L2</span></td><td class="ans"><span class="st n">MENOR</span><span class="sub-st">Dos equipos en un breaker</span></td></tr>
       </tbody>
-      <tfoot><tr><td colspan="3">CARGA INSTALADA TOTAL</td><td class="r">24 915</td><td class="r">103,81</td><td colspan="4">24 915 VA ÷ 240 V</td></tr></tfoot>
+      <tfoot><tr><td colspan="2">CARGA CONECTADA TOTAL</td><td class="r">22 622</td><td class="r">94,26</td><td colspan="5">22 622 VA ÷ 240 V · tablero sin directorio y sin reserva</td></tr></tfoot>
     </table>
-    <p style="font-size:22px;color:var(--gris);margin-top:8px">Tomas contados a 180 VA por salida (Art. 220.14). Los circuitos de 2 polos reparten su carga por igual entre L1 y L2.</p>
+    <button class="rv-btn" data-rv="rv6">▶ Descubrir estado de cada circuito</button>
+    </div>
+    <p style="font-size:21px;color:var(--gris);margin-top:6px">Carga conectada = lo que hay en la casa (tomas a 180 VA por salida), distinta de la carga mínima de diseño.</p>
   </div>
 </section>
 
@@ -681,14 +706,14 @@ body:hover .help{opacity:.8}
       <b>I<sub>N</sub></b> = |I<sub>L1(120 V)</sub> − I<sub>L2(120 V)</sub>|
     </div>
     <div class="ex" style="padding:12px 26px"><span class="lab">Ejemplo resuelto · cooktop de 7200 VA a 240 V (2 polos)</span>Aporta <b>7200 ÷ 2 = 3600 VA a L1</b> y <b>3600 VA a L2</b>, y no lleva corriente por el neutro.</div>
-    <div class="turn rvbox" id="rv4" style="padding:12px 26px"><span class="lab">Tu turno · usa el cuadro de la lámina anterior</span>
-      <div>Suma los circuitos de 1 polo de L1 y de L2, añade la mitad de los de 2 polos (14 534 VA ÷ 2 = 7267 VA a cada línea) y halla el desbalance.</div>
+    <div class="turn rvbox" id="rv4" style="padding:12px 26px"><span class="lab">Tu turno · cuadro «tal como lo encontramos»</span>
+      <div>Suma por línea los circuitos de 1 polo, añade la mitad de los de 2 polos (14 534 VA ÷ 2 = 7267 VA a cada línea) y halla el desbalance, la corriente de cada línea y la del neutro.</div>
       <div class="ans">
-        <div class="bars" style="height:200px;gap:50px">
-          <div class="bar"><div class="b" style="height:100%;background:#C0392B">12 447 VA</div><div class="t">L1 · 5180 + 7267</div></div>
-          <div class="bar"><div class="b" style="height:100.2%;background:var(--azul-2)">12 468 VA</div><div class="t">L2 · 5201 + 7267</div></div>
+        <div class="bars" style="height:150px;gap:50px">
+          <div class="bar"><div class="b" style="height:100%;background:#C0392B;font-size:28px;padding-top:8px">15 355 VA</div><div class="t">L1 · 8088 + 7267</div></div>
+          <div class="bar"><div class="b" style="height:47.3%;background:var(--azul-2);font-size:22px;padding-top:4px">7267 VA</div><div class="t">L2 · 0 + 7267</div></div>
         </div>
-        <div style="margin-top:8px;font-size:26px">Desbalance = 21 ÷ 12 457,5 × 100 = <span class="res">0,17 %</span> · I<sub>N</sub> = |43,17 − 43,34| = <span class="res">0,17 A</span></div>
+        <div style="margin-top:8px;font-size:25px">Desbalance = 8088 ÷ 11 311 × 100 = <span class="res">71,5 %</span> · I<sub>N</sub> = 8088 ÷ 120 = <span class="res">67,4 A</span><br>I<sub>L1</sub> = 67,4 + 60,6 = <span class="res">128,0 A</span> (con acometida de 100 A) · I<sub>L2</sub> = <span class="res">60,6 A</span></div>
       </div>
       <button class="rv-btn" data-rv="rv4">▶ Descubrir respuesta</button>
     </div>
@@ -715,25 +740,30 @@ body:hover .help{opacity:.8}
         <tfoot><tr><td colspan="3">CARGA DEMANDADA TOTAL</td><td class="r ans">20 449 VA</td></tr></tfoot>
       </table>
       <button class="rv-btn" data-rv="rv5">▶ Descubrir cálculo completo</button>
-      <div class="ex ans" style="margin-top:10px;padding:12px 26px"><span class="lab">Corriente de la acometida</span>I = 20 449 ÷ 240 = <span class="res">85,2 A</span> → protección general y acometida de <span class="res">100 A</span> (mínimo para vivienda unifamiliar, Art. 230.79). La carga instalada (103,8 A) <b>supera</b> los 100 A, por eso la demanda importa.</div>
+      <div class="ex ans" style="margin-top:10px;padding:12px 26px"><span class="lab">Corriente de la acometida</span>I = 20 449 ÷ 240 = <span class="res">85,2 A</span> → protección general y acometida de <span class="res">100 A</span> (mínimo para vivienda unifamiliar, Art. 230.79). Cabe en 100 A, pero sin holgura: la casa no tiene reserva para ampliar. La demanda sale de los mínimos de la norma, no de lo que está conectado hoy (94,3 A).</div>
     </div>
   </div>
 </section>
 
-<!-- 21 · HALLAZGOS -->
-<section class="slide" data-title="Hallazgos de inspección">
+<!-- 21 · MATRIZ DE HALLAZGOS -->
+<section class="slide" data-title="Matriz de hallazgos">
   <div class="body">
-    <h2>Mirada de inspector: <em>hallazgos típicos</em></h2>
-    <p class="lead">Al contrastar el levantamiento con la norma aparecen incumplimientos. Aprendan a reconocerlos:</p>
-    <div class="grid g2">
-      <div class="card na"><h3>Breaker mayor que el cable</h3><p>Cable 14 AWG protegido con breaker de 20 A. Debe ser máximo 15 A <b>(240.4(D))</b>.</p></div>
-      <div class="card na"><h3>Baño sin GFCI</h3><p>Toma del baño sin protección contra fallas a tierra <b>(210.8(A))</b>.</p></div>
-      <div class="card na"><h3>Cocina con un solo circuito</h3><p>Nevera, microondas y mesón en el mismo breaker; faltan los 2 circuitos de pequeños artefactos <b>(210.11(C))</b>.</p></div>
-      <div class="card na"><h3>Tablero sin directorio</h3><p>Circuitos sin identificar: nadie sabe qué apaga cada breaker <b>(408.4)</b>.</p></div>
-      <div class="card na"><h3>Sin puesta a tierra</h3><p>Tomas de 3 polos sin conductor de tierra real, o tierra no medida <b>(Art. 250)</b>.</p></div>
-      <div class="card na"><h3>Un solo polo con carga de 240 V</h3><p>Equipo de 240 V conectado a un breaker de 1 polo: <b>L2 queda sin protección</b>.</p></div>
-    </div>
-    <div class="turn" style="margin-top:10px"><span class="lab">Discusión</span>¿Cuál de estos hallazgos es el más peligroso para la vida de las personas? Justifiquen en 2 minutos.</div>
+    <h2>Matriz de hallazgos: <em>la entrada de la Misión 2</em></h2>
+    <table style="font-size:25px">
+      <thead><tr><th>#</th><th>Hallazgo</th><th>Dónde</th><th>Severidad</th><th>Referencia NTC 2050</th><th>Propuesta</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Cooktop con 12 AWG (30 A de carga)</td><td>F7</td><td><span class="st c">CRÍTICO</span></td><td>240.4(D), 210.19(A)(3)</td><td>Misión 2</td></tr>
+        <tr><td>2</td><td>Cocina en un solo breaker de 30 A con 12 AWG</td><td>F4</td><td><span class="st c">CRÍTICO</span></td><td>240.4(D), 210.11(C)(1), 210.52(B)</td><td>Misión 2</td></tr>
+        <tr><td>3</td><td>Mesón de cocina sin GFCI</td><td>F4</td><td><span class="st m">MAYOR</span></td><td>210.8(A)</td><td>Misión 2</td></tr>
+        <tr><td>4</td><td>Baños sin GFCI</td><td>F3</td><td><span class="st m">MAYOR</span></td><td>210.8(A)</td><td>Misión 2</td></tr>
+        <tr><td>5</td><td>14 AWG con breaker de 20 A</td><td>F1</td><td><span class="st m">MAYOR</span></td><td>240.4(D)</td><td>Misión 2</td></tr>
+        <tr><td>6</td><td>Todo el 120 V en L1: 71,5 % de desbalance, 128 A en L1</td><td>Tablero</td><td><span class="st m">MAYOR</span></td><td>220.61 y práctica de balanceo</td><td>Misión 2</td></tr>
+        <tr><td>7</td><td>Puesta a tierra sin medir; tomas de 3 polos dudosos</td><td>Toda la casa</td><td><span class="st m">MAYOR</span></td><td>Art. 250</td><td>Misión 2</td></tr>
+        <tr><td>8</td><td>Sin directorio de circuitos ni espacios de reserva</td><td>Tablero</td><td><span class="st n">MENOR</span></td><td>408.4</td><td>Misión 2</td></tr>
+        <tr><td>9</td><td>Alumbrado + tomas mezclados; dos A/A en un breaker</td><td>F1, F2, F9</td><td><span class="st n">MENOR</span></td><td>Mala práctica</td><td>Misión 2</td></tr>
+      </tbody>
+    </table>
+    <div class="turn" style="margin-top:21px"><span class="lab">Discusión</span>¿Cuál hallazgo es el más peligroso para la vida de las personas? Justifíquenlo en 2 minutos.</div>
   </div>
 </section>
 
@@ -745,15 +775,15 @@ body:hover .help{opacity:.8}
       <div>
         <h3>Trabajo en equipos (3 personas)</h3>
         <ul>
-          <li>Elaboren el cuadro de cargas en <b>hoja de cálculo</b> con fórmulas (no valores pegados).</li>
-          <li>Agreguen una columna de <b>línea (L1/L2)</b> y calculen el desbalance.</li>
+          <li>Elaboren el cuadro <b>as-found</b> en <b>hoja de cálculo</b> con fórmulas (no valores pegados).</li>
+          <li>Calculen el <b>desbalance</b> y las corrientes de L1, L2 y neutro.</li>
           <li>Calculen la <b>carga demandada</b> y la corriente de la acometida.</li>
-          <li>Listen <b>3 hallazgos</b> que encontrarían en un levantamiento real.</li>
+          <li>Completen la <b>matriz de hallazgos</b>: severidad y referencia de cada uno.</li>
         </ul>
       </div>
       <div>
-        <div class="card"><h3>Criterios de evaluación</h3><ul style="font-size:25px"><li>Cálculos de S e I correctos</li><li>Breaker y calibre coherentes</li><li>Balanceo menor al 5 %</li><li>Demanda con factores de la norma</li><li>Orden y trazabilidad de los datos</li></ul></div>
-        <div class="warn"><span class="lab">Para la próxima clase</span>Llevar el cuadro terminado: será la base del <b>plano eléctrico</b> de la Misión 2.</div>
+        <div class="card"><h3>Criterios de evaluación</h3><ul style="font-size:25px"><li>Cálculos de S e I correctos</li><li>Breaker y calibre coherentes</li><li>Hallazgos bien clasificados</li><li>Demanda con factores de la norma</li><li>Orden y trazabilidad de los datos</li></ul></div>
+        <div class="warn"><span class="lab">Para la próxima clase</span>En la Misión 2 <b>replanteamos la instalación</b>: nuevos circuitos, balanceo, GFCI y reserva. Traigan la matriz terminada.</div>
       </div>
     </div>
   </div>
@@ -770,7 +800,8 @@ body:hover .help{opacity:.8}
       • L1 y L2 dan <b style="color:#fff">240 V</b>; cada una con el neutro, <b style="color:#fff">120 V</b>.<br>
       • S = P ÷ FP · I = S ÷ V<br>
       • Breaker y calibre se eligen por <b style="color:#fff">corriente</b>.<br>
-      • Carga instalada ≠ <b style="color:#fff">carga demandada</b> (Art. 220).<br>
+      • Clasificar: <b style="color:#fff">incumplimiento</b>, mala práctica, eficiencia.<br>
+      • Carga conectada ≠ <b style="color:#fff">carga demandada</b> (Art. 220).<br>
       • Siempre verificar con el texto oficial vigente.
     </div>
   </div>
