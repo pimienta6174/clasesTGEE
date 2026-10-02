@@ -2,7 +2,7 @@
 
 **Instructor:** Andrés Felipe Valencia · Tecnología en Gestión Eficiente de la Energía · SENA
 
-**Duración sugerida:** 215 min (≈ 3 h 35 min), sin descansos. Ajusta según el ritmo del grupo.
+**Duración sugerida:** 223 min (≈ 3 h 43 min), sin descansos. Ajusta según el ritmo del grupo.
 
 ## Antes de empezar
 
@@ -24,24 +24,25 @@
 | 7 | La NTC 2050 como un mapa | 5 |
 | 8 | El lenguaje básico: magnitudes y unidades | 8 |
 | 9 | Acometida 120/240 V: L1, L2, N y tierra | 12 |
-| 10 | Fórmulas 1: de vatios a VA y amperios | 10 |
-| 11 | Fórmulas 2: el triángulo de potencias | 8 |
-| 12 | ¿De dónde sale el factor de potencia? | 8 |
-| 13 | Tu turno: calcula S e I a mano | 10 |
-| 14 | Levantar una instalación existente: 5 pasos | 10 |
-| 15 | Circuitos que exige la NTC 2050 en una vivienda | 8 |
-| 16 | ¿Dónde van los tomacorrientes? Art. 210.52 | 8 |
-| 17 | Inventario de cargas fijas del caso | 12 |
-| 18 | Fórmulas 3: breaker y calibre de cada circuito | 12 |
-| 19 | ¿Cómo clasificamos lo que encontramos? | 6 |
-| 20 | Cuadro de cargas tal como lo encontramos | 15 |
-| 21 | Balanceo: ¿cuánto lleva cada línea? | 12 |
-| 22 | Carga instalada vs. carga demandada (Art. 220) | 15 |
-| 23 | Matriz de hallazgos: la entrada de la Misión 2 | 10 |
-| 24 | Taller: su cuadro de cargas | 10 |
-| 25 | Lo que nos llevamos | 5 |
+| 10 | En Colombia conviven 120/240 V y 120/208 V | 8 |
+| 11 | Fórmulas 1: de vatios a VA y amperios | 10 |
+| 12 | Fórmulas 2: el triángulo de potencias | 8 |
+| 13 | ¿De dónde sale el factor de potencia? | 8 |
+| 14 | Tu turno: calcula S e I a mano | 10 |
+| 15 | Levantar una instalación existente: 5 pasos | 10 |
+| 16 | Circuitos que exige la NTC 2050 en una vivienda | 8 |
+| 17 | ¿Dónde van los tomacorrientes? Art. 210.52 | 8 |
+| 18 | Inventario de cargas fijas del caso | 12 |
+| 19 | Fórmulas 3: breaker y calibre de cada circuito | 12 |
+| 20 | ¿Cómo clasificamos lo que encontramos? | 6 |
+| 21 | Cuadro de cargas tal como lo encontramos | 15 |
+| 22 | Balanceo: ¿cuánto lleva cada línea? | 12 |
+| 23 | Carga instalada vs. carga demandada (Art. 220) | 15 |
+| 24 | Matriz de hallazgos: la entrada de la Misión 2 | 10 |
+| 25 | Taller: su cuadro de cargas | 10 |
+| 26 | Lo que nos llevamos | 5 |
 
-| | **Total** | **215** |
+| | **Total** | **223** |
 
 ## 1. Portada · 2 min
 
@@ -165,7 +166,25 @@
 
 > **Ojo:** La lámina no afirma colores de conductores. Pide que verifiquen el código de colores del RETIE vigente.
 
-## 10. Fórmulas 1: de vatios a VA y amperios · 10 min
+## 10. En Colombia conviven 120/240 V y 120/208 V · 8 min
+
+**Objetivo:** Aclarar que coexisten dos sistemas y que nuestro caso es 120/240 V.
+
+**Qué decir:**
+
+- Pregunta que van a hacer: «¿en Colombia es 120/240 o 120/208?». Respuesta: **los dos conviven**; cuál llega a un predio depende de la red secundaria de la zona.
+- **120/240 V, monofásico trifilar:** transformador monofásico con derivación central. Típico de casas independientes, barrios tradicionales y zonas rurales.
+- **120/208 V, trifásico tetrafilar o bifásico:** transformador trifásico en estrella. Típico de edificios de apartamentos, comercio, industria liviana y zonas densas.
+- Lo que cambia al calcular: entre dos líneas hay 240 V en el primero y 208 V en el segundo, así que las cargas de 2 polos toman más corriente a 208 V (I = S ÷ V). Además, en el bifásico las fases están a 120° y el neutro lleva corriente aunque haya balance.
+- **Nuestro caso sigue en 120/240 V.** Esta lámina solo les da el panorama.
+
+**Pregunta o ejercicio:** Tu turno: cooktop de 7200 VA. ¿Cuánta corriente toma a 240 V y cuánta a 208 V?
+
+**Respuesta:** A 240 V: 7200 ÷ 240 = **30,0 A**. A 208 V: 7200 ÷ 208 = **34,6 A**. Menos tensión, más corriente.
+
+> **Ojo:** Qué sistema predomina en cada zona u operador no está verificado en esta lámina. Pregunta a tu operador de red y revisa el contador. Algunas cargas aceptan 208 a 240 V y otras bajan su potencia a 208 V: revisa la placa.
+
+## 11. Fórmulas 1: de vatios a VA y amperios · 10 min
 
 **Objetivo:** Introducir S = P ÷ FP e I = S ÷ V con ejemplos resueltos.
 
@@ -178,7 +197,7 @@
 
 > **Ojo:** Resuelve los dos ejemplos en el tablero a mano, despacio. Es el modelo que ellos copiarán.
 
-## 11. Fórmulas 2: el triángulo de potencias · 8 min
+## 12. Fórmulas 2: el triángulo de potencias · 8 min
 
 **Objetivo:** Relacionar P, Q, S y FP.
 
@@ -192,7 +211,7 @@
 
 **Respuesta:** Sube. Los cables van más cargados y hay más pérdidas.
 
-## 12. ¿De dónde sale el factor de potencia? · 8 min
+## 13. ¿De dónde sale el factor de potencia? · 8 min
 
 **Objetivo:** Aclarar que el FP lo da el fabricante y que la norma calcula en VA.
 
@@ -204,7 +223,7 @@
 
 > **Ojo:** Los umbrales de CREG (energía reactiva) y RETILAP (FP de luminarias) no los pude verificar. Consulta la regulación vigente antes de dar cifras.
 
-## 13. Tu turno: calcula S e I a mano · 10 min
+## 14. Tu turno: calcula S e I a mano · 10 min
 
 **Objetivo:** Que cada aprendiz practique S e I antes de ver la respuesta.
 
@@ -219,7 +238,7 @@
 
 > **Ojo:** Pulsa «Descubrir respuestas» o la tecla **R**. Respuesta a la pregunta: porque trabaja a 240 V, y I = S ÷ V.
 
-## 14. Levantar una instalación existente: 5 pasos · 10 min
+## 15. Levantar una instalación existente: 5 pasos · 10 min
 
 **Objetivo:** Enseñar el método de campo y la seguridad.
 
@@ -233,7 +252,7 @@
 
 **Respuesta:** Apagan un breaker a la vez y verifican con detector o probador, con autorización del propietario.
 
-## 15. Circuitos que exige la NTC 2050 en una vivienda · 8 min
+## 16. Circuitos que exige la NTC 2050 en una vivienda · 8 min
 
 **Objetivo:** Dar la lista de mínimos para comparar con lo encontrado.
 
@@ -249,7 +268,7 @@
 
 > **Ojo:** Confirma el alcance exacto de AFCI y GFCI en la edición de la NTC 2050 que uses.
 
-## 16. ¿Dónde van los tomacorrientes? Art. 210.52 · 8 min
+## 17. ¿Dónde van los tomacorrientes? Art. 210.52 · 8 min
 
 **Objetivo:** Aplicar la regla de 1,8 m y casos especiales.
 
@@ -264,7 +283,7 @@
 
 > **Ojo:** Haz el dibujo en el tablero si hay dudas con la geometría.
 
-## 17. Inventario de cargas fijas del caso · 12 min
+## 18. Inventario de cargas fijas del caso · 12 min
 
 **Objetivo:** Calcular S de cada equipo con datos de placa y descubrirlos.
 
@@ -277,7 +296,7 @@
 
 > **Ojo:** Recuerda el aviso de la lámina: en una casa real, para motores y aires usen la **corriente de placa**.
 
-## 18. Fórmulas 3: breaker y calibre de cada circuito · 12 min
+## 19. Fórmulas 3: breaker y calibre de cada circuito · 12 min
 
 **Objetivo:** Elegir breaker comercial y calibre a partir de la corriente.
 
@@ -293,7 +312,7 @@
 
 > **Ojo:** Para aires acondicionados usa la placa (MCA y protección máxima). Aquí: 7,41 A, 2×20 A y 12 AWG.
 
-## 19. ¿Cómo clasificamos lo que encontramos? · 6 min
+## 20. ¿Cómo clasificamos lo que encontramos? · 6 min
 
 **Objetivo:** Dar el criterio de clasificación antes de ver el tablero.
 
@@ -308,7 +327,7 @@
 
 **Respuesta:** Mala práctica: la norma lo permite en habitaciones, pero si salta el breaker se queda sin luz ni tomas.
 
-## 20. Cuadro de cargas tal como lo encontramos · 15 min
+## 21. Cuadro de cargas tal como lo encontramos · 15 min
 
 **Objetivo:** Que los aprendices detecten las fallas fila por fila.
 
@@ -321,7 +340,7 @@
 
 > **Ojo:** Totales: 22 622 VA y 94,26 A a 240 V. «Carga conectada» no es igual a la carga mínima de diseño: no los mezcles.
 
-## 21. Balanceo: ¿cuánto lleva cada línea? · 12 min
+## 22. Balanceo: ¿cuánto lleva cada línea? · 12 min
 
 **Objetivo:** Calcular L1, L2, desbalance y corriente de neutro.
 
@@ -337,7 +356,7 @@
 
 > **Ojo:** Con factores de demanda no sería siempre 128 A, pero en un pico simultáneo el breaker general dispara o los conductores se sobrecargan.
 
-## 22. Carga instalada vs. carga demandada (Art. 220) · 15 min
+## 23. Carga instalada vs. carga demandada (Art. 220) · 15 min
 
 **Objetivo:** Calcular la demanda con los factores de la norma.
 
@@ -350,7 +369,7 @@
 
 > **Ojo:** Cabe en 100 A pero sin holgura: no hay reserva para ampliar. Confirma Tabla 220.55 y Art. 230.79 en tu edición de la NTC 2050.
 
-## 23. Matriz de hallazgos: la entrada de la Misión 2 · 10 min
+## 24. Matriz de hallazgos: la entrada de la Misión 2 · 10 min
 
 **Objetivo:** Consolidar los hallazgos con severidad y referencia.
 
@@ -363,7 +382,7 @@
 
 **Respuesta:** No hay una sola. Un buen argumento: los dos críticos (cooktop y cocina) por riesgo de incendio, y la puesta a tierra sin medir por riesgo de choque.
 
-## 24. Taller: su cuadro de cargas · 10 min
+## 25. Taller: su cuadro de cargas · 10 min
 
 **Objetivo:** Dejar claras las tareas y los criterios.
 
@@ -375,7 +394,7 @@
 
 > **Ojo:** Tu clave está en el repositorio: clave-mision2-instructor.md. No la proyectes.
 
-## 25. Lo que nos llevamos · 5 min
+## 26. Lo que nos llevamos · 5 min
 
 **Objetivo:** Cerrar con cinco ideas.
 
