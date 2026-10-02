@@ -174,7 +174,7 @@
 
 - Pregunta que van a hacer: «¿en Colombia es 120/240 o 120/208?». Respuesta: **los dos conviven**; cuál llega a un predio depende de la red secundaria de la zona.
 - **120/240 V, monofásico trifilar:** transformador monofásico con derivación central. Típico de casas independientes, barrios tradicionales y zonas rurales.
-- **120/208 V, trifásico tetrafilar o bifásico:** transformador trifásico en estrella. Típico de edificios de apartamentos, comercio, industria liviana y zonas densas.
+- **120/208 V, trifásico tetrafilar o bifásico:** transformador trifásico en estrella. Típico de edificios de apartamentos, comercio, industria liviana y zonas densas de ciudades principales; la lámina menciona redes de Enel, EMCALI y EPM.
 - Lo que cambia al calcular: entre dos líneas hay 240 V en el primero y 208 V en el segundo, así que las cargas de 2 polos toman más corriente a 208 V (I = S ÷ V). Además, en el bifásico las fases están a 120° y el neutro lleva corriente aunque haya balance.
 - **Nuestro caso sigue en 120/240 V.** Esta lámina solo les da el panorama.
 
@@ -182,7 +182,7 @@
 
 **Respuesta:** A 240 V: 7200 ÷ 240 = **30,0 A**. A 208 V: 7200 ÷ 208 = **34,6 A**. Menos tensión, más corriente.
 
-> **Ojo:** Qué sistema predomina en cada zona u operador no está verificado en esta lámina. Pregunta a tu operador de red y revisa el contador. Algunas cargas aceptan 208 a 240 V y otras bajan su potencia a 208 V: revisa la placa.
+> **Ojo:** Los nombres de operadores (Enel, EMCALI, EPM) los incluí a tu pedido y no los pude verificar. Confírmalos con cada operador y revisa el contador de la zona. Algunas cargas aceptan 208 a 240 V y otras bajan su potencia a 208 V: revisa la placa.
 
 ## 11. Fórmulas 1: de vatios a VA y amperios · 10 min
 
