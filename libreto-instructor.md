@@ -6,7 +6,7 @@
 
 ## Antes de empezar
 
-- Verifica el texto oficial vigente de la **Resolución 40284 de 2026** y la edición de la **NTC 2050** que usas. Los artículos de este libreto salen de mi conocimiento de la NTC 2050; no pude verificar el articulado de la resolución.
+- Los artículos se verificaron contra la **Resolución 40284 de 2026** (Libros 3 y 4) y la **NTC 2050 segunda actualización (2020)**. Quedan sin verificar los valores de las tablas 220.12, 220.42 y 220.55, que en el .md son imágenes.
 - Lleva calculadora, cuaderno por aprendiz y acceso a hoja de cálculo para el taller.
 - Teclas: **flechas** cambian de lámina, **F** pantalla completa, **R** descubre la siguiente respuesta, **D** descarga el .html (solo tú).
 - Tu clave para la Misión 2 está en `clave-mision2-instructor.md`. No la proyectes.
@@ -95,7 +95,7 @@
 
 **Qué decir:**
 
-- El **RETIE** es el reglamento técnico del Ministerio de Minas y Energía. **Es obligatorio**. Nuestra referencia en el curso es la Resolución 40284 del 23 de junio de 2026.
+- El **RETIE** es el reglamento técnico del Ministerio de Minas y Energía. **Es obligatorio**. Nuestra referencia en el curso es la Resolución 40284 del 23 de junio de 2026, que **modifica la Resolución 40117 de 2024**.
 - La **NTC 2050** es el código eléctrico colombiano, basado en el NEC. Es el «cómo se hace bien»: circuitos, cargas, protecciones, conductores. El reglamento la acoge como referente técnico.
 - Dos más: **RETILAP** para iluminación (Misión 3) y el **operador de red** (ESSA, EPM, Enel...) con sus requisitos de conexión.
 - Mensaje clave: antes de citar un artículo en un informe, **confírmenlo en el texto oficial vigente**.
@@ -104,7 +104,7 @@
 
 **Respuesta:** El RETIE obliga. La NTC 2050 es el referente técnico que el reglamento adopta para demostrar el cumplimiento.
 
-> **Ojo:** No conozco el texto de la Resolución 40284 de 2026. Léelo antes de clase y ajusta lo que digas sobre su articulado.
+> **Ojo:** Verificado contra el texto de la resolución (Libros 1 a 4). Estructura: Libro 1 generales, Libro 2 productos, Libro 3 instalaciones, Libro 4 evaluación de la conformidad.
 
 ## 6. ¿Qué le pregunta el RETIE a una instalación existente? · 8 min
 
@@ -114,12 +114,13 @@
 
 - Cuando levantamos, buscamos evidencia en seis frentes: diseño y memorias, productos con certificado de conformidad, protecciones, puesta a tierra, personal competente y verificación (dictamen de inspección y declaración de cumplimiento).
 - En una casa antigua casi nunca hay papeles. Eso también es un hallazgo.
+- **Dato clave para nuestro caso:** hasta 15 kVA y 4 cuentas, una vivienda solo necesita un **esquema constructivo** (art. 3.3.2) y no requiere certificación plena. Pero **más de 15 kVA** exige **diseño detallado** (3.3.1, literal q) y **certificación plena** (4.3.2.1, literal c). Nuestra casa tiene más de 22 kVA conectados, así que cae en el segundo caso.
 
 **Pregunta o ejercicio:** ¿Qué evidencia pediríamos para saber si los breakers del tablero son productos certificados?
 
 **Respuesta:** La marcación legible en el producto y el certificado de conformidad del fabricante o importador.
 
-> **Ojo:** Los números de artículo y las exigencias por tipo de instalación están pendientes de verificar contra la resolución vigente.
+> **Ojo:** Referencias verificadas: 3.3.1 y 3.3.2 (diseño y esquema), 3.2.1 (personas), 3.8.1 (protecciones), 3.12.1 a 3.12.4 (puesta a tierra), 4.2 (productos), 4.3.2 (certificación plena). Una remodelación residencial también requiere certificación plena si supera 10 kVA de ampliación, o si se remodela más del 50 % de los dispositivos o conductores y la parte remodelada supera 10 kVA (4.3.2.2, literal a).
 
 ## 7. La NTC 2050 como un mapa · 5 min
 

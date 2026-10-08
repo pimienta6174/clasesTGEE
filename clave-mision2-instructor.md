@@ -42,3 +42,14 @@ Caso didáctico de la Clase 1. Las cifras salen de la carga de placa de los equi
 | 9 | Mezclas y A/A compartidos | Circuito independiente por A/A; separar alumbrado y tomas |
 
 Verifica cada artículo contra la edición de la NTC 2050 y el texto vigente del RETIE antes de evaluar.
+
+## Marco RETIE para el replanteo (Resolución 40284 de 2026, verificado)
+
+- **Diseño:** una vivienda con **más de 15 kVA** de capacidad instalable requiere **diseño detallado** por ingeniero (Libro 3, art. 3.3.1, literal q). Hasta 15 kVA y 4 cuentas basta un **esquema constructivo** (art. 3.3.2).
+- **Certificación plena** (dictamen de inspección y declaración de cumplimiento): viviendas de más de 15 kVA (Libro 4, art. 4.3.2.1, literal c).
+- **Remodelación residencial** (art. 4.3.2.2, literal a): requiere certificación plena si la ampliación supera 10 kVA, o si se remodela más del 50 % de los dispositivos o conductores y la parte remodelada supera 10 kVA, o si se agregan equipos especiales.
+- **Lo que debe traer un esquema constructivo** (art. 3.3.2.1): ubicación de la puesta a tierra con material y longitud del electrodo, medida, tablero, canalizaciones con diámetros, número y calibre de conductores por tramo, ubicación de aparatos y protecciones, cuadro de convenciones conforme al RETIE, **cuadro de cargas con potencias y tensiones por circuito** y espacios de montaje.
+- **Diseño detallado** (art. 3.3.1.1): incluye cálculo de cargas con factor de potencia y armónicos, protecciones, puesta a tierra, regulación, canalizaciones, diagramas unifilares y planos.
+- **Personas** (art. 3.2.1): ingenieros, tecnólogos en electricidad y técnicos, según el alcance de su matrícula.
+
+Nuestro caso (22 622 VA conectados, 24 915 VA de diseño) supera los 15 kVA: el plano de la Misión 2 hace parte de un **diseño detallado**.

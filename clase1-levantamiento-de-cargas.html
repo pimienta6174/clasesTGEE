@@ -150,9 +150,9 @@ tfoot td{background:var(--verde-claro)!important;font-weight:700;color:var(--azu
 .slide[data-title="Ruta de misiones"] .mission{padding:34px}
 .slide[data-title="Ruta de misiones"] .mission p{font-size:27px}
 .slide[data-title="Ruta de misiones"] .mission h3{font-size:34px}
-.slide[data-title="RETIE y el levantamiento"] .card{padding:30px 38px}
-.slide[data-title="RETIE y el levantamiento"] .card h3{font-size:34px}
-.slide[data-title="RETIE y el levantamiento"] .card p{font-size:28px}
+.slide[data-title="RETIE y el levantamiento"] .card{padding:20px 30px}
+.slide[data-title="RETIE y el levantamiento"] .card h3{font-size:30px}
+.slide[data-title="RETIE y el levantamiento"] .card p{font-size:24px}
 .slide[data-title="Magnitudes eléctricas"] .card{padding:30px 38px}
 .slide[data-title="Magnitudes eléctricas"] .card h3{font-size:34px}
 .slide[data-title="Magnitudes eléctricas"] .card p{font-size:28px}
@@ -268,7 +268,7 @@ body:hover .help{opacity:.8}
     <h2>Dos documentos que <em>no se separan</em></h2>
     <div class="cols" style="margin-top:21px">
       <div class="layers">
-        <div class="layer" style="background:var(--azul)"><b>RETIE</b><span><b style="font-size:25px;min-width:0">Reglamento Técnico de Instalaciones Eléctricas.</b> Lo expide el Ministerio de Minas y Energía. <b style="font-size:25px;min-width:0;color:var(--cian)">Es obligatorio.</b> Referencia del curso: Resolución 40284 del 23 de junio de 2026.</span></div>
+        <div class="layer" style="background:var(--azul)"><b>RETIE</b><span><b style="font-size:25px;min-width:0">Reglamento Técnico de Instalaciones Eléctricas.</b> Lo expide el Ministerio de Minas y Energía. <b style="font-size:25px;min-width:0;color:var(--cian)">Es obligatorio.</b> Referencia del curso: Resolución 40284 del 23 de junio de 2026, que modifica la 40117 de 2024.</span></div>
         <div class="layer" style="background:var(--verde-osc)"><b>NTC 2050</b><span>Código Eléctrico Colombiano, basado en el NEC (NFPA 70). Es el <b style="font-size:25px;min-width:0">«cómo se hace bien»</b>: circuitos, cargas, protecciones, conductores.</span></div>
         <div class="layer" style="background:var(--azul-2)"><b>RETILAP</b><span>Iluminación y alumbrado público (Misión 3).</span></div>
         <div class="layer" style="background:#5C6B77"><b>Operador de red</b><span>Requisitos de conexión, medida y acometida (por ejemplo ESSA, EPM, Enel).</span></div>
@@ -285,16 +285,16 @@ body:hover .help{opacity:.8}
 <section class="slide" data-title="RETIE y el levantamiento">
   <div class="body">
     <h2>¿Qué le pregunta el <em>RETIE</em> a una instalación existente?</h2>
-    <p class="lead">Un levantamiento serio busca evidencias de estos seis frentes:</p>
-    <div class="grid g3">
-      <div class="card"><h3>1 · Diseño y memorias</h3><p>¿Hay planos, cuadro de cargas y cálculos que respalden lo instalado?</p></div>
-      <div class="card"><h3>2 · Productos</h3><p>¿Breakers, tomas y cables tienen <b>certificado de conformidad</b> y marcación legible?</p></div>
-      <div class="card"><h3>3 · Protecciones</h3><p>¿Cada circuito tiene protección contra sobrecorriente adecuada al conductor?</p></div>
-      <div class="card"><h3>4 · Puesta a tierra</h3><p>¿Existe sistema de puesta a tierra y equipotencialidad continua y medida?</p></div>
-      <div class="card"><h3>5 · Personal competente</h3><p>¿Quien diseñó y construyó tiene matrícula profesional vigente?</p></div>
-      <div class="card"><h3>6 · Verificación</h3><p>¿Existe <b>dictamen de inspección</b> y declaración de cumplimiento?</p></div>
+    <p class="lead" style="margin-bottom:13px;font-size:26px">Un levantamiento busca evidencia en seis frentes. Referencias a los Libros de la Resolución 40284 de 2026:</p>
+    <div class="grid g3" style="gap:18px">
+      <div class="card"><h3>1 · Diseño y memorias</h3><p><b>Libro 3, art. 3.3.1 y 3.3.2.</b> Diseño detallado por ingeniero. Hasta 15 kVA y 4 cuentas basta un esquema constructivo.</p></div>
+      <div class="card"><h3>2 · Productos</h3><p><b>Libros 2 y 4 (4.2).</b> Certificado de conformidad en breakers, tomas y conductores.</p></div>
+      <div class="card"><h3>3 · Protecciones</h3><p><b>Libro 3, art. 3.8.1.</b> Protección adecuada al conductor; detalle en NTC 2050, arts. 210 y 240.</p></div>
+      <div class="card"><h3>4 · Puesta a tierra</h3><p><b>Libro 3, título 12 (3.12.1 a 3.12.4).</b> Requisitos, valores de referencia y mediciones.</p></div>
+      <div class="card"><h3>5 · Personal competente</h3><p><b>Libro 3, art. 3.2.1.</b> Ingenieros, tecnólogos y técnicos, según el alcance de su matrícula.</p></div>
+      <div class="card"><h3>6 · Verificación</h3><p><b>Libro 4, art. 4.3.2.</b> Certificación plena: dictamen de inspección y declaración de cumplimiento.</p></div>
     </div>
-    <div class="warn" style="margin-top:28px"><span class="lab">Verifique</span>Los números de artículo y las exigencias exactas por tipo de instalación deben consultarse en el texto oficial de la Resolución 40284 de 2026.</div>
+    <div class="note" style="margin-top:21px;padding:14px 26px;font-size:25px"><span class="lab">Nuestro caso</span>Con <b>más de 15 kVA</b> de capacidad instalable, una vivienda requiere <b>diseño detallado</b> (3.3.1, literal q) y <b>certificación plena</b> (4.3.2.1, literal c).</div>
   </div>
 </section>
 
