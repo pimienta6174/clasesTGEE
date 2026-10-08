@@ -259,14 +259,14 @@
 **Qué decir:**
 
 - Esta es la lista de verificación del levantamiento. Alumbrado en 15 o 20 A sin mezclarse con los de cocina; **mínimo dos circuitos de 20 A para pequeños artefactos** de cocina y comedor; uno para lavandería; uno para baños; circuitos individuales para equipos fijos.
-- GFCI en baños, mesones de cocina, exteriores y lavandería. El AFCI (210.12) depende de la edición adoptada.
+- GFCI en baños, mesones de cocina, exteriores y lavandería. El AFCI (210.12(A)) aplica en cocinas, salas, comedores, alcobas, armarios y lavandería de la vivienda.
 - Aclaración importante: el alumbrado y los tomacorrientes de uso general se calculan **por área**, 33 VA/m² (Art. 220), no uno por uno.
 
 **Pregunta o ejercicio:** ¿Cuántos circuitos mínimos de pequeños artefactos debe tener la cocina?
 
 **Respuesta:** Dos, de 20 A cada uno (210.11(C)(1)).
 
-> **Ojo:** Confirma el alcance exacto de AFCI y GFCI en la edición de la NTC 2050 que uses.
+> **Ojo:** Verificado contra la NTC 2050 segunda actualización (2020): 210.8(A), 210.11(C) y 210.12(A).
 
 ## 17. ¿Dónde van los tomacorrientes? Art. 210.52 · 8 min
 
@@ -365,9 +365,9 @@
 - No todo funciona a la vez. La norma usa factores de demanda. Aquí partimos de **120 m²** y de los mínimos de la norma, no de lo conectado.
 - Paso a paso, cada renglón lo calculan y luego lo descubren: **1)** alumbrado general 33 VA/m² (220.12); **2)** dos circuitos de pequeños artefactos; **3)** lavandería; **4)** al subtotal se aplica el 220.42: los primeros 3000 VA al 100 % y el resto al 35 %; **5)** cooktop + horno por la Tabla 220.55; **6)** nevera y microondas al 100 %; **7)** los aires al 100 %.
 
-**Respuesta:** **3960**, **3000**, **1500**; subtotal 8460 → 3000 + 5460 × 0,35 = **4911**; cocción **8000**; nevera + micro **2204**; aires **5334**. Total **20 449 VA** = **85,2 A** a 240 V. Acometida y protección general de **100 A** (mínimo para vivienda unifamiliar).
+**Respuesta:** **3960**, **3000**, **1500**; subtotal 8460 → 3000 + 5460 × 0,35 = **4911**; cocción **8000**; nevera + micro **2204**; aires **5334**. Total **20 449 VA** = **85,2 A** a 240 V. Acometida y protección general de **100 A** (mínimo de 100 A para vivienda unifamiliar según 225.39(C)).
 
-> **Ojo:** Cabe en 100 A pero sin holgura: no hay reserva para ampliar. Confirma Tabla 220.55 y Art. 230.79 en tu edición de la NTC 2050.
+> **Ojo:** Cabe en 100 A pero sin holgura. Las tablas 220.12, 220.42 y 220.55 no están en el .md (son imágenes): confirma 33 VA/m², 35 % y 8 kW en el impreso. El 100 A sale del 225.39(C); el 230.79 solo trae 15 A, 30 A y la carga calculada.
 
 ## 24. Matriz de hallazgos: la entrada de la Misión 2 · 10 min
 
