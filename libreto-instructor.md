@@ -2,7 +2,7 @@
 
 **Instructor:** Andrés Felipe Valencia · Tecnología en Gestión Eficiente de la Energía · SENA
 
-**Duración sugerida:** 223 min (≈ 3 h 43 min), sin descansos. Ajusta según el ritmo del grupo.
+**Duración sugerida:** 238 min (≈ 3 h 58 min), sin descansos. Ajusta según el ritmo del grupo.
 
 ## Antes de empezar
 
@@ -17,32 +17,34 @@
 |---|---|---:|
 | 1 | Portada | 2 |
 | 2 | Su encargo: una casa ya construida | 5 |
-| 3 | Objetivos | 3 |
-| 4 | ¿Por qué levantar cargas? | 5 |
-| 5 | Dos documentos que no se separan | 8 |
-| 6 | ¿Qué le pregunta el RETIE a una instalación existente? | 8 |
-| 7 | La NTC 2050 como un mapa | 5 |
-| 8 | El lenguaje básico: magnitudes y unidades | 8 |
-| 9 | Acometida 120/240 V: L1, L2, N y tierra | 12 |
-| 10 | En Colombia conviven 120/240 V y 120/208 V | 8 |
-| 11 | Fórmulas 1: de vatios a VA y amperios | 10 |
-| 12 | Fórmulas 2: el triángulo de potencias | 8 |
-| 13 | ¿De dónde sale el factor de potencia? | 8 |
-| 14 | Tu turno: calcula S e I a mano | 10 |
-| 15 | Levantar una instalación existente: 5 pasos | 10 |
-| 16 | Circuitos que exige la NTC 2050 en una vivienda | 8 |
-| 17 | ¿Dónde van los tomacorrientes? Art. 210.52 | 8 |
-| 18 | Inventario de cargas fijas del caso | 12 |
-| 19 | Fórmulas 3: breaker y calibre de cada circuito | 12 |
-| 20 | ¿Cómo clasificamos lo que encontramos? | 6 |
-| 21 | Cuadro de cargas tal como lo encontramos | 15 |
-| 22 | Balanceo: ¿cuánto lleva cada línea? | 12 |
-| 23 | Carga instalada vs. carga demandada (Art. 220) | 15 |
-| 24 | Matriz de hallazgos: la entrada de la Misión 2 | 10 |
-| 25 | Taller: su cuadro de cargas | 10 |
-| 26 | Lo que nos llevamos | 5 |
+| 3 | La casa del bulevar | 7 |
+| 4 | Objetivos | 3 |
+| 5 | ¿Por qué levantar cargas? | 5 |
+| 6 | Dos documentos que no se separan | 8 |
+| 7 | ¿Qué le pregunta el RETIE a una instalación existente? | 8 |
+| 8 | La NTC 2050 como un mapa | 5 |
+| 9 | El lenguaje básico: magnitudes y unidades | 8 |
+| 10 | Acometida 120/240 V: L1, L2, N y tierra | 12 |
+| 11 | En Colombia conviven 120/240 V y 120/208 V | 8 |
+| 12 | Fórmulas 1: de vatios a VA y amperios | 10 |
+| 13 | Fórmulas 2: el triángulo de potencias | 8 |
+| 14 | ¿De dónde sale el factor de potencia? | 8 |
+| 15 | Tu turno: calcula S e I a mano | 10 |
+| 16 | Levantar una instalación existente: 5 pasos | 10 |
+| 17 | Circuitos que exige la NTC 2050 en una vivienda | 8 |
+| 18 | ¿Dónde van los tomacorrientes? Art. 210.52 | 8 |
+| 19 | Inventario de cargas fijas del caso | 12 |
+| 20 | Fórmulas 3: breaker y calibre de cada circuito | 12 |
+| 21 | ¿Cómo clasificamos lo que encontramos? | 6 |
+| 22 | Cuadro de cargas tal como lo encontramos | 15 |
+| 23 | Balanceo: ¿cuánto lleva cada línea? | 12 |
+| 24 | Carga instalada vs. carga demandada (Art. 220) | 15 |
+| 25 | Matriz de hallazgos: la entrada de la Misión 2 | 10 |
+| 26 | Los 9 hallazgos sobre el plano | 8 |
+| 27 | Taller: su cuadro de cargas | 10 |
+| 28 | Lo que nos llevamos | 5 |
 
-| | **Total** | **223** |
+| | **Total** | **238** |
 
 ## 1. Portada · 2 min
 
@@ -67,7 +69,24 @@
 
 **Pregunta o ejercicio:** ¿Alguien ha visto una instalación en su casa o en la de un familiar que le haya dado desconfianza? (2 respuestas rápidas)
 
-## 3. Objetivos · 3 min
+## 3. La casa del bulevar · 7 min
+
+**Objetivo:** Presentar el caso: plano, espacios y datos base.
+
+**Qué decir:**
+
+- Este es el plano de nuestra casa: una vivienda de un piso con dos alcobas, dos baños, sala, comedor, cocina con desayunador, lavandería, garaje y terraza. La suponemos en Colombia, con servicio de 120/240 V.
+- El plano original venía en pies y pulgadas; aquí lo convertimos a metros. Recuerden: 1 pie = 0,3048 m.
+- Área para el cálculo de la carga: unos 110 m², sin garaje ni terraza (220.12).
+- Supuesto del caso: un aire acondicionado en cada alcoba y uno en la sala-comedor.
+
+**Pregunta o ejercicio:** Tu turno: la sala mide 14'2" × 17'2". Conviértanla a metros y calculen su área.
+
+**Respuesta:** 14'2" = 4,32 m y 17'2" = 5,23 m. Área = **22,6 m²**.
+
+> **Ojo:** El plano base se trazó a partir de un plano de Zillow (recorrido 3D): los puntos verdes y azules del original son marcadores del recorrido, no símbolos eléctricos. Las posiciones de luminarias, tomas y equipos del dibujo son supuestos didácticos. El área de 110 m² es una estimación; confírmala con el dato oficial.
+
+## 4. Objetivos · 3 min
 
 **Objetivo:** Que sepan qué se llevan y qué deben entregar.
 
@@ -76,7 +95,7 @@
 - Al terminar, ustedes podrán: explicar qué son L1, L2, neutro y tierra; calcular VA y amperios de cada carga; levantar circuitos, tomas y equipos de una casa existente; y **diagnosticar** con un cuadro de cargas, el balanceo y una matriz de hallazgos.
 - El entregable es el cuadro «tal como lo encontramos» y la matriz de hallazgos. Esa matriz es la materia prima de la Misión 2.
 
-## 4. ¿Por qué levantar cargas? · 5 min
+## 5. ¿Por qué levantar cargas? · 5 min
 
 **Objetivo:** Generar conciencia de riesgo antes de entrar en fórmulas.
 
@@ -89,7 +108,7 @@
 
 > **Ojo:** No cites estadísticas si no las tienes verificadas.
 
-## 5. Dos documentos que no se separan · 8 min
+## 6. Dos documentos que no se separan · 8 min
 
 **Objetivo:** Distinguir RETIE (obliga) de NTC 2050 (cómo se hace).
 
@@ -106,7 +125,7 @@
 
 > **Ojo:** Verificado contra el texto de la resolución (Libros 1 a 4). Estructura: Libro 1 generales, Libro 2 productos, Libro 3 instalaciones, Libro 4 evaluación de la conformidad.
 
-## 6. ¿Qué le pregunta el RETIE a una instalación existente? · 8 min
+## 7. ¿Qué le pregunta el RETIE a una instalación existente? · 8 min
 
 **Objetivo:** Dar seis frentes de evidencia para el levantamiento.
 
@@ -114,7 +133,7 @@
 
 - Cuando levantamos, buscamos evidencia en seis frentes: diseño y memorias, productos con certificado de conformidad, protecciones, puesta a tierra, personal competente y verificación (dictamen de inspección y declaración de cumplimiento).
 - En una casa antigua casi nunca hay papeles. Eso también es un hallazgo.
-- **Dato clave para nuestro caso:** hasta 15 kVA y 4 cuentas, una vivienda solo necesita un **esquema constructivo** (art. 3.3.2) y no requiere certificación plena. Pero **más de 15 kVA** exige **diseño detallado** (3.3.1, literal q) y **certificación plena** (4.3.2.1, literal c). Nuestra casa tiene más de 22 kVA conectados, así que cae en el segundo caso.
+- **Dato clave para nuestro caso:** hasta 15 kVA y 4 cuentas, una vivienda solo necesita un **esquema constructivo** (art. 3.3.2) y no requiere certificación plena. Pero **más de 15 kVA** exige **diseño detallado** (3.3.1, literal q) y **certificación plena** (4.3.2.1, literal c). Nuestra casa tiene casi 24 kVA conectados, así que cae en el segundo caso.
 
 **Pregunta o ejercicio:** ¿Qué evidencia pediríamos para saber si los breakers del tablero son productos certificados?
 
@@ -122,7 +141,7 @@
 
 > **Ojo:** Referencias verificadas: 3.3.1 y 3.3.2 (diseño y esquema), 3.2.1 (personas), 3.8.1 (protecciones), 3.12.1 a 3.12.4 (puesta a tierra), 4.2 (productos), 4.3.2 (certificación plena). Una remodelación residencial también requiere certificación plena si supera 10 kVA de ampliación, o si se remodela más del 50 % de los dispositivos o conductores y la parte remodelada supera 10 kVA (4.3.2.2, literal a).
 
-## 7. La NTC 2050 como un mapa · 5 min
+## 8. La NTC 2050 como un mapa · 5 min
 
 **Objetivo:** Enseñar a navegar la norma, no a memorizarla.
 
@@ -135,7 +154,7 @@
 
 **Respuesta:** El 310 (ampacidad) junto con el 240.4(D) (límite de protección de conductores pequeños).
 
-## 8. El lenguaje básico: magnitudes y unidades · 8 min
+## 9. El lenguaje básico: magnitudes y unidades · 8 min
 
 **Objetivo:** Fijar vocabulario con una analogía.
 
@@ -149,7 +168,7 @@
 
 **Respuesta:** No. Solo si el factor de potencia es 1. Con FP menor, los VA son mayores.
 
-## 9. Acometida 120/240 V: L1, L2, N y tierra · 12 min
+## 10. Acometida 120/240 V: L1, L2, N y tierra · 12 min
 
 **Objetivo:** Entender qué es cada conductor y qué voltaje hay entre ellos.
 
@@ -167,7 +186,7 @@
 
 > **Ojo:** La lámina no afirma colores de conductores. Pide que verifiquen el código de colores del RETIE vigente.
 
-## 10. En Colombia conviven 120/240 V y 120/208 V · 8 min
+## 11. En Colombia conviven 120/240 V y 120/208 V · 8 min
 
 **Objetivo:** Aclarar que coexisten dos sistemas y que nuestro caso es 120/240 V.
 
@@ -185,7 +204,7 @@
 
 > **Ojo:** Los nombres de operadores (Enel, EMCALI, EPM) los incluí a tu pedido y no los pude verificar. Confírmalos con cada operador y revisa el contador de la zona. Algunas cargas aceptan 208 a 240 V y otras bajan su potencia a 208 V: revisa la placa.
 
-## 11. Fórmulas 1: de vatios a VA y amperios · 10 min
+## 12. Fórmulas 1: de vatios a VA y amperios · 10 min
 
 **Objetivo:** Introducir S = P ÷ FP e I = S ÷ V con ejemplos resueltos.
 
@@ -198,7 +217,7 @@
 
 > **Ojo:** Resuelve los dos ejemplos en el tablero a mano, despacio. Es el modelo que ellos copiarán.
 
-## 12. Fórmulas 2: el triángulo de potencias · 8 min
+## 13. Fórmulas 2: el triángulo de potencias · 8 min
 
 **Objetivo:** Relacionar P, Q, S y FP.
 
@@ -212,7 +231,7 @@
 
 **Respuesta:** Sube. Los cables van más cargados y hay más pérdidas.
 
-## 13. ¿De dónde sale el factor de potencia? · 8 min
+## 14. ¿De dónde sale el factor de potencia? · 8 min
 
 **Objetivo:** Aclarar que el FP lo da el fabricante y que la norma calcula en VA.
 
@@ -224,7 +243,7 @@
 
 > **Ojo:** Los umbrales de CREG (energía reactiva) y RETILAP (FP de luminarias) no los pude verificar. Consulta la regulación vigente antes de dar cifras.
 
-## 14. Tu turno: calcula S e I a mano · 10 min
+## 15. Tu turno: calcula S e I a mano · 10 min
 
 **Objetivo:** Que cada aprendiz practique S e I antes de ver la respuesta.
 
@@ -239,7 +258,7 @@
 
 > **Ojo:** Pulsa «Descubrir respuestas» o la tecla **R**. Respuesta a la pregunta: porque trabaja a 240 V, y I = S ÷ V.
 
-## 15. Levantar una instalación existente: 5 pasos · 10 min
+## 16. Levantar una instalación existente: 5 pasos · 10 min
 
 **Objetivo:** Enseñar el método de campo y la seguridad.
 
@@ -253,7 +272,7 @@
 
 **Respuesta:** Apagan un breaker a la vez y verifican con detector o probador, con autorización del propietario.
 
-## 16. Circuitos que exige la NTC 2050 en una vivienda · 8 min
+## 17. Circuitos que exige la NTC 2050 en una vivienda · 8 min
 
 **Objetivo:** Dar la lista de mínimos para comparar con lo encontrado.
 
@@ -269,7 +288,7 @@
 
 > **Ojo:** Verificado contra la NTC 2050 segunda actualización (2020): 210.8(A), 210.11(C) y 210.12(A).
 
-## 17. ¿Dónde van los tomacorrientes? Art. 210.52 · 8 min
+## 18. ¿Dónde van los tomacorrientes? Art. 210.52 · 8 min
 
 **Objetivo:** Aplicar la regla de 1,8 m y casos especiales.
 
@@ -284,7 +303,7 @@
 
 > **Ojo:** Haz el dibujo en el tablero si hay dudas con la geometría.
 
-## 18. Inventario de cargas fijas del caso · 12 min
+## 19. Inventario de cargas fijas del caso · 12 min
 
 **Objetivo:** Calcular S de cada equipo con datos de placa y descubrirlos.
 
@@ -297,7 +316,7 @@
 
 > **Ojo:** Recuerda el aviso de la lámina: en una casa real, para motores y aires usen la **corriente de placa**.
 
-## 19. Fórmulas 3: breaker y calibre de cada circuito · 12 min
+## 20. Fórmulas 3: breaker y calibre de cada circuito · 12 min
 
 **Objetivo:** Elegir breaker comercial y calibre a partir de la corriente.
 
@@ -313,7 +332,7 @@
 
 > **Ojo:** Para aires acondicionados usa la placa (MCA y protección máxima). Aquí: 7,41 A, 2×20 A y 12 AWG.
 
-## 20. ¿Cómo clasificamos lo que encontramos? · 6 min
+## 21. ¿Cómo clasificamos lo que encontramos? · 6 min
 
 **Objetivo:** Dar el criterio de clasificación antes de ver el tablero.
 
@@ -328,7 +347,7 @@
 
 **Respuesta:** Mala práctica: la norma lo permite en habitaciones, pero si salta el breaker se queda sin luz ni tomas.
 
-## 21. Cuadro de cargas tal como lo encontramos · 15 min
+## 22. Cuadro de cargas tal como lo encontramos · 15 min
 
 **Objetivo:** Que los aprendices detecten las fallas fila por fila.
 
@@ -337,11 +356,11 @@
 - Aquí está el tablero. Lean cada fila: carga, corriente, breaker, calibre, línea. **Tu turno:** ¿qué está mal en cada una? Tienen cinco minutos, en parejas, anotando en el cuaderno.
 - Después pulsa «Descubrir estado» y discute fila por fila. Deja que ellos argumenten antes de que tú confirmes.
 
-**Respuesta:** **F1** mayor: 14 AWG con 20 A. **F2** menor: mezcla alumbrado y tomas. **F3** mayor: baños sin GFCI. **F4** crítico: 12 AWG con 30 A, sin GFCI, todo en un circuito. **F5, F6, F8** cumplen. **F7** crítico: 12 AWG soporta máximo 20 A y la carga es de 30 A. **F9** menor: dos aires en un breaker.
+**Respuesta:** **F1** mayor: 14 AWG con 20 A. **F2** menor: mezcla alumbrado y tomas. **F3** mayor: baños y garaje en el mismo circuito y sin GFCI. **F4** crítico: 12 AWG con breaker de 40 A (la carga es de 30,4 A), sin GFCI y todo en un circuito. **F5, F6, F8** cumplen. **F7** crítico: 12 AWG soporta máximo 20 A y la carga es de 30 A. **F9** menor: los aires de la alcoba 2 y de la sala en un solo breaker.
 
-> **Ojo:** Totales: 22 622 VA y 94,26 A a 240 V. «Carga conectada» no es igual a la carga mínima de diseño: no los mezcles.
+> **Ojo:** Totales: 23 895 VA y 99,56 A a 240 V. «Carga conectada» no es igual a la carga mínima de diseño: no los mezcles.
 
-## 22. Balanceo: ¿cuánto lleva cada línea? · 12 min
+## 23. Balanceo: ¿cuánto lleva cada línea? · 12 min
 
 **Objetivo:** Calcular L1, L2, desbalance y corriente de neutro.
 
@@ -351,26 +370,26 @@
 - **Ejemplo resuelto:** el cooktop de 7200 VA aporta 3600 a L1 y 3600 a L2, y no lleva corriente por el neutro.
 - Tu turno: con el cuadro anterior, calculen las dos líneas y lo que sigue.
 
-**Pregunta o ejercicio:** ¿Qué pasa con un tablero de 100 A si L1 puede llegar a 128 A?
+**Pregunta o ejercicio:** ¿Qué pasa con un tablero de 100 A si L1 puede llegar a 139 A?
 
-**Respuesta:** L1 = 8088 + 7267 = **15 355 VA**. L2 = 0 + 7267 = **7267 VA**. Desbalance = 8088 ÷ 11 311 × 100 = **71,5 %**. I del neutro = 8088 ÷ 120 = **67,4 A**. I de L1 = 67,4 + 60,6 = **128,0 A**. I de L2 = **60,6 A**.
+**Respuesta:** L1 = 9361 + 7267 = **16 628 VA**. L2 = 0 + 7267 = **7267 VA**. Desbalance = 9361 ÷ 11 947,5 × 100 = **78,4 %**. I del neutro = 9361 ÷ 120 = **78,0 A**. I de L1 = 78,0 + 60,6 = **138,6 A**. I de L2 = **60,6 A**.
 
-> **Ojo:** Con factores de demanda no sería siempre 128 A, pero en un pico simultáneo el breaker general dispara o los conductores se sobrecargan.
+> **Ojo:** Con factores de demanda no sería siempre 139 A, pero en un pico simultáneo el breaker general dispara o los conductores se sobrecargan.
 
-## 23. Carga instalada vs. carga demandada (Art. 220) · 15 min
+## 24. Carga instalada vs. carga demandada (Art. 220) · 15 min
 
 **Objetivo:** Calcular la demanda con los factores de la norma.
 
 **Qué decir:**
 
-- No todo funciona a la vez. La norma usa factores de demanda. Aquí partimos de **120 m²** y de los mínimos de la norma, no de lo conectado.
+- No todo funciona a la vez. La norma usa factores de demanda. Aquí partimos de **110 m²** (sin garaje ni terraza) y de los mínimos de la norma, no de lo conectado.
 - Paso a paso, cada renglón lo calculan y luego lo descubren: **1)** alumbrado general 33 VA/m² (220.12); **2)** dos circuitos de pequeños artefactos; **3)** lavandería; **4)** al subtotal se aplica el 220.42: los primeros 3000 VA al 100 % y el resto al 35 %; **5)** cooktop + horno por la Tabla 220.55; **6)** nevera y microondas al 100 %; **7)** los aires al 100 %.
 
-**Respuesta:** **3960**, **3000**, **1500**; subtotal 8460 → 3000 + 5460 × 0,35 = **4911**; cocción **8000**; nevera + micro **2204**; aires **5334**. Total **20 449 VA** = **85,2 A** a 240 V. Acometida y protección general de **100 A** (mínimo de 100 A para vivienda unifamiliar según 225.39(C)).
+**Respuesta:** **3630**, **3000**, **1500**; subtotal 8130 → 3000 + 5130 × 0,35 = **4796**; cocción **8000**; nevera + micro **2204**; aires **5334**. Total **20 334 VA** = **84,7 A** a 240 V. Acometida y protección general de **100 A** (mínimo de 100 A para vivienda unifamiliar según 225.39(C)).
 
-> **Ojo:** Cabe en 100 A pero sin holgura. Las tablas 220.12, 220.42 y 220.55 no están en el .md (son imágenes): confirma 33 VA/m², 35 % y 8 kW en el impreso. El 100 A sale del 225.39(C); el 230.79 solo trae 15 A, 30 A y la carga calculada.
+> **Ojo:** Cabe en 100 A pero sin holgura: lo conectado hoy (99,6 A) ya roza ese valor. El área de 110 m² es una estimación sumando los espacios del plano: confírmala. Las tablas 220.12, 220.42 y 220.55 no están en el .md (son imágenes): confirma 33 VA/m², 35 % y 8 kW en el impreso. El 100 A sale del 225.39(C); el 230.79 solo trae 15 A, 30 A y la carga calculada.
 
-## 24. Matriz de hallazgos: la entrada de la Misión 2 · 10 min
+## 25. Matriz de hallazgos: la entrada de la Misión 2 · 10 min
 
 **Objetivo:** Consolidar los hallazgos con severidad y referencia.
 
@@ -383,7 +402,23 @@
 
 **Respuesta:** No hay una sola. Un buen argumento: los dos críticos (cooktop y cocina) por riesgo de incendio, y la puesta a tierra sin medir por riesgo de choque.
 
-## 25. Taller: su cuadro de cargas · 10 min
+## 26. Los 9 hallazgos sobre el plano · 8 min
+
+**Objetivo:** Relacionar cada hallazgo con su lugar en la casa.
+
+**Qué decir:**
+
+- Ubiquen cada hallazgo de la matriz sobre el plano antes de ver los marcadores. Un minuto en parejas.
+- Luego pulsa «Descubrir marcadores»: 1 y 2 en la cocina, 3 en el mesón, 4 en los baños y el garaje, 5 en la zona social, 6 y 8 en el tablero del garaje, 7 en la puesta a tierra y 9 en los aires acondicionados.
+- Cierra con la idea: un hallazgo en el papel se vuelve real cuando sabes dónde está.
+
+**Pregunta o ejercicio:** ¿Qué dos hallazgos están en el mismo espacio y por qué conviene corregirlos juntos?
+
+**Respuesta:** El 1 y el 2 están en la cocina: cooktop y circuito de pequeños artefactos. Al replantear la cocina se resuelven ambos y el del GFCI del mesón (3).
+
+> **Ojo:** Los marcadores son ilustrativos; en el plano real cada uno se ubica con la medición en campo.
+
+## 27. Taller: su cuadro de cargas · 10 min
 
 **Objetivo:** Dejar claras las tareas y los criterios.
 
@@ -395,7 +430,7 @@
 
 > **Ojo:** Tu clave está en el repositorio: clave-mision2-instructor.md. No la proyectes.
 
-## 26. Lo que nos llevamos · 5 min
+## 28. Lo que nos llevamos · 5 min
 
 **Objetivo:** Cerrar con cinco ideas.
 

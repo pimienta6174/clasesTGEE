@@ -129,13 +129,13 @@
 
 **Qué decir:**
 
-- Este es el cuadro nuevo: 15 circuitos con carga, corriente, breaker, calibre y conductor PE. La columna de línea está oculta.
+- Este es el cuadro nuevo sobre la casa del bulevar: 16 circuitos con carga, corriente, breaker, calibre y conductor PE. La columna de línea está oculta.
 - Tu turno: asignen L1 o L2 a cada circuito de 1 polo para balancear. Los de 2 polos ya usan las dos líneas. Cinco minutos en parejas.
 - Cuando terminen, pulsa «Descubrir línea de cada circuito» y comparen. Puede haber más de una solución buena; lo que importa es el desbalance.
 
-**Respuesta:** La propuesta: **L1** en C1, C2, C3, C5, C9 y C10. **L2** en C4, C6, C7 y C8. Da L1 = 12 447 VA y L2 = 12 468 VA.
+**Respuesta:** La propuesta: **L1** en C1, C6, C7, C8 y C9. **L2** en C2, C3, C4, C5, C10 y C11. Da L1 = 12 741 VA y L2 = 12 714 VA.
 
-> **Ojo:** La carga de diseño es 24 915 VA (103,8 A) porque cuenta los 3000 VA mínimos de pequeños artefactos. La carga conectada antes era 22 622 VA.
+> **Ojo:** La carga de diseño es 25 455 VA (106,1 A) porque cuenta los 3000 VA mínimos de pequeños artefactos (C6 y C7 a 1500 VA, 220.52). La carga conectada antes era 23 895 VA. Reparto de tomas: C3 sala, pasillo y terraza; C4 alcobas y vestier; C5 baños; C6 mesón y desayunador; C7 mesón y comedor; C11 garaje.
 
 ## 9. Balanceo del cuadro nuevo · 12 min
 
@@ -146,7 +146,7 @@
 - Fórmulas: S de L1 = Σ(1 polo en L1) + ½ Σ(2 polos); desbalance = diferencia ÷ promedio × 100.
 - Tu turno: los circuitos de 2 polos suman 14 534 VA, o sea 7267 VA por línea. Calculen L1, L2, desbalance y corriente del neutro.
 
-**Respuesta:** L1 = 5180 + 7267 = **12 447 VA**. L2 = 5201 + 7267 = **12 468 VA**. Desbalance = 21 ÷ 12 457,5 × 100 = **0,17 %**. I del neutro = |5180 − 5201| ÷ 120 = **0,17 A** (antes 67,4 A). I de L1 = 103,7 A y de L2 = 103,9 A (antes 128,0 A y 60,6 A).
+**Respuesta:** L1 = 5474 + 7267 = **12 741 VA**. L2 = 5447 + 7267 = **12 714 VA**. Desbalance = 27 ÷ 12 727,5 × 100 = **0,21 %**. I del neutro = |5474 − 5447| ÷ 120 = **0,23 A** (antes 78,0 A). I de L1 = 106,2 A y de L2 = 105,9 A (antes 138,6 A y 60,6 A).
 
 ## 10. El tablero: espacios, reserva y ubicación · 10 min
 
@@ -156,9 +156,9 @@
 
 - Fórmula: espacios requeridos = espacios usados ÷ (1 − reserva). Un circuito de 1 polo ocupa 1 espacio y uno de 2 polos, 2.
 - **Ejemplo resuelto:** 12 espacios usados con 25 % de reserva: 12 ÷ 0,75 = 16, tablero de 18.
-- Tu turno: 10 circuitos de 1 polo y 5 de 2 polos.
+- Tu turno: 11 circuitos de 1 polo y 5 de 2 polos.
 
-**Respuesta:** Usa 10 + 5 × 2 = **20 espacios**. 20 ÷ 0,75 = 26,7, entonces tablero de **30 espacios**.
+**Respuesta:** Usa 11 + 5 × 2 = **21 espacios**. 21 ÷ 0,75 = 28, entonces tablero de **30 espacios**.
 
 > **Ojo:** Espacio de trabajo (110.26): ancho el del equipo o 0,76 m, altura 2,0 m, profundidad según la Tabla 110.26(A)(1), que está en imagen. Los tamaños comerciales (12 a 42 espacios) dependen del fabricante.
 
@@ -168,10 +168,10 @@
 
 **Qué decir:**
 
-- Tres cifras: carga de diseño 24 915 VA, demandada 20 449 VA y la conectada de antes, 22 622 VA.
+- Tres cifras: carga de diseño 25 455 VA, demandada 20 334 VA y la conectada de antes, 23 895 VA.
 - Tu turno: corriente de la demanda a 240 V y protección general.
 
-**Respuesta:** I = 20 449 ÷ 240 = **85,2 A**. El comercial sería 90 A, pero la vivienda unifamiliar pide mínimo 100 A (225.39(C)): general **2×100 A**. Conductor **3 AWG Cu** (100 A a 75 °C).
+**Respuesta:** I = 20 334 ÷ 240 = **84,7 A**. El comercial sería 90 A, pero la vivienda unifamiliar pide mínimo 100 A (225.39(C)): general **2×100 A**. Conductor **3 AWG Cu** (100 A a 75 °C).
 
 > **Ojo:** El 3 AWG sale de la Tabla 310.15(B)(16), que es imagen en el .md. Confírmalo en la norma impresa.
 
@@ -183,9 +183,9 @@
 
 - Fórmula: ΔV = 2 · ρ · L · I ÷ S, con ρ del cobre = 0,0175 Ω·mm²/m. Luego ΔV % = ΔV ÷ V × 100.
 - **Ejemplo resuelto:** 25 m, 16 A, 12 AWG (3,31 mm²), 120 V: ΔV = 4,23 V, o sea 3,5 %. Conviene un calibre mayor si la meta es 3 %.
-- Tu turno: el cooktop (18 m, 30 A, 8 AWG, 240 V) y los pequeños artefactos (20 m, 12,5 A, 12 AWG, 120 V).
+- Tu turno, con longitudes medidas sobre el plano: el cooktop (8 m, 30 A, 8 AWG, 240 V) y las tomas de alcobas (22 m, 12 A, 12 AWG, 120 V).
 
-**Respuesta:** **a)** ΔV = 2 × 0,0175 × 18 × 30 ÷ 8,37 = **2,26 V**, o sea **0,94 %** de 240 V. **b)** ΔV = 2 × 0,0175 × 20 × 12,5 ÷ 3,31 = **2,64 V**, o sea **2,20 %** de 120 V. Ambos cumplen la meta de 3 %.
+**Respuesta:** **a)** ΔV = 2 × 0,0175 × 8 × 30 ÷ 8,37 = **1,00 V**, o sea **0,42 %** de 240 V. **b)** ΔV = 2 × 0,0175 × 22 × 12 ÷ 3,31 = **2,79 V**, o sea **2,33 %** de 120 V. Ambos cumplen la meta de 3 %.
 
 > **Ojo:** La meta de 3 % en el ramal y 5 % en total es recomendación de diseño: el texto digital de la NTC 2050 no trae la nota informativa. Confírmala en tu edición.
 
@@ -226,7 +226,7 @@
 **Qué decir:**
 
 - Código de colores del RETIE (Libro 3, título 5, Tabla 3.5.a): neutro blanco y tierra de protección verde o desnuda. Para L1 y L2 en 120/240 V se espera negro y rojo; confírmalo en la tabla original.
-- **Ejemplo resuelto:** T-12: 2 × Cu 8 AWG (L1 + L2) + 1 × Cu 10 AWG (PE), THHN/THWN-2, 600 V, en EMT Ø ¾", circuito C-12, protección 2P-40 A.
+- **Ejemplo resuelto:** T-13: 2 × Cu 8 AWG (L1 + L2) + 1 × Cu 10 AWG (PE), THHN/THWN-2, 600 V, en EMT Ø ¾", circuito C-13, protección 2P-40 A.
 - Tu turno: rótulo del tramo del circuito C6, en EMT ½".
 
 **Respuesta:** **T-06:** 1 × Cu 12 AWG (L) + 1 × Cu 12 AWG (N) + 1 × Cu 12 AWG (PE), THHN/THWN-2, 600 V, en EMT Ø ½", circuito C-6, protección 1P-20 A.
@@ -259,12 +259,14 @@
 
 **Qué decir:**
 
-- Recorran el plano: TG-1 en el hall técnico, junto al medidor; cargas de 240 V resaltadas (aires, cooktop y horno); tomas con GFCI en baños, mesón, lavandería y terraza; tramos rotulados T-nn.
-- Se muestran 4 de los 15 circuitos. En su plano a escala 1:50 deben aparecer todos.
+- Recorran el plano: TG-1 en el garaje, junto a la lavandería y al medidor; cargas de 240 V resaltadas (tres aires, cooktop y horno); tomas con GFCI en naranja en baños, mesón, garaje y terraza; tramos rotulados T-nn.
+- Se muestran 4 de los 16 circuitos. En su plano a escala 1:50 deben aparecer todos.
 
 **Pregunta o ejercicio:** ¿Qué tramo atraviesa más espacios y qué problema puede traer?
 
-**Respuesta:** El de las alcobas recorre el pasillo; puede ser largo, lo que afecta la caída de tensión. Se verifica con la fórmula de la lámina 12.
+**Respuesta:** El de las alcobas: sale del garaje, cruza la cocina y el pasillo y llega al fondo de la alcoba principal, unos 22 m. Es el que más caída de tensión acumula; se verifica con la fórmula de la lámina 12.
+
+> **Ojo:** El trazado de tramos y las longitudes (cooktop 8 m, alcobas 22 m) son aproximaciones sobre el plano a 15 px por pie, con un recargo por bajantes. En obra se miden.
 
 ## 19. Diagrama unifilar del tablero · 8 min
 
