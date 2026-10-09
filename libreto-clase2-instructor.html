@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Libreto de la Clase 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700;800&display=swap">
+<style>
+:root{--bg:#F6F8F9;--card:#fff;--fg:#1D2B36;--mut:#5C6B77;--line:#DCE3E8;--verde:#39A900;--verde-t:#2B8200;--azul:#00304D;--nar:#FF6C00;--soft:#EAF6E1;--warn:#FFF6D6;--ask:#FFF1E4}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1A22;--card:#142630;--fg:#E6EEF2;--mut:#9FB3BF;--line:#26404E;--verde:#5CC21A;--verde-t:#8FE04C;--azul:#7CC4E6;--nar:#FF8A33;--soft:#18331B;--warn:#3A3314;--ask:#3A2A1A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1A22;--card:#142630;--fg:#E6EEF2;--mut:#9FB3BF;--line:#26404E;--verde:#5CC21A;--verde-t:#8FE04C;--azul:#7CC4E6;--nar:#FF8A33;--soft:#18331B;--warn:#3A3314;--ask:#3A2A1A;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:17px/1.55 "Work Sans",system-ui,sans-serif;margin:0;padding-inline:16px;padding-block:32px}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:2rem;line-height:1.15;margin:0 0 6px;color:var(--azul);text-wrap:balance}
+.sub{color:var(--mut);margin:0 0 24px}
+h2{font-size:1.35rem;margin:0;color:var(--azul);text-wrap:balance}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0;border-top:5px solid var(--verde)}
+.hd{display:flex;gap:12px;align-items:baseline;justify-content:space-between;flex-wrap:wrap}
+.min{font-weight:700;color:var(--verde-t);white-space:nowrap}
+.obj{color:var(--mut);margin:4px 0 10px}
+.box{border-radius:10px;padding:10px 14px;margin:10px 0}
+.q{background:var(--ask);border-left:5px solid var(--nar)}
+.a{background:var(--soft);border-left:5px solid var(--verde)}
+.o{background:var(--warn);border-left:5px solid #FDC300}
+.lab{display:block;font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px;color:var(--mut)}
+ul{padding-left:22px;margin:8px 0}li{margin:6px 0}
+table{border-collapse:collapse;width:100%;font-size:.95rem}td,th{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left}td:last-child,th:last-child{text-align:right}
+.scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="wrap"><h1>Libreto del instructor · Clase 2</h1><p class="sub">Replanteo y planos · Andrés Felipe Valencia · Tecnología en Gestión Eficiente de la Energía · SENA</p>
+<div class="card"><h2>Antes de empezar</h2><ul><li>Duración sugerida: <strong>189 min</strong> (≈ 3 h 9 min), sin descansos.</li><li>Verificado contra la Resolución 40284 de 2026 (Libros 3 y 4) y la NTC 2050, segunda actualización (2020).</li><li>Sin verificar por ser imágenes en el .md: tablas 4 y 5 del Cap. 9, 250.122, 310.15(B)(16), 110.26(A)(1), colores L1/L2 y la nota de caída de tensión.</li><li>Teclas: flechas, <strong>F</strong> pantalla completa, <strong>R</strong> descubre la respuesta, <strong>D</strong> descarga el .html.</li></ul></div>
+<div class="card scroll"><h2>Mapa de tiempos</h2><table><thead><tr><th>#</th><th>Lámina</th><th>Min</th></tr></thead><tbody>
+<tr><td>1</td><td>Portada</td><td>2</td></tr>
+<tr><td>2</td><td>Del diagnóstico al diseño</td><td>5</td></tr>
+<tr><td>3</td><td>Objetivos</td><td>3</td></tr>
+<tr><td>4</td><td>Qué exige el RETIE a nuestro caso</td><td>8</td></tr>
+<tr><td>5</td><td>Del hallazgo a la corrección</td><td>12</td></tr>
+<tr><td>6</td><td>Seis criterios para replantear</td><td>8</td></tr>
+<tr><td>7</td><td>Repaso: corriente, breaker y calibre</td><td>10</td></tr>
+<tr><td>8</td><td>Cuadro de cargas propuesto</td><td>15</td></tr>
+<tr><td>9</td><td>Balanceo del cuadro nuevo</td><td>12</td></tr>
+<tr><td>10</td><td>El tablero: espacios, reserva y ubicación</td><td>10</td></tr>
+<tr><td>11</td><td>Carga de diseño, demanda y acometida</td><td>10</td></tr>
+<tr><td>12</td><td>Caída de tensión en circuitos ramales</td><td>12</td></tr>
+<tr><td>13</td><td>Canalizaciones: ocupación de la tubería</td><td>12</td></tr>
+<tr><td>14</td><td>Conductor de protección y puesta a tierra</td><td>10</td></tr>
+<tr><td>15</td><td>Colores y rotulado de tramos</td><td>10</td></tr>
+<tr><td>16</td><td>Qué debe mostrar el plano</td><td>6</td></tr>
+<tr><td>17</td><td>Cuadro de convenciones</td><td>5</td></tr>
+<tr><td>18</td><td>Plano de planta del caso</td><td>10</td></tr>
+<tr><td>19</td><td>Diagrama unifilar del tablero</td><td>8</td></tr>
+<tr><td>20</td><td>Lista de verificación antes de entregar</td><td>6</td></tr>
+<tr><td>21</td><td>Taller: su paquete de diseño</td><td>10</td></tr>
+<tr><td>22</td><td>Lo que nos llevamos</td><td>5</td></tr>
+<tr><td></td><td><strong>Total</strong></td><td><strong>189</strong></td></tr></tbody></table></div>
+<section class="card"><div class="hd"><h2>1. Portada</h2><span class="min">2 min</span></div><p class="obj">Abrir la clase y conectar con la Misión 1.</p><span class="lab">Qué decir</span><ul>
+<li>Bienvenidos a la Misión 2. En la anterior encontramos qué estaba mal. Hoy decidimos cómo debe quedar la instalación y la dejamos dibujada.</li>
+</ul>
+<div class="box o"><span class="lab">Ojo</span>Pulsa <strong>F</strong> para pantalla completa, <strong>R</strong> para descubrir respuestas y <strong>D</strong> para descargar el .html (solo tú).</div>
+</section>
+<section class="card"><div class="hd"><h2>2. Del diagnóstico al diseño</h2><span class="min">5 min</span></div><p class="obj">Ubicar la clase en el flujo de trabajo.</p><span class="lab">Qué decir</span><ul>
+<li>Cinco pasos: la matriz de hallazgos de la Misión 1, los criterios de replanteo, el cuadro nuevo, los cálculos (caída de tensión, ocupación de tubería, tablero) y el plano.</li>
+<li>La regla de oro no cambia: fórmula, ejemplo resuelto, ustedes calculan a mano y solo al final descubrimos la respuesta.</li>
+</ul>
+<div class="box q"><span class="lab">Pregunta o ejercicio</span>¿Qué hallazgo de la Misión 1 les parece más urgente corregir? (2 respuestas rápidas)</div>
+</section>
+<section class="card"><div class="hd"><h2>3. Objetivos</h2><span class="min">3 min</span></div><p class="obj">Que sepan qué entregan al final.</p><span class="lab">Qué decir</span><ul>
+<li>Al terminar: corregir cada hallazgo en una propuesta y armar el cuadro nuevo; calcular caída de tensión, ocupación de tubería, reserva del tablero y acometida; dibujar el plano con convenciones, tramos rotulados y unifilar; y verificar con una lista de control.</li>
+<li>El entregable es un paquete de diseño: cuadro propuesto, plano de planta, unifilar, tabla de tramos y memoria de cálculo.</li>
+</ul>
+</section>
+<section class="card"><div class="hd"><h2>4. Qué exige el RETIE a nuestro caso</h2><span class="min">8 min</span></div><p class="obj">Entender por qué el plano forma parte de un diseño detallado.</p><span class="lab">Qué decir</span><ul>
+<li>La casa supera los <strong>15 kVA</strong> de capacidad instalable. Por eso necesita <strong>diseño detallado</strong> de un ingeniero (Libro 3, art. 3.3.1, literal q). Hasta 15 kVA y 4 cuentas bastaría un esquema constructivo (3.3.2).</li>
+<li>El diseño detallado incluye cálculo de cargas con factor de potencia y armónicos, protecciones, puesta a tierra, canalizaciones, regulación de tensión, diagramas unifilares y planos (3.3.1.1).</li>
+<li>La remodelación también cuenta: certificación plena si se remodela más del 50 % de dispositivos o conductores y la parte remodelada supera 10 kVA (Libro 4, 4.3.2.2). La certificación plena trae dictamen de inspección y declaración de cumplimiento (4.3.2).</li>
+<li>En el curso hacemos el diseño como práctica de formación. La firma legal es del profesional competente según su matrícula (3.2.1).</li>
+</ul>
+<div class="box q"><span class="lab">Pregunta o ejercicio</span>Si la casa fuera de 12 kVA y tuviera 1 cuenta, ¿qué documento bastaría?</div>
+<div class="box a"><span class="lab">Respuesta</span>Un esquema constructivo firmado por una persona competente (art. 3.3.2). No requeriría diseño detallado ni certificación plena por capacidad, salvo otras causas.</div>
+<div class="box o"><span class="lab">Ojo</span>Verificado contra la Resolución 40284 de 2026, Libros 3 y 4.</div>
+</section>
+<section class="card"><div class="hd"><h2>5. Del hallazgo a la corrección</h2><span class="min">12 min</span></div><p class="obj">Convertir los 9 hallazgos en propuestas.</p><span class="lab">Qué decir</span><ul>
+<li>Retomen la matriz de la Misión 1. Cada uno escribe en su cuaderno la propuesta para cada hallazgo. Cinco minutos, luego comparan en parejas.</li>
+<li>Después pulsa «Descubrir propuestas» y discute. Insiste en el porqué de cada una.</li>
+</ul>
+<div class="box a"><span class="lab">Respuesta</span>1) Cooktop: 2×40 A con 8 AWG (30 × 1,25 = 37,5 A). 2) Cocina: nevera y micro individuales y 2 circuitos de 20 A para el mesón. 3) GFCI en el mesón. 4) Circuito de baños de 20 A con GFCI. 5) Cambiar a 12 AWG o bajar a 15 A. 6) Repartir los de 1 polo entre L1 y L2. 7) Medir y corregir la puesta a tierra (referencia 25 Ω). 8) Rotular y dejar espacios libres. 9) Un circuito por aire; separar alumbrado y tomas.</div>
+</section>
+<section class="card"><div class="hd"><h2>6. Seis criterios para replantear</h2><span class="min">8 min</span></div><p class="obj">Dar el criterio general antes de rediseñar.</p><span class="lab">Qué decir</span><ul>
+<li>No parchamos, rediseñamos por zona y tipo de carga: un circuito por carga grande; alumbrado separado de tomas, con AFCI donde lo pide el 210.12(A); cocina con dos circuitos de 20 A para el mesón y GFCI; baños con su circuito de 20 A; balanceo; y reserva con directorio.</li>
+<li>Aclaren que la reserva del 25 % y el desbalance menor al 5 % son criterios del curso, no cifras de la norma.</li>
+</ul>
+<div class="box q"><span class="lab">Pregunta o ejercicio</span>¿Por qué conviene un circuito individual para cada aire acondicionado?</div>
+<div class="box a"><span class="lab">Respuesta</span>Si uno falla o dispara, los demás siguen; cada equipo se protege con la corriente de su placa; y se evitan sobrecargas por compartir breaker.</div>
+</section>
+<section class="card"><div class="hd"><h2>7. Repaso: corriente, breaker y calibre</h2><span class="min">10 min</span></div><p class="obj">Reactivar la fórmula de la Misión 1.</p><span class="lab">Qué decir</span><ul>
+<li>Recuerden: I = S ÷ V; ×1,25 si la carga es continua; breaker comercial igual o mayor; 14 AWG a 15 A, 12 AWG a 20 A, 10 AWG a 30 A (240.4(D)).</li>
+<li><strong>Ejemplo resuelto, horno de convección:</strong> 2000 VA a 240 V da 8,33 A. Breaker 2×20 A, conductor 12 AWG Cu.</li>
+<li>Tu turno: nevera, microondas y lavadora-secadora. Tres minutos.</li>
+</ul>
+<div class="box a"><span class="lab">Respuesta</span><strong>Nevera:</strong> 7,84 A, 1×20 A, 12 AWG. <strong>Microondas:</strong> 10,53 A, 1×20 A, 12 AWG. <strong>Lavadora-secadora:</strong> 13,89 A, 1×20 A, 12 AWG; el circuito de lavandería es de 20 A (210.11(C)(2)).</div>
+</section>
+<section class="card"><div class="hd"><h2>8. Cuadro de cargas propuesto</h2><span class="min">15 min</span></div><p class="obj">Asignar L1 y L2 y descubrir el cuadro limpio.</p><span class="lab">Qué decir</span><ul>
+<li>Este es el cuadro nuevo: 15 circuitos con carga, corriente, breaker, calibre y conductor PE. La columna de línea está oculta.</li>
+<li>Tu turno: asignen L1 o L2 a cada circuito de 1 polo para balancear. Los de 2 polos ya usan las dos líneas. Cinco minutos en parejas.</li>
+<li>Cuando terminen, pulsa «Descubrir línea de cada circuito» y comparen. Puede haber más de una solución buena; lo que importa es el desbalance.</li>
+</ul>
+<div class="box a"><span class="lab">Respuesta</span>La propuesta: <strong>L1</strong> en C1, C2, C3, C5, C9 y C10. <strong>L2</strong> en C4, C6, C7 y C8. Da L1 = 12 447 VA y L2 = 12 468 VA.</div>
+<div class="box o"><span class="lab">Ojo</span>La carga de diseño es 24 915 VA (103,8 A) porque cuenta los 3000 VA mínimos de pequeños artefactos. La carga conectada antes era 22 622 VA.</div>
+</section>
+<section class="card"><div class="hd"><h2>9. Balanceo del cuadro nuevo</h2><span class="min">12 min</span></div><p class="obj">Calcular el balanceo y compararlo con el antes.</p><span class="lab">Qué decir</span><ul>
+<li>Fórmulas: S de L1 = Σ(1 polo en L1) + ½ Σ(2 polos); desbalance = diferencia ÷ promedio × 100.</li>
+<li>Tu turno: los circuitos de 2 polos suman 14 534 VA, o sea 7267 VA por línea. Calculen L1, L2, desbalance y corriente del neutro.</li>
+</ul>
+<div class="box a"><span class="lab">Respuesta</span>L1 = 5180 + 7267 = <strong>12 447 VA</strong>. L2 = 5201 + 7267 = <strong>12 468 VA</strong>. Desbalance = 21 ÷ 12 457,5 × 100 = <strong>0,17 %</strong>. I del neutro = |5180 − 5201| ÷ 120 = <strong>0,17 A</strong> (antes 67,4 A). I de L1 = 103,7 A y de L2 = 103,9 A (antes 128,0 A y 60,6 A).</div>
+</section>
+<section class="card"><div class="hd"><h2>10. El tablero: espacios, reserva y ubicación</h2><span class="min">10 min</span></div><p class="obj">Dimensionar el tablero y ubicarlo bien.</p><span class="lab">Qué decir</span><ul>
+<li>Fórmula: espacios requeridos = espacios usados ÷ (1 − reserva). Un circuito de 1 polo ocupa 1 espacio y uno de 2 polos, 2.</li>
+<li><strong>Ejemplo resuelto:</strong> 12 espacios usados con 25 % de reserva: 12 ÷ 0,75 = 16, tablero de 18.</li>
+<li>Tu turno: 10 circuitos de 1 polo y 5 de 2 polos.</li>
+</ul>
+<div class="box a"><span class="lab">Respuesta</span>Usa 10 + 5 × 2 = <strong>20 espacios</strong>. 20 ÷ 0,75 = 26,7, entonces tablero de <strong>30 espacios</strong>.</div>
+<div class="box o"><span class="lab">Ojo</span>Espacio de trabajo (110.26): ancho el del equipo o 0,76 m, altura 2,0 m, profundidad según la Tabla 110.26(A)(1), que está en imagen. Los tamaños comerciales (12 a 42 espacios) dependen del fabricante.</div>
+</section>
+<section class="card"><div class="hd"><h2>11. Carga de diseño, demanda y acometida</h2><span class="min">10 min</span></div><p class="obj">Cerrar la corriente de acometida y su protección.</p><span class="lab">Qué decir</span><ul>
+<li>Tres cifras: carga de diseño 24 915 VA, demandada 20 449 VA y la conectada de antes, 22 622 VA.</li>
+<li>Tu turno: corriente de la demanda a 240 V y protección general.</li>
+</ul>
+<div class="box a"><span class="lab">Respuesta</span>I = 20 449 ÷ 240 = <strong>85,2 A</strong>. El comercial sería 90 A, pero la vivienda unifamiliar pide mínimo 100 A (225.39(C)): general <strong>2×100 A</strong>. Conductor <strong>3 AWG Cu</strong> (100 A a 75 °C).</div>
+<div class="box o"><span class="lab">Ojo</span>El 3 AWG sale de la Tabla 310.15(B)(16), que es imagen en el .md. Confírmalo en la norma impresa.</div>
+</section>
+<section class="card"><div class="hd"><h2>12. Caída de tensión en circuitos ramales</h2><span class="min">12 min</span></div><p class="obj">Calcular la caída de tensión de un ramal.</p><span class="lab">Qué decir</span><ul>
+<li>Fórmula: ΔV = 2 · ρ · L · I ÷ S, con ρ del cobre = 0,0175 Ω·mm²/m. Luego ΔV % = ΔV ÷ V × 100.</li>
+<li><strong>Ejemplo resuelto:</strong> 25 m, 16 A, 12 AWG (3,31 mm²), 120 V: ΔV = 4,23 V, o sea 3,5 %. Conviene un calibre mayor si la meta es 3 %.</li>
+<li>Tu turno: el cooktop (18 m, 30 A, 8 AWG, 240 V) y los pequeños artefactos (20 m, 12,5 A, 12 AWG, 120 V).</li>
+</ul>
+<div class="box a"><span class="lab">Respuesta</span><strong>a)</strong> ΔV = 2 × 0,0175 × 18 × 30 ÷ 8,37 = <strong>2,26 V</strong>, o sea <strong>0,94 %</strong> de 240 V. <strong>b)</strong> ΔV = 2 × 0,0175 × 20 × 12,5 ÷ 3,31 = <strong>2,64 V</strong>, o sea <strong>2,20 %</strong> de 120 V. Ambos cumplen la meta de 3 %.</div>
+<div class="box o"><span class="lab">Ojo</span>La meta de 3 % en el ramal y 5 % en total es recomendación de diseño: el texto digital de la NTC 2050 no trae la nota informativa. Confírmala en tu edición.</div>
+</section>
+<section class="card"><div class="hd"><h2>13. Canalizaciones: ocupación de la tubería</h2><span class="min">12 min</span></div><p class="obj">Calcular el llenado de una tubería.</p><span class="lab">Qué decir</span><ul>
+<li>Fórmula: %O = suma de áreas de los conductores ÷ área interior del tubo × 100. Límites del Cap. 9, Tabla 1: 53 % con un conductor, 31 % con dos, 40 % con más de dos. El conductor PE también ocupa espacio.</li>
+<li><strong>Ejemplo resuelto:</strong> tres conductores 12 AWG (8,58 mm² cada uno) en EMT ½&quot; (196 mm²): 25,74 ÷ 196 = 13,1 %, cumple.</li>
+<li>Tu turno: el tramo del cooktop con 2 conductores 8 AWG y un PE de 10 AWG.</li>
+</ul>
+<div class="box a"><span class="lab">Respuesta</span>Σ = 2 × 23,61 + 13,61 = <strong>60,83 mm²</strong>. En ½&quot;: <strong>31,0 %</strong>. En ¾&quot; (343 mm²): <strong>17,7 %</strong>. Ambos cumplen el 40 %, pero ¾&quot; deja más holgura.</div>
+<div class="box o"><span class="lab">Ojo</span>Las áreas (Tablas 4 y 5 del Cap. 9) están en imagen en el .md; los valores de la lámina son los habituales. Ojo: en el documento «esquema constructivo.md» las áreas de ejemplo (6,02 mm² para 12 AWG y 138 mm² para el tubo ½&quot;) difieren de estos valores, aunque su porcentaje de 13,1 % coincide. Confirma ambas en la tabla.</div>
+</section>
+<section class="card"><div class="hd"><h2>14. Conductor de protección y puesta a tierra</h2><span class="min">10 min</span></div><p class="obj">Elegir el PE y reconocer la referencia de resistencia.</p><span class="lab">Qué decir</span><ul>
+<li>El conductor de protección se elige según el breaker: 15 A, 14 AWG; 20 A, 12 AWG; 30 a 60 A, 10 AWG; 100 A, 8 AWG (Tabla 250.122).</li>
+<li><strong>Ejemplo resuelto:</strong> varilla de 2,40 m, 0,016 m de diámetro y suelo de 100 Ω·m: R ≈ ρ ÷ (2πL) × [ln(4L ÷ d) − 1] ≈ 35,8 Ω.</li>
+<li>La referencia del RETIE para el punto neutro de acometida en baja tensión es <strong>25 Ω</strong> (Libro 3, Tabla 3.12.3.a).</li>
+</ul>
+<div class="box q"><span class="lab">Pregunta o ejercicio</span>Con 35,8 Ω, ¿cumple la referencia? ¿Qué haría?</div>
+<div class="box a"><span class="lab">Respuesta</span>No cumple. Agregar electrodos en paralelo o mejorar el terreno, y medir en campo: el valor de aceptación es la medición, no la estimación.</div>
+<div class="box o"><span class="lab">Ojo</span>La Tabla 250.122 es imagen en el .md; los valores son los típicos. Confírmalos.</div>
+</section>
+<section class="card"><div class="hd"><h2>15. Colores y rotulado de tramos</h2><span class="min">10 min</span></div><p class="obj">Rotular tramos con la información completa.</p><span class="lab">Qué decir</span><ul>
+<li>Código de colores del RETIE (Libro 3, título 5, Tabla 3.5.a): neutro blanco y tierra de protección verde o desnuda. Para L1 y L2 en 120/240 V se espera negro y rojo; confírmalo en la tabla original.</li>
+<li><strong>Ejemplo resuelto:</strong> T-12: 2 × Cu 8 AWG (L1 + L2) + 1 × Cu 10 AWG (PE), THHN/THWN-2, 600 V, en EMT Ø ¾&quot;, circuito C-12, protección 2P-40 A.</li>
+<li>Tu turno: rótulo del tramo del circuito C6, en EMT ½&quot;.</li>
+</ul>
+<div class="box a"><span class="lab">Respuesta</span><strong>T-06:</strong> 1 × Cu 12 AWG (L) + 1 × Cu 12 AWG (N) + 1 × Cu 12 AWG (PE), THHN/THWN-2, 600 V, en EMT Ø ½&quot;, circuito C-6, protección 1P-20 A.</div>
+<div class="box o"><span class="lab">Ojo</span>La tabla de colores en el .md quedó desordenada: no pude confirmar L1 y L2. Verifícalo en el original.</div>
+</section>
+<section class="card"><div class="hd"><h2>16. Qué debe mostrar el plano</h2><span class="min">6 min</span></div><p class="obj">Dar la lista de contenido del plano.</p><span class="lab">Qué decir</span><ul>
+<li>Seis frentes del artículo 3.3.2.1: puesta a tierra, sistema de medida, tablero, canalizaciones, conductores por tramo y aparatos con puntos de iluminación. Más tres documentos: cuadro de convenciones, cuadro de cargas y espacios de montaje.</li>
+<li>Nuestro caso es diseño detallado, así que además llevan unifilar y memoria de cálculo (3.3.1.1).</li>
+</ul>
+</section>
+<section class="card"><div class="hd"><h2>17. Cuadro de convenciones</h2><span class="min">5 min</span></div><p class="obj">Fijar los símbolos del plano.</p><span class="lab">Qué decir</span><ul>
+<li>Cada símbolo del plano debe aparecer en el cuadro de convenciones. Lo mostrado es un ejemplo didáctico.</li>
+<li>Para el entregable usen los símbolos oficiales del Libro 1, art. 1.3.4.</li>
+</ul>
+<div class="box o"><span class="lab">Ojo</span>No verifiqué cada símbolo contra el art. 1.3.4: en el .md son imágenes. Revísalos antes de exigirlos como oficiales.</div>
+</section>
+<section class="card"><div class="hd"><h2>18. Plano de planta del caso</h2><span class="min">10 min</span></div><p class="obj">Leer e interpretar el plano.</p><span class="lab">Qué decir</span><ul>
+<li>Recorran el plano: TG-1 en el hall técnico, junto al medidor; cargas de 240 V resaltadas (aires, cooktop y horno); tomas con GFCI en baños, mesón, lavandería y terraza; tramos rotulados T-nn.</li>
+<li>Se muestran 4 de los 15 circuitos. En su plano a escala 1:50 deben aparecer todos.</li>
+</ul>
+<div class="box q"><span class="lab">Pregunta o ejercicio</span>¿Qué tramo atraviesa más espacios y qué problema puede traer?</div>
+<div class="box a"><span class="lab">Respuesta</span>El de las alcobas recorre el pasillo; puede ser largo, lo que afecta la caída de tensión. Se verifica con la fórmula de la lámina 12.</div>
+</section>
+<section class="card"><div class="hd"><h2>19. Diagrama unifilar del tablero</h2><span class="min">8 min</span></div><p class="obj">Leer el unifilar y verificar su consistencia.</p><span class="lab">Qué decir</span><ul>
+<li>El unifilar muestra red, medidor, protección general de 2×100 A, barras L1, L2, N y PE, cada circuito con su breaker y calibre, y la puesta a tierra.</li>
+<li>Regla: los datos del unifilar deben coincidir con el cuadro de cargas y con los rótulos del plano.</li>
+</ul>
+</section>
+<section class="card"><div class="hd"><h2>20. Lista de verificación antes de entregar</h2><span class="min">6 min</span></div><p class="obj">Autoevaluar el paquete de diseño.</p><span class="lab">Qué decir</span><ul>
+<li>Diez puntos: coherencia plano-cuadro-unifilar, breaker que protege al conductor, caída de tensión menor al 3 %, ocupación menor al 40 %, desbalance menor al 5 %, GFCI y AFCI, convenciones completas, tablero con espacio y reserva, puesta a tierra definida y directorio de circuitos.</li>
+<li>Un punto sin cumplir es un hallazgo para corregir antes de entregar.</li>
+</ul>
+</section>
+<section class="card"><div class="hd"><h2>21. Taller: su paquete de diseño</h2><span class="min">10 min</span></div><p class="obj">Dejar claras las tareas y los criterios.</p><span class="lab">Qué decir</span><ul>
+<li>Equipos de tres: matriz de hallazgos con propuesta, cuadro propuesto en hoja de cálculo con fórmulas, memoria con caída de tensión y ocupación de tres circuitos, plano a escala 1:50 con convenciones y tramos rotulados, y unifilar del TG-1.</li>
+<li>Criterios: propuestas coherentes con la norma, cálculos correctos y trazables, balanceo menor al 5 %, plano legible y consistente, lista de verificación completa.</li>
+</ul>
+</section>
+<section class="card"><div class="hd"><h2>22. Lo que nos llevamos</h2><span class="min">5 min</span></div><p class="obj">Cerrar y anunciar la Misión 3.</p><span class="lab">Qué decir</span><ul>
+<li>Cada hallazgo se convierte en una propuesta. Un circuito por carga grande con L1 y L2 balanceadas. La caída de tensión y la ocupación se calculan, no se adivinan. El plano, el cuadro y el unifilar cuentan la misma historia.</li>
+<li>Siguiente: <strong>iluminación y RETILAP</strong>.</li>
+</ul>
+<div class="box q"><span class="lab">Pregunta o ejercicio</span>Pregunta de salida: ¿qué decisión de replanteo les pareció más importante?</div>
+</section>
+</div>
+</body>
+</html>
