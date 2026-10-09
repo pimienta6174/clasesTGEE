@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 2 · Replanteo y planos · SENA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style id="deck-css">
+/* Escala áurea: φ = 1,618 · espaciado Fibonacci 8-13-21-34-55-89 · columnas 61,8 % / 38,2 % */
+:root{
+  --f13:13px; --f21:21px; --f34:34px; --f55:55px; --f89:89px;
+  --verde:#39A900; --verde-osc:#2B8200; --verde-claro:#EAF6E1;
+  --azul:#00304D; --azul-2:#0A4A70;
+  --cian:#50E5F9; --amarillo:#FDC300; --naranja:#FF6C00;
+  --texto:#1D2B36; --gris:#5C6B77; --linea:#D9E1E6; --fondo:#F4F7F9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#071a26;font-family:'Work Sans',system-ui,sans-serif;color:var(--texto);overflow:hidden}
+.viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+.stage{position:relative;width:1920px;height:1080px;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;background:#fff;display:none;overflow:hidden}
+.slide.active{display:block;animation:in .45s ease}
+@keyframes in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+
+/* ---------- Estructura común ---------- */
+.top{position:absolute;left:0;right:0;top:0;height:110px;padding:0 var(--f89);display:flex;align-items:center;gap:28px;border-bottom:6px solid var(--verde);background:#fff}
+.top .logo{width:78px;height:78px;color:var(--verde)}
+.top .prog{font-size:24px;font-weight:600;color:var(--azul);line-height:1.15}
+.top .prog small{display:block;font-weight:400;color:var(--gris);font-size:20px}
+.top .tag{margin-left:auto;font-size:22px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--azul);padding:10px 22px;border-radius:40px}
+.body{position:absolute;left:var(--f89);right:var(--f89);top:144px;bottom:89px}
+.foot{position:absolute;left:var(--f89);right:var(--f89);bottom:0;height:70px;display:flex;align-items:center;justify-content:space-between;color:var(--gris);font-size:20px}
+.foot .n{font-weight:700;color:var(--azul)}
+h1,h2,h3{color:var(--azul);letter-spacing:-.01em}
+h2{font-size:55px;font-weight:800;line-height:1.08;margin-bottom:var(--f21)}
+h2 em{font-style:normal;color:var(--verde)}
+.lead{font-size:30px;line-height:1.4;color:var(--gris);max-width:1500px;margin-bottom:var(--f21)}
+h3{font-size:32px;font-weight:700;margin-bottom:10px}
+p,li{font-size:29px;line-height:1.42}
+ul{padding-left:34px}
+li{margin-bottom:10px}
+li::marker{color:var(--verde)}
+b,strong{color:var(--azul)}
+.grid{display:grid;gap:var(--f21)}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(5,1fr)}
+.cols{display:grid;grid-template-columns:1.618fr 1fr;gap:var(--f55)}
+.cols.rev{grid-template-columns:1fr 1.618fr}
+.card{background:var(--fondo);border-radius:21px;padding:21px 34px;border-top:7px solid var(--verde)}
+.card.az{border-top-color:var(--azul)}.card.na{border-top-color:var(--naranja)}.card.am{border-top-color:var(--amarillo)}.card.ci{border-top-color:var(--cian)}
+.card h3{font-size:30px}.card p,.card li{font-size:25px}
+.big{font-size:70px;font-weight:800;color:var(--verde);line-height:1}
+.pill{display:inline-block;font-weight:700;font-size:22px;padding:6px 16px;border-radius:30px;background:var(--verde-claro);color:var(--verde-osc);margin-right:8px}
+.pill.az{background:#DCEBF4;color:var(--azul)}.pill.na{background:#FFE9D9;color:#B84A00}
+code,.mono{font-family:'JetBrains Mono',monospace;font-weight:700}
+sub,sup{font-size:.65em}
+
+/* Fórmulas y bloques didácticos */
+.formula{background:var(--azul);color:#fff;border-radius:20px;padding:22px 34px;font-size:40px;font-weight:600;line-height:1.5;margin:12px 0}
+.formula b{color:var(--cian)}.formula small{display:block;font-size:23px;font-weight:400;color:#B9D6E6}
+.formula .row{display:flex;gap:56px;flex-wrap:wrap}
+.ex,.turn,.note,.warn{border-radius:18px;padding:20px 28px;margin:12px 0;font-size:27px;line-height:1.45}
+.ex{background:var(--verde-claro);border-left:10px solid var(--verde)}
+.turn{background:#FFF3E8;border-left:10px solid var(--naranja)}
+.note{background:#EAF6FB;border-left:10px solid var(--azul)}
+.warn{background:#FFF8DB;border-left:10px solid var(--amarillo)}
+.ex .lab,.turn .lab,.note .lab,.warn .lab{display:block;font-size:20px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.ex .lab{color:var(--verde-osc)}.turn .lab{color:#C24F00}.note .lab{color:var(--azul)}.warn .lab{color:#8A6A00}
+.steps div{margin:3px 0}
+.res{font-weight:800;color:var(--verde-osc)}
+
+/* Descubrir respuesta */
+.rvbox .ans{filter:blur(13px);opacity:.25;transition:all .5s ease;user-select:none}
+.rvbox.shown .ans{filter:none;opacity:1;user-select:auto}
+.rv-btn{font-family:inherit;font-size:22px;font-weight:700;background:var(--naranja);color:#fff;border:none;border-radius:40px;padding:10px 26px;cursor:pointer;margin-top:8px;box-shadow:0 4px 0 #B84A00}
+.rv-btn:active{transform:translateY(3px);box-shadow:none}
+.rvbox.shown .rv-btn{background:var(--verde);box-shadow:0 4px 0 var(--verde-osc)}
+
+/* Tablas */
+table{width:100%;border-collapse:collapse;font-size:24px}
+th{background:var(--azul);color:#fff;font-weight:600;padding:9px 12px;text-align:left}
+td{padding:7px 12px;border-bottom:1px solid var(--linea)}
+tr:nth-child(even) td{background:#F8FAFB}
+td.r,th.r{text-align:right}
+td.c,th.c{text-align:center}
+tfoot td{background:var(--verde-claro)!important;font-weight:700;color:var(--azul)}
+.l1{color:#fff;background:#C0392B;border-radius:6px;padding:2px 10px;font-weight:700;font-size:21px}
+.l2{color:#fff;background:var(--azul-2);border-radius:6px;padding:2px 10px;font-weight:700;font-size:21px}
+.l12{color:#fff;background:#6C3483;border-radius:6px;padding:2px 10px;font-weight:700;font-size:21px}
+
+/* Portada */
+.cover{background:linear-gradient(120deg,#00304D 0%,#00304D 55%,#0A4A70 100%)}
+.cover .phi{position:absolute;right:80px;top:230px;width:760px}
+.cover .stripe{position:absolute;left:0;bottom:0;width:100%;height:26px;background:linear-gradient(90deg,var(--verde) 0 62%,var(--amarillo) 62% 81%,var(--cian) 81% 100%)}
+.cover .logobox{position:absolute;left:110px;top:89px;width:210px;height:210px;background:#fff;border-radius:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.cover .logobox svg{width:170px;height:170px;color:var(--verde)}
+.cover .txt{position:absolute;left:110px;top:382px;width:940px;color:#fff}
+.cover .kicker{font-size:30px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--cian)}
+.cover h1{color:#fff;font-size:89px;line-height:1.02;font-weight:800;margin:20px 0 26px}
+.cover h1 span{color:var(--verde)}
+.cover .sub{font-size:34px;font-weight:300;line-height:1.4;max-width:1000px;color:#D6E8F2}
+.cover .who{position:absolute;left:110px;bottom:100px;color:#fff;font-size:30px;line-height:1.5}
+.cover .who b{color:#fff;font-size:36px}.cover .who span{color:var(--cian)}
+.cover .chip{position:absolute;right:110px;bottom:100px;background:var(--verde);color:#fff;font-weight:800;font-size:34px;padding:18px 40px;border-radius:50px}
+
+/* Ruta de misiones */
+.mission{border-radius:22px;padding:28px;background:var(--fondo);position:relative;border-top:8px solid var(--linea)}
+.mission .no{font-size:24px;font-weight:800;letter-spacing:.1em;color:var(--gris)}
+.mission h3{font-size:30px;margin:8px 0}
+.mission p{font-size:24px;color:var(--gris)}
+.mission.on{background:var(--azul);border-top-color:var(--verde);transform:translateY(-14px);box-shadow:0 18px 40px rgba(0,48,77,.3)}
+.mission.on h3,.mission.on .no{color:#fff}.mission.on p{color:#CFE3EE}
+.mission.on::after{content:"HOY";position:absolute;right:22px;top:20px;background:var(--verde);color:#fff;font-weight:800;font-size:20px;padding:5px 16px;border-radius:30px}
+
+/* Pirámide normativa */
+.layers{display:flex;flex-direction:column;gap:12px}
+.layer{border-radius:16px;padding:16px 26px;color:#fff;display:flex;align-items:center;gap:24px}
+.layer b{color:#fff;font-size:32px;min-width:330px}.layer span{font-size:25px;line-height:1.3}
+
+/* Pasos */
+.step{display:flex;gap:21px;align-items:flex-start;background:var(--fondo);border-radius:21px;padding:21px 34px;margin-bottom:21px}
+.step .num{flex:none;width:64px;height:64px;border-radius:50%;background:var(--verde);color:#fff;font-weight:800;font-size:34px;display:flex;align-items:center;justify-content:center}
+.step h3{font-size:30px;margin:0}.step p{font-size:24px;color:var(--gris);line-height:1.3}
+
+/* Barras */
+.bars{display:flex;align-items:flex-end;gap:70px;height:380px;border-bottom:4px solid var(--azul);padding:0 40px;margin-top:10px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.bar .b{width:100%;border-radius:14px 14px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:14px;color:#fff;font-weight:800;font-size:34px}
+.bar .t{margin-top:10px;font-size:26px;font-weight:700;color:var(--azul)}
+
+
+/* Ajustes por lámina para equilibrar el espacio (proyección en aula) */
+.slide[data-title="Objetivos"] .card{padding:26px 40px}
+.slide[data-title="Objetivos"] .card p{font-size:30px}
+.slide[data-title="Objetivos"] .card h3{font-size:36px}
+.slide[data-title="Objetivos"] .big{font-size:76px}
+.slide[data-title="Riesgo eléctrico"] .card{padding:34px 40px}
+.slide[data-title="Riesgo eléctrico"] .card h3{font-size:36px;margin-bottom:13px}
+.slide[data-title="Riesgo eléctrico"] .card p{font-size:30px}
+.slide[data-title="Tu turno: potencia y corriente"] table{font-size:31px}
+.slide[data-title="Tu turno: potencia y corriente"] th,.slide[data-title="Tu turno: potencia y corriente"] td{padding:17px 18px}
+.slide[data-title="Tu turno: potencia y corriente"] .turn{font-size:31px;margin-top:34px}
+.slide[data-title="Circuitos requeridos en vivienda"] table{font-size:25px}
+.slide[data-title="Circuitos requeridos en vivienda"] th,.slide[data-title="Circuitos requeridos en vivienda"] td{padding:10px 18px}
+.slide[data-title="Circuitos requeridos en vivienda"] .note{font-size:27px;margin-top:21px}
+.slide[data-title="Taller y entregable"] li{font-size:34px;margin-bottom:21px}
+.slide[data-title="Taller y entregable"] .card li{font-size:29px;margin-bottom:13px}
+.slide[data-title="Taller y entregable"] .card{padding:34px 40px}
+.slide[data-title="Taller y entregable"] .warn,.slide[data-title="Taller y entregable"] h3{font-size:31px}
+.slide[data-title="Ruta de misiones"] .mission{padding:34px}
+.slide[data-title="Ruta de misiones"] .mission p{font-size:27px}
+.slide[data-title="Ruta de misiones"] .mission h3{font-size:34px}
+.slide[data-title="RETIE y el levantamiento"] .card{padding:20px 30px}
+.slide[data-title="RETIE y el levantamiento"] .card h3{font-size:30px}
+.slide[data-title="RETIE y el levantamiento"] .card p{font-size:24px}
+.slide[data-title="Magnitudes eléctricas"] .card{padding:30px 38px}
+.slide[data-title="Magnitudes eléctricas"] .card h3{font-size:34px}
+.slide[data-title="Magnitudes eléctricas"] .card p{font-size:28px}
+.slide[data-title="Mapa de la NTC 2050"] .card{padding:20px 30px!important}
+.slide[data-title="Mapa de la NTC 2050"] .card h3{font-size:29px!important}
+.slide[data-title="Mapa de la NTC 2050"] .card p{font-size:24px!important}
+.slide[data-title="Marco normativo"] .layer span{font-size:27px}
+.st{display:inline-block;font-weight:800;font-size:19px;letter-spacing:.04em;padding:3px 12px;border-radius:30px;color:#fff;white-space:nowrap}
+.st.c{background:#C0392B}.st.m{background:var(--naranja)}.st.n{background:#8A6A00}.st.ok{background:var(--verde-osc)}
+.sub-st{display:block;font-size:19px;font-weight:500;color:var(--gris);margin-top:2px;white-space:normal}
+.slide[data-title="Cuadro de cargas encontrado"] td,.slide[data-title="Cuadro de cargas encontrado"] th{padding:5px 10px}
+.slide[data-title="Cuadro de cargas encontrado"] td.c{white-space:nowrap}
+.slide[data-title="Cuadro de cargas encontrado"] .sub-st{font-size:17px;margin-top:0}
+.slide[data-title="Balanceo de líneas"] .formula{font-size:30px!important;padding:12px 26px!important;margin:8px 0}
+.slide[data-title="Carga demandada Art. 220"] td,.slide[data-title="Carga demandada Art. 220"] th{padding:5px 12px}
+
+.slide[data-title="RETIE para nuestro caso"] .step p{font-size:27px}
+.slide[data-title="RETIE para nuestro caso"] .step h3{font-size:32px}
+.slide[data-title="RETIE para nuestro caso"] .card p,.slide[data-title="RETIE para nuestro caso"] .warn{font-size:28px}
+.slide[data-title="Del hallazgo a la corrección"] td,.slide[data-title="Del hallazgo a la corrección"] th{font-size:27px;padding:11px 14px}
+.slide[data-title="Fórmulas breaker y calibre c2"] .ex,.slide[data-title="Fórmulas breaker y calibre c2"] .turn{font-size:30px}
+.slide[data-title="Fórmulas breaker y calibre c2"] .formula{font-size:42px!important}
+.slide[data-title="Diseño y acometida"] .card p{font-size:27px}
+.slide[data-title="Diseño y acometida"] .turn{font-size:29px}
+.slide[data-title="Ocupación de tubería"] .formula{font-size:38px!important}
+.slide[data-title="Ocupación de tubería"] .ex,.slide[data-title="Ocupación de tubería"] .turn{font-size:28px!important}
+.slide[data-title="Ocupación de tubería"] .note,.slide[data-title="Ocupación de tubería"] .warn{font-size:24px!important}
+.slide[data-title="Puesta a tierra en el diseño"] table{font-size:30px!important}
+.slide[data-title="Puesta a tierra en el diseño"] td,.slide[data-title="Puesta a tierra en el diseño"] th{padding:12px 16px}
+.slide[data-title="Puesta a tierra en el diseño"] .ex,.slide[data-title="Puesta a tierra en el diseño"] .turn,.slide[data-title="Puesta a tierra en el diseño"] .card p{font-size:28px!important}
+.slide[data-title="Colores y rotulado de tramos"] .ex,.slide[data-title="Colores y rotulado de tramos"] .turn{font-size:29px!important}
+.slide[data-title="Colores y rotulado de tramos"] .card h3{font-size:32px!important}
+.slide[data-title="Contenido del plano"] .card p{font-size:27px!important}
+.slide[data-title="Contenido del plano"] .card h3{font-size:31px!important}
+.slide[data-title="Contenido del plano"] .note{font-size:27px!important}
+.slide[data-title="Cuadro de convenciones"] table{font-size:30px!important}
+.slide[data-title="Cuadro de convenciones"] td{padding:12px 16px}
+.slide[data-title="Lista de verificación"] .step p{font-size:28px!important}
+.slide[data-title="Lista de verificación"] .step{padding:16px 26px!important}
+.slide[data-title="Taller c2"] li{margin-bottom:16px}
+.slide[data-title="Plano de planta del caso"] li,.slide[data-title="Diagrama unifilar"] li{font-size:25px!important}
+/* Navegación */
+.hud{position:fixed;left:0;right:0;bottom:0;height:6px;background:rgba(255,255,255,.12);z-index:10}
+.hud i{display:block;height:100%;width:0;background:var(--verde);transition:width .3s}
+.btn{position:fixed;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;border:none;background:rgba(255,255,255,.14);color:#fff;font-size:26px;cursor:pointer;z-index:10;opacity:.0;transition:.2s}
+.viewport:hover~.btn,.btn:hover{opacity:1}
+#prev{left:12px}#next{right:12px}
+.dl{position:fixed;left:50%;transform:translateX(-50%);bottom:30px;z-index:11;font:600 15px "Work Sans",system-ui,sans-serif;color:#fff;background:rgba(0,48,77,.88);border:1px solid rgba(80,229,249,.55);border-radius:30px;padding:8px 18px;cursor:pointer;opacity:0;transition:.2s}
+.dl:hover,.dl:focus-visible{opacity:1;background:var(--verde)}
+:fullscreen .dl{display:none}
+.help{position:fixed;right:14px;top:10px;color:#9fb6c3;font-size:13px;z-index:10;opacity:.0;transition:.3s}
+body:hover .help{opacity:.8}
+
+@media print{
+  html,body{overflow:visible;background:#fff;height:auto}
+  .viewport{position:static;display:block}
+  .stage{transform:none!important;width:1920px;height:auto}
+  .slide{display:block!important;position:relative;height:1080px;page-break-after:always;animation:none}
+  .btn,.hud,.help,.rv-btn,.dl{display:none}
+  .rvbox .ans{filter:none;opacity:1}
+  @page{size:1920px 1080px;margin:0}
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+<!-- Logo SENA (símbolo reutilizable) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="sena" viewBox="0 0 1000 1000">
+    <path fill="currentColor" d="M504.2,20.5c-58.3,0.1-105.6,47.4-105.5,105.8c0.1,58.3,47.4,105.6,105.7,105.6 c58.3,0,105.6-47.3,105.6-105.7V126C609.9,67.6,562.6,20.4,504.2,20.5z M155.6,264.6c-18.6,0.1-37.5,1.1-55.2,5.6 c-11.7,3-23,7.8-30.3,15.4c-9.2,9.5-10.4,22.3-5.9,33.3c4,9.7,14.8,16.9,26.8,21.1c25.9,8.9,54.6,10.7,81.8,16.3 c5,1.2,10.6,2.6,13.7,6c3.2,4.1,1.3,9.7-4,12.2c-8.8,4.5-20.1,4.5-30.4,4.4c-9.4-0.4-19.7-1.2-27.2-5.9c-5.5-3.4-6.5-9.1-5.2-14.1 l-60.6,0c-0.2,9.2,1.6,18.9,8.4,26.8c5.6,6.8,14.8,11.5,24.6,14.4c15.7,4.6,32.7,6,49.4,6.4c22.7,0.4,45.8-0.3,67.6-5.4 c13-3.2,25.8-8.3,34.1-16.6c14.8-14.8,11.3-38.3-8.3-49.8c-9.8-5.7-21.5-9.2-33.4-11.5c-17.5-3.6-35.3-6.3-52.9-9.2 c-6.2-1.2-12.8-2.3-18-5.2c-5.5-2.9-5.9-9.8-0.3-12.9c7.2-4.1,16.8-4,25.4-4c9.1,0.2,19,0.7,26.5,5c4.2,2.3,5.9,6.3,5.9,10.1 l57.6-0.1c-0.2-7.3-1.6-14.9-6.9-21.2c-6.2-7.8-17.1-12.7-28.3-15.5C192.8,265.6,174.1,264.7,155.6,264.6L155.6,264.6z M280.6,268.9 l0,137.7l168.1,0l0-30H342.3v-26.7h94.9v-29.3h-94.9l0-21.9l102.6,0l-0.1-29.7L280.6,268.9z M557.5,269c0,0-51.9,0-77.9,0l0,137.7 l59,0l0-92.7l80.8,92.6l81,0.1l0-137.7l-59.1,0l0.1,92L557.5,269z M805.6,269.2c0,0-63.6,91.9-95.6,137.7l61.9,0l14.9-24.8h95.7 l13.9,24.9l68.8,0L874,269.2L805.6,269.2z M836.6,302.1l29.4,49.9l-60.7,0.1L836.6,302.1z M10.6,445.6l0.5,75l280.1-1 c14.3,3.1,22.6,12.4,19.7,33.5L138.6,854.7l56.1,52.5l266.9-461.6L10.6,445.6z M545.2,446.2l262.4,459.6l58-52.1L691.3,552.9 c-2.9-21.2,5.4-30.6,19.7-33.7l280.2,1l-0.1-73.7L545.2,446.2z M500.9,522.3L254.8,944.7l65.4,31.9L484.4,699 c5.7-4.6,11.4-7.1,17.1-7.3c6-0.2,12.2,2,18.3,6.8l163.8,278.4l67.4-35.2L500.9,522.3z"/>
+  </symbol>
+</svg>
+
+<div class="viewport"><div class="stage" id="stage">
+
+<section class="slide cover" data-title="Portada c2">
+  <svg class="phi" viewBox="-0.02 -0.02 1.658 1.04" aria-hidden="true"><g fill="none" stroke="#50E5F9" stroke-width=".003"><g stroke-opacity=".3"><rect x="0.0000" y="0.0000" width="1.0000" height="1.0000"/><rect x="1.0000" y="0.3820" width="0.6180" height="0.6180"/><rect x="1.2361" y="0.0000" width="0.3820" height="0.3820"/><rect x="1.0000" y="0.0000" width="0.2361" height="0.2361"/><rect x="1.0000" y="0.2361" width="0.1459" height="0.1459"/><rect x="1.1459" y="0.2918" width="0.0902" height="0.0902"/><rect x="1.1803" y="0.2361" width="0.0557" height="0.0557"/><rect x="1.1459" y="0.2361" width="0.0344" height="0.0344"/><rect x="1.1459" y="0.2705" width="0.0213" height="0.0213"/></g><path d="M0.0000,0.0000 A1.0000,1.0000 0 0 0 1.0000,1.0000 A0.6180,0.6180 0 0 0 1.6180,0.3820 A0.3820,0.3820 0 0 0 1.2361,0.0000 A0.2361,0.2361 0 0 0 1.0000,0.2361 A0.1459,0.1459 0 0 0 1.1459,0.3820 A0.0902,0.0902 0 0 0 1.2361,0.2918 A0.0557,0.0557 0 0 0 1.1803,0.2361 A0.0344,0.0344 0 0 0 1.1459,0.2705 A0.0213,0.0213 0 0 0 1.1672,0.2918 " stroke="#39A900" stroke-width=".012" stroke-linecap="round"/></g><path fill="#50E5F9" fill-opacity=".14" transform="translate(.2 .2) scale(.006)" d="M58 2 20 56h24l-8 42 44-58H54z"/></svg><div class="logobox"><svg><use href="#sena"/></svg></div>
+  <div class="txt"><div class="kicker">Clase 2 · Misión 2</div>
+    <h1>Replanteo de la instalación y <span>planos</span></h1>
+    <div class="sub">Del diagnóstico al diseño corregido: circuitos, cálculos y plano bajo la <b style="color:#fff">NTC&nbsp;2050</b> y el <b style="color:#fff">RETIE</b>.</div></div>
+  <div class="who"><b>Andrés Felipe Valencia</b><br><span>Instructor · Tecnología en Gestión Eficiente de la Energía</span></div>
+  <div class="chip">SENA</div><div class="stripe"></div></section>
+
+<section class="slide" data-title="Del diagnóstico al diseño"><div class="body">
+  <h2>De la Misión 1 a la Misión 2: <em>del diagnóstico al diseño</em></h2>
+  <p class="lead">Ya sabemos qué está mal. Hoy decidimos cómo debe quedar la instalación y lo dejamos dibujado.</p>
+  <div style="display:flex;gap:13px;margin-top:34px;align-items:stretch">
+    <div style="flex:1;background:var(--fondo);border-radius:21px;padding:26px 24px;border-top:8px solid var(--verde)"><div style="font-weight:800;letter-spacing:.1em;font-size:20px;color:var(--gris)">MISIÓN 1</div><h3 style="color:var(--azul);font-size:30px;margin:6px 0">Hallazgos</h3><p style="font-size:24px;color:var(--gris);line-height:1.3">Matriz con 9 hallazgos y su severidad.</p></div><div style="align-self:center;font-size:44px;color:var(--verde);font-weight:800">›</div>
+    <div style="flex:1;background:var(--azul);border-radius:21px;padding:26px 24px;border-top:8px solid var(--verde)"><div style="font-weight:800;letter-spacing:.1em;font-size:20px;color:#CFE3EE">PASO 1</div><h3 style="color:#fff;font-size:30px;margin:6px 0">Criterios</h3><p style="font-size:24px;color:#CFE3EE;line-height:1.3">Reglas para circuitos por zona y carga.</p></div><div style="align-self:center;font-size:44px;color:var(--verde);font-weight:800">›</div>
+    <div style="flex:1;background:var(--azul);border-radius:21px;padding:26px 24px;border-top:8px solid var(--verde)"><div style="font-weight:800;letter-spacing:.1em;font-size:20px;color:#CFE3EE">PASO 2</div><h3 style="color:#fff;font-size:30px;margin:6px 0">Cuadro nuevo</h3><p style="font-size:24px;color:#CFE3EE;line-height:1.3">Circuitos, breakers, calibres y balanceo.</p></div><div style="align-self:center;font-size:44px;color:var(--verde);font-weight:800">›</div>
+    <div style="flex:1;background:var(--azul);border-radius:21px;padding:26px 24px;border-top:8px solid var(--verde)"><div style="font-weight:800;letter-spacing:.1em;font-size:20px;color:#CFE3EE">PASO 3</div><h3 style="color:#fff;font-size:30px;margin:6px 0">Cálculos</h3><p style="font-size:24px;color:#CFE3EE;line-height:1.3">Caída de tensión, ocupación de tubería y tablero.</p></div><div style="align-self:center;font-size:44px;color:var(--verde);font-weight:800">›</div>
+    <div style="flex:1;background:var(--azul);border-radius:21px;padding:26px 24px;border-top:8px solid var(--verde)"><div style="font-weight:800;letter-spacing:.1em;font-size:20px;color:#CFE3EE">PASO 4</div><h3 style="color:#fff;font-size:30px;margin:6px 0">Plano</h3><p style="font-size:24px;color:#CFE3EE;line-height:1.3">Planta, unifilar, convenciones y rótulos.</p></div>
+  </div>
+  <div class="note" style="margin-top:55px"><span class="lab">Regla de oro (la misma de siempre)</span>Fórmula, ejemplo resuelto, <b>ustedes calculan a mano</b> y solo al final <b>descubrimos la respuesta</b>.</div>
+</div></section>
+
+<section class="slide" data-title="Objetivos c2"><div class="body">
+  <h2>Al terminar esta clase <em>ustedes podrán…</em></h2>
+  <div class="grid g2" style="margin-top:21px">
+    <div class="card" style="padding:26px 40px"><div class="big" style="font-size:76px">1</div><h3 style="font-size:36px">Corregir</h3><p style="font-size:30px">Convertir cada hallazgo en una propuesta y armar el <b>cuadro de cargas nuevo</b>.</p></div>
+    <div class="card" style="padding:26px 40px"><div class="big" style="font-size:76px">2</div><h3 style="font-size:36px">Calcular</h3><p style="font-size:30px"><b>Caída de tensión</b>, <b>ocupación de tubería</b>, reserva del tablero y acometida.</p></div>
+    <div class="card" style="padding:26px 40px"><div class="big" style="font-size:76px">3</div><h3 style="font-size:36px">Dibujar</h3><p style="font-size:30px">Plano de planta con <b>convenciones</b>, tramos rotulados y diagrama unifilar.</p></div>
+    <div class="card" style="padding:26px 40px"><div class="big" style="font-size:76px">4</div><h3 style="font-size:36px">Verificar</h3><p style="font-size:30px">Revisar el diseño con una <b>lista de control</b> antes de entregarlo.</p></div>
+  </div>
+  <div class="warn" style="margin-top:26px"><span class="lab">Entregable de la clase</span>Paquete de diseño: <b>cuadro propuesto, plano de planta, unifilar, tabla de tramos y memoria de cálculo</b>.</div>
+</div></section>
+
+<section class="slide" data-title="RETIE para nuestro caso"><div class="body">
+  <h2>Qué exige el <em>RETIE</em> a nuestro caso</h2>
+  <div class="cols" style="margin-top:13px">
+    <div>
+      <div class="step"><div class="num">1</div><div><h3>Más de 15 kVA: diseño detallado</h3><p>La casa supera los 15 kVA instalables. Exige diseño de un ingeniero (Libro 3, art. 3.3.1, literal q).</p></div></div>
+      <div class="step"><div class="num">2</div><div><h3>Qué incluye el diseño</h3><p>Cálculo de cargas con factor de potencia y armónicos, protecciones, puesta a tierra, canalizaciones, regulación de tensión, unifilares y planos (3.3.1.1).</p></div></div>
+      <div class="step"><div class="num">3</div><div><h3>La remodelación también cuenta</h3><p>Certificación plena si se remodela más del 50 % de dispositivos o conductores y la parte remodelada supera 10 kVA (Libro 4, art. 4.3.2.2).</p></div></div>
+      <div class="step"><div class="num">4</div><div><h3>Verificación final</h3><p>Certificación plena: dictamen de inspección y declaración de cumplimiento (4.3.2).</p></div></div>
+    </div>
+    <div>
+      <div class="card az"><h3>¿Quién firma?</h3><p>Personas con competencia legal según su matrícula: ingenieros, tecnólogos y técnicos, dentro de su alcance (art. 3.2.1).</p></div><br>
+      <div class="warn"><span class="lab">En el curso</span>Hacemos el diseño como práctica de formación. La firma legal corresponde al profesional competente.</div>
+    </div>
+  </div>
+</div></section>
+
+<section class="slide" data-title="Del hallazgo a la corrección"><div class="body">
+  <h2>Del hallazgo a <em>la corrección</em></h2>
+  <p class="lead" style="margin-bottom:8px;font-size:26px"><b style="color:var(--naranja)">Tu turno:</b> escriban en su cuaderno la propuesta para cada hallazgo de la Misión 1 y luego descúbranla.</p>
+  <div class="rvbox" id="c2r1"><table style="font-size:24px"><thead><tr><th>#</th><th>Hallazgo (Misión 1)</th><th>Propuesta de corrección</th></tr></thead><tbody><tr><td>1</td><td>Cooktop con 12 AWG (30 A de carga)</td><td class="ans">Circuito 2×40 A con 8 AWG Cu (30 × 1,25 = 37,5 A)</td></tr><tr><td>2</td><td>Cocina en un breaker de 30 A con 12 AWG</td><td class="ans">Nevera y microondas individuales; 2 circuitos de 20 A para el mesón</td></tr><tr><td>3</td><td>Mesón de cocina sin GFCI</td><td class="ans">GFCI en las tomas del mesón (210.8(A))</td></tr><tr><td>4</td><td>Baños sin GFCI</td><td class="ans">Circuito de baños 1×20 A con GFCI</td></tr><tr><td>5</td><td>14 AWG con breaker de 20 A</td><td class="ans">Cambiar a 12 AWG, o bajar el breaker a 15 A (240.4(D))</td></tr><tr><td>6</td><td>Todo el 120 V en L1</td><td class="ans">Repartir los circuitos de 1 polo entre L1 y L2</td></tr><tr><td>7</td><td>Puesta a tierra sin medir</td><td class="ans">Medir y corregir; referencia 25 Ω en el neutro de acometida (3.12.3)</td></tr><tr><td>8</td><td>Sin directorio ni reserva</td><td class="ans">Rotular (408.4(A)) y dejar espacios libres</td></tr><tr><td>9</td><td>Alumbrado con tomas; dos A/A en un breaker</td><td class="ans">Un circuito por aire; separar alumbrado y tomas</td></tr></tbody></table><button class="rv-btn" data-rv="c2r1">▶ Descubrir propuestas</button></div>
+</div></section>
+
+<section class="slide" data-title="Criterios de replanteo"><div class="body">
+  <h2>Seis criterios para <em>replantear</em> los circuitos</h2>
+  <p class="lead" style="font-size:27px">No parchamos: rediseñamos por zona y tipo de carga.</p>
+  <div class="grid g3"><div class="card" style="padding:24px 32px"><h3 style="font-size:31px">1 · Un circuito por carga grande</h3><p style="font-size:26px">Cooktop, horno, nevera, microondas, lavandería y cada aire. Si uno falla, los demás siguen.</p></div><div class="card" style="padding:24px 32px"><h3 style="font-size:31px">2 · Separar alumbrado y tomas</h3><p style="font-size:26px">Y proteger con AFCI las áreas que pide el 210.12(A): alcobas, salas, cocina y lavandería.</p></div><div class="card" style="padding:24px 32px"><h3 style="font-size:31px">3 · Cocina bien resuelta</h3><p style="font-size:26px">Dos circuitos de 20 A para el mesón (210.11(C)(1)), con GFCI (210.8(A)) y nevera individual.</p></div><div class="card" style="padding:24px 32px"><h3 style="font-size:31px">4 · Baños con su circuito</h3><p style="font-size:26px">Un circuito de 20 A solo para tomas de baño (210.11(C)(3)), con GFCI.</p></div><div class="card" style="padding:24px 32px"><h3 style="font-size:31px">5 · Balancear L1 y L2</h3><p style="font-size:26px">Repartir los circuitos de 1 polo. Meta de diseño: desbalance menor al 5 %.</p></div><div class="card" style="padding:24px 32px"><h3 style="font-size:31px">6 · Reserva y directorio</h3><p style="font-size:26px">Dejar espacios libres en el tablero y rotular cada circuito (408.4(A)).</p></div></div>
+  <div class="note" style="margin-top:26px"><span class="lab">Criterio de diseño</span>La reserva (25 %) y el límite de desbalance (5 %) son criterios del curso, no cifras de la norma.</div>
+</div></section>
+
+<section class="slide" data-title="Fórmulas breaker y calibre c2"><div class="body">
+  <h2>Repaso: <em>corriente, breaker y calibre</em> de cada circuito</h2>
+  <div class="formula" style="font-size:36px;padding:16px 30px"><div class="row"><div><b>I</b> = S ÷ V</div><div><b>I<sub>diseño</sub></b> = I × 1,25 <span style="font-size:22px;font-weight:400">(carga continua)</span></div></div>
+   <small>Breaker comercial ≥ I de diseño · 14 AWG máx. 15 A · 12 AWG máx. 20 A · 10 AWG máx. 30 A (240.4(D))</small></div>
+  <div class="ex" style="padding:14px 28px"><span class="lab">Ejemplo resuelto · horno de convección</span>2000 VA a 240 V: I = 2000 ÷ 240 = <span class="res">8,33 A</span> → breaker <span class="res">2×20 A</span>, conductor <span class="res">12 AWG Cu</span>.</div>
+  <div class="turn rvbox" id="c2r2" style="padding:14px 28px"><span class="lab">Tu turno · tres circuitos nuevos</span>
+    <div>Calculen I, breaker y calibre: <b>nevera</b> (941 VA a 120 V), <b>microondas</b> (1263 VA a 120 V) y <b>lavadora-secadora</b> (1667 VA a 120 V).</div>
+    <div class="ans" style="margin-top:8px"><b>Nevera:</b> 7,84 A → 1×20 A, 12 AWG. <b>Microondas:</b> 10,53 A → 1×20 A, 12 AWG. <b>Lavadora-secadora:</b> 13,89 A → 1×20 A, 12 AWG (el circuito de lavandería es de 20 A, 210.11(C)(2)).</div>
+    <button class="rv-btn" data-rv="c2r2">▶ Descubrir respuesta</button></div>
+</div></section>
+
+<section class="slide" data-title="Cuadro de cargas propuesto"><div class="body">
+  <h2>Cuadro de cargas <em>propuesto</em></h2>
+  <p class="lead" style="margin-bottom:6px;font-size:25px"><b style="color:var(--naranja)">Tu turno:</b> asignen L1 o L2 a cada circuito de 1 polo para balancear, y luego descubran la propuesta.</p>
+  <div class="rvbox" id="c2r3"><table style="font-size:20px"><thead><tr><th>Cto</th><th>Descripción</th><th class="r">Carga [VA]</th><th class="r">I [A]</th><th class="c">Breaker</th><th class="c">Cond.</th><th class="c">PE</th><th class="c">Línea</th></tr></thead><tbody><tr><td>C1</td><td>Alumbrado zonas sociales (8 × 30 VA)</td><td class="r">240</td><td class="r">2,00</td><td class="c">1×15 A</td><td class="c">14 AWG</td><td class="c">14 AWG</td><td class="c ans"><span class="l1">L1</span></td></tr><tr><td>C2</td><td>Alumbrado alcobas y baños (7 × 30 VA)</td><td class="r">210</td><td class="r">1,75</td><td class="c">1×15 A</td><td class="c">14 AWG</td><td class="c">14 AWG</td><td class="c ans"><span class="l1">L1</span></td></tr><tr><td>C3</td><td>Tomas sala  comedor y terraza (7 × 180 VA)</td><td class="r">1 260</td><td class="r">10,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c ans"><span class="l1">L1</span></td></tr><tr><td>C4</td><td>Tomas de alcobas (7 × 180 VA)</td><td class="r">1 260</td><td class="r">10,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c ans"><span class="l2">L2</span></td></tr><tr><td>C5</td><td>Tomas de baños con GFCI (3 × 180 VA)</td><td class="r">540</td><td class="r">4,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c ans"><span class="l1">L1</span></td></tr><tr><td>C6</td><td>Pequeños artefactos de cocina 1 (GFCI)</td><td class="r">1 500</td><td class="r">12,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c ans"><span class="l2">L2</span></td></tr><tr><td>C7</td><td>Pequeños artefactos de cocina 2 (GFCI)</td><td class="r">1 500</td><td class="r">12,50</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c ans"><span class="l2">L2</span></td></tr><tr><td>C8</td><td>Nevera</td><td class="r">941</td><td class="r">7,84</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c ans"><span class="l2">L2</span></td></tr><tr><td>C9</td><td>Microondas</td><td class="r">1 263</td><td class="r">10,53</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c ans"><span class="l1">L1</span></td></tr><tr><td>C10</td><td>Lavadora-secadora</td><td class="r">1 667</td><td class="r">13,89</td><td class="c">1×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c ans"><span class="l1">L1</span></td></tr><tr><td>C11</td><td>Horno de convección</td><td class="r">2 000</td><td class="r">8,33</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c "><span class="l12">L1+L2</span></td></tr><tr><td>C12</td><td>Cooktop de inducción</td><td class="r">7 200</td><td class="r">30,00</td><td class="c">2×40 A</td><td class="c">8 AWG</td><td class="c">10 AWG</td><td class="c "><span class="l12">L1+L2</span></td></tr><tr><td>C13</td><td>A/A alcoba principal</td><td class="r">1 778</td><td class="r">7,41</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c "><span class="l12">L1+L2</span></td></tr><tr><td>C14</td><td>A/A alcoba 2</td><td class="r">1 778</td><td class="r">7,41</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c "><span class="l12">L1+L2</span></td></tr><tr><td>C15</td><td>A/A alcoba 3</td><td class="r">1 778</td><td class="r">7,41</td><td class="c">2×20 A</td><td class="c">12 AWG</td><td class="c">12 AWG</td><td class="c "><span class="l12">L1+L2</span></td></tr></tbody>
+  <tfoot><tr><td colspan="2">CARGA DE DISEÑO TOTAL</td><td class="r">24 915</td><td class="r">103,81</td><td colspan="4">24 915 VA ÷ 240 V · tomas a 180 VA por salida</td></tr></tfoot></table><button class="rv-btn" data-rv="c2r3">▶ Descubrir línea de cada circuito</button></div>
+</div></section>
+
+<section class="slide" data-title="Balanceo del cuadro nuevo"><div class="body">
+  <h2>Balanceo del cuadro nuevo: <em>antes y después</em></h2>
+  <div class="formula" style="font-size:30px;padding:12px 26px;margin:8px 0"><b>S<sub>L1</sub></b> = Σ(1 polo en L1) + ½ · Σ(2 polos) &nbsp;·&nbsp; <b>Desbalance %</b> = |S<sub>L1</sub> − S<sub>L2</sub>| ÷ promedio × 100</div>
+  <div class="turn rvbox" id="c2r4" style="padding:14px 28px"><span class="lab">Tu turno · cuadro propuesto</span>
+    <div>Los circuitos de 2 polos suman 14 534 VA (7267 VA a cada línea). Calculen S de L1 y de L2, el desbalance y la corriente del neutro.</div>
+    <div class="ans"><div class="bars" style="height:170px;gap:26px;padding:0 20px">
+      <div class="bar"><div class="b" style="height:100%;background:#C0392B;font-size:22px;padding-top:6px">15 355</div><div class="t" style="font-size:20px">Antes L1</div></div>
+      <div class="bar"><div class="b" style="height:47.3%;background:var(--azul-2);font-size:18px;padding-top:2px">7 267</div><div class="t" style="font-size:20px">Antes L2</div></div>
+      <div class="bar"><div class="b" style="height:81.1%;background:var(--verde-osc);font-size:22px;padding-top:6px">12 447</div><div class="t" style="font-size:20px">Ahora L1</div></div>
+      <div class="bar"><div class="b" style="height:81.2%;background:var(--verde-osc);font-size:22px;padding-top:6px">12 468</div><div class="t" style="font-size:20px">Ahora L2</div></div></div>
+      <div style="margin-top:8px;font-size:24px">L1 = 5180 + 7267 = <span class="res">12 447 VA</span> · L2 = 5201 + 7267 = <span class="res">12 468 VA</span> · Desbalance = 21 ÷ 12 457,5 × 100 = <span class="res">0,17 %</span><br>I<sub>N</sub> = |5180 − 5201| ÷ 120 = <span class="res">0,17 A</span> (antes 67,4 A) · I<sub>L1</sub> = 103,7 A · I<sub>L2</sub> = 103,9 A (antes 128,0 A y 60,6 A)</div></div>
+    <button class="rv-btn" data-rv="c2r4">▶ Descubrir respuesta</button></div>
+</div></section>
+
+<section class="slide" data-title="Tablero y reserva"><div class="body">
+  <h2>El tablero: <em>espacios, reserva y ubicación</em></h2>
+  <div class="cols" style="margin-top:8px">
+  <div>
+    <div class="formula" style="font-size:34px;padding:14px 28px"><b>Espacios requeridos</b> = espacios usados ÷ (1 − reserva)<small>Un circuito de 1 polo ocupa 1 espacio; uno de 2 polos, 2. El general va aparte.</small></div>
+    <div class="ex" style="padding:12px 26px"><span class="lab">Ejemplo resuelto</span>Con 12 espacios usados y 25 % de reserva: 12 ÷ 0,75 = 16 → tablero de <span class="res">18 espacios</span> (el comercial inmediato).</div>
+    <div class="turn rvbox" id="c2r5" style="padding:12px 26px"><span class="lab">Tu turno</span><div>El cuadro propuesto tiene 10 circuitos de 1 polo y 5 de 2 polos. ¿Cuántos espacios usa y qué tablero necesita con 25 % de reserva?</div>
+      <div class="ans" style="margin-top:6px">Usa 10 + 5 × 2 = <span class="res">20 espacios</span>. 20 ÷ 0,75 = 26,7 → tablero de <span class="res">30 espacios</span>.</div>
+      <button class="rv-btn" data-rv="c2r5">▶ Descubrir respuesta</button></div>
+  </div>
+  <div>
+    <div class="card az" style="padding:18px 28px"><h3 style="font-size:28px">Espacio de trabajo (110.26)</h3><ul style="font-size:24px;padding-left:26px"><li>Ancho: el del equipo o <b>0,76 m</b>, el mayor.</li><li>Altura libre: <b>2,0 m</b> o la del equipo.</li><li>Profundidad: según la Tabla 110.26(A)(1).</li></ul></div><br>
+    <div class="warn" style="padding:12px 24px;font-size:23px"><span class="lab">Ubicación</span>Accesible, sin obstáculos y fuera de los baños. Mismo lugar en el plano y en la obra.</div>
+  </div></div>
+  <div class="note" style="margin-top:8px;padding:10px 24px;font-size:22px">Tamaños comerciales típicos: 12, 18, 24, 30, 36 y 42 espacios. Confirme el catálogo del fabricante.</div>
+</div></section>
+
+<section class="slide" data-title="Diseño y acometida"><div class="body">
+  <h2>Carga de diseño, demanda y <em>acometida</em></h2>
+  <div class="grid g3" style="margin-top:8px">
+    <div class="card"><h3>Carga de diseño</h3><div class="big" style="font-size:56px">24 915 VA</div><p>103,8 A a 240 V. Incluye los 3000 VA mínimos de pequeños artefactos.</p></div>
+    <div class="card az"><h3>Carga demandada</h3><div class="big" style="font-size:56px;color:var(--azul)">20 449 VA</div><p>Con los factores del Art. 220 (calculada en la Misión 1).</p></div>
+    <div class="card na"><h3>Antes (conectada)</h3><div class="big" style="font-size:56px;color:var(--naranja)">22 622 VA</div><p>Lo que había en el tablero, con tomas a 180 VA.</p></div>
+  </div>
+  <div class="turn rvbox" id="c2r6" style="margin-top:21px"><span class="lab">Tu turno · protección general y acometida</span>
+    <div>Calculen la corriente de la carga demandada a 240 V. ¿Qué protección general y qué conductor de acometida eligen?</div>
+    <div class="ans" style="margin-top:8px">I = 20 449 ÷ 240 = <span class="res">85,2 A</span>. El comercial inmediato sería 90 A, pero la vivienda unifamiliar pide <b>mínimo 100 A</b> (225.39(C)) → general <span class="res">2×100 A</span>. Conductor: <span class="res">3 AWG Cu</span>, que soporta 100 A a 75 °C (Tabla 310.15(B)(16)).</div>
+    <button class="rv-btn" data-rv="c2r6">▶ Descubrir respuesta</button></div>
+  <div class="note" style="margin-top:13px;padding:12px 26px;font-size:24px"><span class="lab">Verifique</span>El calibre 3 AWG sale de la tabla de ampacidad, que no está en el texto digital de la norma. Confírmelo en la NTC 2050 impresa.</div>
+</div></section>
+
+<section class="slide" data-title="Caída de tensión"><div class="body">
+  <h2>Caída de tensión en <em>circuitos ramales</em></h2>
+  <div class="formula" style="font-size:36px;padding:14px 30px"><div class="row"><div><b>ΔV</b> = 2 · ρ · L · I ÷ S</div><div><b>ΔV %</b> = ΔV ÷ V × 100</div></div>
+    <small>ρ del cobre = 0,0175 Ω·mm²/m · L = longitud de ida (m) · S = sección (mm²): 14 AWG 2,08 · 12 AWG 3,31 · 10 AWG 5,26 · 8 AWG 8,37</small></div>
+  <div class="ex" style="padding:12px 26px"><span class="lab">Ejemplo resuelto · 25 m, 16 A, 12 AWG, 120 V</span>ΔV = 2 × 0,0175 × 25 × 16 ÷ 3,31 = <span class="res">4,23 V</span> → ΔV % = 4,23 ÷ 120 × 100 ≈ <span class="res">3,5 %</span>. Conviene un calibre mayor si la meta es 3 %.</div>
+  <div class="turn rvbox" id="c2r7" style="padding:12px 26px"><span class="lab">Tu turno · dos circuitos del cuadro propuesto</span>
+    <div><b>a)</b> Cooktop (C12): 18 m, 30 A, 8 AWG, 240 V. &nbsp; <b>b)</b> Pequeños artefactos (C6): 20 m, 12,5 A, 12 AWG, 120 V.</div>
+    <div class="ans" style="margin-top:6px"><b>a)</b> ΔV = 2 × 0,0175 × 18 × 30 ÷ 8,37 = <span class="res">2,26 V</span> → <span class="res">0,94 %</span> de 240 V. &nbsp; <b>b)</b> ΔV = 2 × 0,0175 × 20 × 12,5 ÷ 3,31 = <span class="res">2,64 V</span> → <span class="res">2,20 %</span> de 120 V. Ambos cumplen la meta de 3 %.</div>
+    <button class="rv-btn" data-rv="c2r7">▶ Descubrir respuesta</button></div>
+  <div class="note" style="margin-top:8px;padding:10px 24px;font-size:22px">La meta de 3 % en el ramal y 5 % en total es una recomendación de diseño. Confirme la nota informativa en su edición de la NTC 2050.</div>
+</div></section>
+
+<section class="slide" data-title="Ocupación de tubería"><div class="body">
+  <h2>Canalizaciones: <em>ocupación de la tubería</em></h2>
+  <div class="formula" style="font-size:34px;padding:14px 30px"><b>%O</b> = (Σ áreas de conductores ÷ área interior del tubo) × 100
+    <small>Límites del Cap. 9, Tabla 1: 53 % con 1 conductor · 31 % con 2 · <b>40 % con más de 2</b>. El PE también ocupa espacio.</small></div>
+  <div class="note" style="padding:10px 24px;font-size:22px">Áreas aproximadas de referencia: THHN 12 AWG = 8,58 mm² · 10 AWG = 13,61 mm² · 8 AWG = 23,61 mm². Tubo EMT ½" = 196 mm² · ¾" = 343 mm². Confirme en las Tablas 4 y 5 del Cap. 9.</div>
+  <div class="ex" style="padding:12px 26px"><span class="lab">Ejemplo resuelto · 3 conductores 12 AWG en EMT ½"</span>Σ = 3 × 8,58 = 25,74 mm² → %O = 25,74 ÷ 196 × 100 = <span class="res">13,1 %</span>. Como hay más de dos conductores, el límite es 40 %: <span class="res">cumple</span>.</div>
+  <div class="turn rvbox" id="c2r8" style="padding:12px 26px"><span class="lab">Tu turno · tramo del cooktop (C12)</span>
+    <div>2 conductores 8 AWG + 1 conductor PE de 10 AWG. ¿Qué %O hay en EMT ½" y en EMT ¾"?</div>
+    <div class="ans" style="margin-top:6px">Σ = 2 × 23,61 + 13,61 = <span class="res">60,83 mm²</span>. En ½": 60,83 ÷ 196 = <span class="res">31,0 %</span>. En ¾": 60,83 ÷ 343 = <span class="res">17,7 %</span>. Ambos cumplen (límite 40 %), pero ¾" deja más holgura para halar.</div>
+    <button class="rv-btn" data-rv="c2r8">▶ Descubrir respuesta</button></div>
+  <div class="warn" style="margin-top:8px;padding:10px 24px;font-size:22px"><span class="lab">No olvide</span>Con 4 o más conductores portadores de corriente en un tubo se aplica un factor de ajuste de ampacidad.</div>
+</div></section>
+
+<section class="slide" data-title="Puesta a tierra en el diseño"><div class="body">
+  <h2>Conductor de protección y <em>puesta a tierra</em></h2>
+  <div class="cols" style="margin-top:8px">
+  <div>
+    <h3 style="font-size:28px">Conductor PE según el breaker (cobre)</h3>
+    <table style="font-size:24px"><thead><tr><th>Breaker</th><th class="c">PE mínimo</th></tr></thead><tbody>
+      <tr><td>15 A</td><td class="c">14 AWG</td></tr><tr><td>20 A</td><td class="c">12 AWG</td></tr><tr><td>30 a 60 A</td><td class="c">10 AWG</td></tr><tr><td>100 A</td><td class="c">8 AWG</td></tr></tbody></table>
+    <p style="font-size:21px;color:var(--gris);margin-top:6px">Tabla 250.122 (valores típicos). Confírmelos en la norma impresa.</p>
+    <div class="ex" style="padding:12px 24px;font-size:24px"><span class="lab">Ejemplo resuelto · estimación de un electrodo</span>Varilla de 2,40 m, d = 0,016 m, ρ del suelo = 100 Ω·m: R ≈ ρ ÷ (2πL) × [ln(4L ÷ d) − 1] ≈ <span class="res">35,8 Ω</span>.</div>
+  </div>
+  <div>
+    <div class="card az" style="padding:20px 28px"><h3 style="font-size:28px">Referencia del RETIE</h3><p style="font-size:26px">Punto neutro de acometida en baja tensión: <b>25 Ω</b> (Libro 3, Tabla 3.12.3.a).</p></div>
+    <div class="turn rvbox" id="c2r9" style="padding:12px 24px;font-size:24px;margin-top:21px"><span class="lab">Tu turno</span><div>Con 35,8 Ω, ¿cumple la referencia? ¿Qué haría?</div>
+      <div class="ans" style="margin-top:6px"><span class="res">No cumple.</span> Agregar electrodos en paralelo o mejorar el terreno, y <b>medir en campo</b>: el valor de aceptación es la medición, no la estimación.</div>
+      <button class="rv-btn" data-rv="c2r9">▶ Descubrir respuesta</button></div>
+  </div></div>
+</div></section>
+
+<section class="slide" data-title="Colores y rotulado de tramos"><div class="body">
+  <h2>Colores y <em>rotulado de tramos</em></h2>
+  <div class="grid g4" style="margin-top:8px;gap:13px">
+    <div class="card" style="padding:14px 20px;border-top-color:#222"><h3 style="font-size:26px">L1 · negro</h3></div>
+    <div class="card" style="padding:14px 20px;border-top-color:#C0392B"><h3 style="font-size:26px">L2 · rojo</h3></div>
+    <div class="card" style="padding:14px 20px;border-top-color:#D9E1E6"><h3 style="font-size:26px">Neutro · blanco</h3></div>
+    <div class="card" style="padding:14px 20px"><h3 style="font-size:26px">PE · verde o desnudo</h3></div>
+  </div>
+  <p style="font-size:21px;color:var(--gris);margin:6px 0 10px">Libro 3, título 5, Tabla 3.5.a. El texto digital de la tabla está desordenado: confirme los colores de L1 y L2 en el original.</p>
+  <div class="ex" style="padding:12px 26px;font-size:24px"><span class="lab">Ejemplo resuelto · rótulo de tramo</span><b>T-12:</b> 2 × Cu 8 AWG (L1 + L2) + 1 × Cu 10 AWG (PE), THHN/THWN-2, 600 V, en EMT Ø ¾", circuito C-12, protección 2P-40 A.</div>
+  <div class="turn rvbox" id="c2r10" style="padding:12px 26px;font-size:24px"><span class="lab">Tu turno</span><div>Escriban el rótulo del tramo del circuito C6 (pequeños artefactos, 1×20 A) en EMT ½".</div>
+    <div class="ans" style="margin-top:6px"><b>T-06:</b> 1 × Cu 12 AWG (L) + 1 × Cu 12 AWG (N) + 1 × Cu 12 AWG (PE), THHN/THWN-2, 600 V, en EMT Ø ½", circuito C-6, protección 1P-20 A.</div>
+    <button class="rv-btn" data-rv="c2r10">▶ Descubrir respuesta</button></div>
+</div></section>
+
+<section class="slide" data-title="Contenido del plano"><div class="body">
+  <h2>Qué debe mostrar <em>el plano</em></h2>
+  <p class="lead" style="font-size:26px;margin-bottom:10px">Lista base del Art. 3.3.2.1 (esquema constructivo). En nuestro caso, el diseño detallado añade unifilar, cálculos y especificaciones (3.3.1.1).</p>
+  <div class="grid g3" style="gap:16px">
+    <div class="card" style="padding:16px 26px"><h3 style="font-size:27px">Puesta a tierra</h3><p style="font-size:23px">Electrodo (longitud y material), calibre del conductor, caja de inspección.</p></div>
+    <div class="card" style="padding:16px 26px"><h3 style="font-size:27px">Sistema de medida</h3><p style="font-size:23px">Ubicación, acceso y relación con la acometida y la protección.</p></div>
+    <div class="card" style="padding:16px 26px"><h3 style="font-size:27px">Tablero</h3><p style="font-size:23px">TG-1, distribución y espacios de montaje acotados.</p></div>
+    <div class="card" style="padding:16px 26px"><h3 style="font-size:27px">Canalizaciones</h3><p style="font-size:23px">Recorrido, tipo, diámetros, cajas y forma de instalación.</p></div>
+    <div class="card" style="padding:16px 26px"><h3 style="font-size:27px">Conductores por tramo</h3><p style="font-size:23px">Número, calibre, función (L, N, PE) y circuito.</p></div>
+    <div class="card" style="padding:16px 26px"><h3 style="font-size:27px">Aparatos y salidas</h3><p style="font-size:23px">Interruptores, tomas, GFCI y puntos de iluminación con tipo y capacidad.</p></div>
+  </div>
+  <div class="grid g3" style="gap:16px;margin-top:16px">
+    <div class="note" style="margin:0;padding:12px 22px;font-size:24px"><span class="lab">Cuadro</span>de convenciones conforme con el RETIE.</div>
+    <div class="note" style="margin:0;padding:12px 22px;font-size:24px"><span class="lab">Cuadro</span>de cargas con potencias y tensiones por circuito.</div>
+    <div class="note" style="margin:0;padding:12px 22px;font-size:24px"><span class="lab">Diseño detallado</span>diagrama unifilar y memoria de cálculo.</div>
+  </div>
+</div></section>
+
+<section class="slide" data-title="Cuadro de convenciones"><div class="body">
+  <h2>Cuadro de <em>convenciones</em></h2>
+  <p class="lead" style="font-size:26px;margin-bottom:8px">Cada símbolo del plano debe aparecer aquí. Ejemplo didáctico: use los símbolos oficiales del Libro 1, art. 1.3.4.</p>
+  <table style="font-size:24px"><thead><tr><th style="width:90px">Símbolo</th><th>Elemento</th><th>Dónde se usa en el caso</th></tr></thead><tbody>
+<tr><td><svg width="40" height="40" viewBox="0 0 40 40"><g transform="translate(20 20)"><circle r="10" fill="#fff" stroke="#0A4A70" stroke-width="3"/><path d="M-7 -7L7 7M-7 7L7 -7" stroke="#0A4A70" stroke-width="3"/></g></svg></td><td>Luminaria LED 15 W · FP 0,5</td><td>C1, C2</td></tr>
+<tr><td><svg width="40" height="40" viewBox="0 0 40 40"><g transform="translate(20 20)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g></svg></td><td>Interruptor sencillo</td><td>Control de alumbrado</td></tr>
+<tr><td><svg width="40" height="40" viewBox="0 0 40 40"><g transform="translate(20 20)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g></svg></td><td>Tomacorriente doble 120 V · 15/20 A</td><td>C3, C4</td></tr>
+<tr><td><svg width="40" height="40" viewBox="0 0 40 40"><g transform="translate(20 20)"><circle r="9" fill="#FF6C00" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g></svg></td><td>Tomacorriente con GFCI</td><td>C5, C6, C7, terraza</td></tr>
+<tr><td><svg width="40" height="40" viewBox="0 0 40 40"><rect x="3" y="9" width="34" height="22" rx="4" fill="#fff" stroke="#6C3483" stroke-width="3"/><text x="20" y="25" font-size="12" font-weight="800" text-anchor="middle" fill="#6C3483">240</text></svg></td><td>Salida de 240 V (2 polos)</td><td>C11 a C15</td></tr>
+<tr><td><svg width="40" height="40" viewBox="0 0 40 40"><rect x="2" y="6" width="36" height="28" rx="3" fill="#00304D"/><text x="20" y="25" font-size="12" font-weight="800" text-anchor="middle" fill="#fff">TG</text></svg></td><td>Tablero general TG-1</td><td>Hall técnico</td></tr>
+<tr><td><svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="#fff" stroke="#00304D" stroke-width="3"/><text x="20" y="26" font-size="16" font-weight="800" text-anchor="middle" fill="#00304D">M</text></svg></td><td>Equipo de medida</td><td>Fachada accesible</td></tr>
+<tr><td><svg width="40" height="40" viewBox="0 0 40 40"><g stroke="#2B8200" stroke-width="3"><path d="M20 4V20M6 20H34M11 28H29M16 36H24"/></g></svg></td><td>Electrodo de puesta a tierra</td><td>Art. 250</td></tr>
+<tr><td><svg width="40" height="40" viewBox="0 0 40 40"><path d="M2 20H38" stroke="#C0392B" stroke-width="5" stroke-linecap="round"/></svg></td><td>Tubería EMT con tramo T-nn</td><td>Rotular tramo</td></tr>
+</tbody></table>
+</div></section>
+
+<section class="slide" data-title="Plano de planta del caso"><div class="body">
+  <h2>Plano de planta <em>del caso</em></h2>
+  <div class="cols" style="margin-top:6px;grid-template-columns:2.4fr 1fr">
+    <div><svg viewBox="0 0 1000 620" width="100%" role="img" aria-label="Plano de planta del caso, esquema sin escala"><rect width="1000" height="620" rx="18" fill="#F4F7F9"/>
+<rect x="20" y="20" width="240" height="230" fill="#fff" stroke="#00304D" stroke-width="4"/>
+<text x="30" y="42" font-size="17" font-weight="700" fill="#5C6B77">Alcoba principal</text>
+<rect x="260" y="20" width="120" height="150" fill="#fff" stroke="#00304D" stroke-width="4"/>
+<text x="270" y="42" font-size="17" font-weight="700" fill="#5C6B77">Baño</text>
+<rect x="380" y="20" width="220" height="230" fill="#fff" stroke="#00304D" stroke-width="4"/>
+<text x="390" y="42" font-size="17" font-weight="700" fill="#5C6B77">Alcoba 2</text>
+<rect x="600" y="20" width="220" height="230" fill="#fff" stroke="#00304D" stroke-width="4"/>
+<text x="610" y="42" font-size="17" font-weight="700" fill="#5C6B77">Alcoba 3</text>
+<rect x="820" y="20" width="160" height="150" fill="#fff" stroke="#00304D" stroke-width="4"/>
+<text x="830" y="42" font-size="17" font-weight="700" fill="#5C6B77">Baño social</text>
+<rect x="20" y="270" width="380" height="300" fill="#fff" stroke="#00304D" stroke-width="4"/>
+<text x="30" y="292" font-size="17" font-weight="700" fill="#5C6B77">Sala · comedor</text>
+<rect x="400" y="270" width="230" height="300" fill="#fff" stroke="#00304D" stroke-width="4"/>
+<text x="410" y="292" font-size="17" font-weight="700" fill="#5C6B77">Cocina</text>
+<rect x="630" y="270" width="170" height="140" fill="#fff" stroke="#00304D" stroke-width="4"/>
+<text x="672" y="292" font-size="17" font-weight="700" fill="#5C6B77">Lavandería</text>
+<rect x="800" y="270" width="180" height="300" fill="#fff" stroke="#00304D" stroke-width="4"/>
+<text x="810" y="292" font-size="17" font-weight="700" fill="#5C6B77">Terraza</text>
+<rect x="630" y="410" width="170" height="160" fill="#EAF6E1" stroke="#00304D" stroke-width="4"/><text x="735" y="432" font-size="17" font-weight="700" fill="#5C6B77">Hall</text>
+<rect x="650" y="470" width="70" height="46" rx="4" fill="#00304D"/><text x="685" y="499" font-size="18" font-weight="800" text-anchor="middle" fill="#fff">TG-1</text>
+<circle cx="835" cy="520" r="20" fill="#fff" stroke="#00304D" stroke-width="4"/><text x="835" y="527" font-size="20" font-weight="800" text-anchor="middle" fill="#00304D">M</text>
+<path d="M800 520H815" stroke="#00304D" stroke-width="4"/>
+<g transform="translate(930 520)" stroke="#2B8200" stroke-width="4"><path d="M0 -30V0M-22 0H22M-14 10H14M-6 20H6"/></g><text x="930" y="565" font-size="15" font-weight="700" text-anchor="middle" fill="#2B8200">Electrodo</text>
+<path d="M855 520H908" stroke="#2B8200" stroke-width="3" stroke-dasharray="8 6"/>
+<g transform="translate(140 140)"><circle r="10" fill="#fff" stroke="#0A4A70" stroke-width="3"/><path d="M-7 -7L7 7M-7 7L7 -7" stroke="#0A4A70" stroke-width="3"/></g>
+<g transform="translate(480 140)"><circle r="10" fill="#fff" stroke="#0A4A70" stroke-width="3"/><path d="M-7 -7L7 7M-7 7L7 -7" stroke="#0A4A70" stroke-width="3"/></g>
+<g transform="translate(710 140)"><circle r="10" fill="#fff" stroke="#0A4A70" stroke-width="3"/><path d="M-7 -7L7 7M-7 7L7 -7" stroke="#0A4A70" stroke-width="3"/></g>
+<g transform="translate(900 95)"><circle r="10" fill="#fff" stroke="#0A4A70" stroke-width="3"/><path d="M-7 -7L7 7M-7 7L7 -7" stroke="#0A4A70" stroke-width="3"/></g>
+<g transform="translate(320 95)"><circle r="10" fill="#fff" stroke="#0A4A70" stroke-width="3"/><path d="M-7 -7L7 7M-7 7L7 -7" stroke="#0A4A70" stroke-width="3"/></g>
+<g transform="translate(210 420)"><circle r="10" fill="#fff" stroke="#0A4A70" stroke-width="3"/><path d="M-7 -7L7 7M-7 7L7 -7" stroke="#0A4A70" stroke-width="3"/></g>
+<g transform="translate(515 420)"><circle r="10" fill="#fff" stroke="#0A4A70" stroke-width="3"/><path d="M-7 -7L7 7M-7 7L7 -7" stroke="#0A4A70" stroke-width="3"/></g>
+<g transform="translate(760 322)"><circle r="10" fill="#fff" stroke="#0A4A70" stroke-width="3"/><path d="M-7 -7L7 7M-7 7L7 -7" stroke="#0A4A70" stroke-width="3"/></g>
+<g transform="translate(250 255)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g>
+<g transform="translate(590 255)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g>
+<g transform="translate(810 255)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g>
+<g transform="translate(395 300)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g>
+<g transform="translate(625 330)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g>
+<g transform="translate(40 60)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(240 60)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(400 60)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(580 60)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(620 60)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(800 60)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(40 335)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(40 540)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(380 300)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(380 540)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(215 570)"><circle r="9" fill="#fff" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(285 150)"><circle r="9" fill="#FF6C00" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(840 150)"><circle r="9" fill="#FF6C00" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(430 555)"><circle r="9" fill="#FF6C00" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(610 555)"><circle r="9" fill="#FF6C00" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(520 285)"><circle r="9" fill="#FF6C00" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(960 330)"><circle r="9" fill="#FF6C00" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(960 500)"><circle r="9" fill="#FF6C00" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<g transform="translate(790 390)"><circle r="9" fill="#FF6C00" stroke="#2B8200" stroke-width="3"/><path d="M0 -9V9" stroke="#2B8200" stroke-width="3"/></g>
+<rect x="30" y="215" width="60" height="22" rx="4" fill="#fff" stroke="#6C3483" stroke-width="3"/><text x="60" y="231" font-size="13" font-weight="800" text-anchor="middle" fill="#6C3483">A/A</text>
+<rect x="390" y="215" width="60" height="22" rx="4" fill="#fff" stroke="#6C3483" stroke-width="3"/><text x="420" y="231" font-size="13" font-weight="800" text-anchor="middle" fill="#6C3483">A/A</text>
+<rect x="610" y="215" width="60" height="22" rx="4" fill="#fff" stroke="#6C3483" stroke-width="3"/><text x="640" y="231" font-size="13" font-weight="800" text-anchor="middle" fill="#6C3483">A/A</text>
+<rect x="470" y="330" width="90" height="26" rx="4" fill="#fff" stroke="#C0392B" stroke-width="3"/><text x="515" y="348" font-size="14" font-weight="800" text-anchor="middle" fill="#C0392B">Cooktop</text>
+<rect x="570" y="470" width="50" height="26" rx="4" fill="#fff" stroke="#C0392B" stroke-width="3"/><text x="595" y="488" font-size="13" font-weight="800" text-anchor="middle" fill="#C0392B">Horno</text>
+<rect x="415" y="480" width="62" height="26" rx="4" fill="#fff" stroke="#0A4A70" stroke-width="3"/><text x="446" y="498" font-size="13" font-weight="800" text-anchor="middle" fill="#0A4A70">Nevera</text>
+<rect x="690" y="350" width="95" height="26" rx="4" fill="#fff" stroke="#0A4A70" stroke-width="3"/><text x="737" y="368" font-size="13" font-weight="800" text-anchor="middle" fill="#0A4A70">Lavadora</text>
+<g fill="none" stroke-width="5" stroke-linecap="round"><path d="M665 470V266H520V330" stroke="#C0392B"/><path d="M650 490H600V540H430V565" stroke="#0A4A70" stroke-dasharray="14 8"/><path d="M655 470V258H190V250" stroke="#39A900"/><path d="M720 490H840V440H940V345" stroke="#6C3483" stroke-dasharray="4 8"/></g>
+<text x="470" y="380" font-size="16" font-weight="800" fill="#C0392B" paint-order="stroke" stroke="#fff" stroke-width="5" stroke-linejoin="round">T-12 cooktop</text>
+<text x="440" y="592" font-size="16" font-weight="800" fill="#0A4A70" paint-order="stroke" stroke="#fff" stroke-width="5" stroke-linejoin="round">T-06 mesón</text>
+<text x="215" y="264" font-size="16" font-weight="800" fill="#2B8200" paint-order="stroke" stroke="#fff" stroke-width="5" stroke-linejoin="round">T-04 tomas de alcobas</text>
+<text x="845" y="428" font-size="16" font-weight="800" fill="#6C3483" paint-order="stroke" stroke="#fff" stroke-width="5" stroke-linejoin="round">T-01 terraza</text>
+<text x="20" y="610" font-size="15" fill="#5C6B77">Esquema sin escala. En el plano real: escala 1:50 con los 15 circuitos.</text>
+</svg></div>
+    <div>
+      <div class="card" style="padding:16px 26px"><h3 style="font-size:27px">Cómo leerlo</h3>
+        <ul style="font-size:23px;padding-left:24px"><li><b>TG-1</b> en el hall técnico, junto al medidor.</li><li>Tomas con <b>GFCI</b> en baños, mesón, lavandería y terraza.</li><li>Cargas de <b>240 V</b> resaltadas: aires, cooktop y horno.</li><li>Cada tramo lleva su rótulo <b>T-nn</b>.</li></ul></div><br>
+      <div class="warn" style="padding:12px 24px;font-size:22px"><span class="lab">Tu tarea</span>Reproducir este esquema a escala 1:50 con los 15 circuitos y su cuadro de convenciones.</div>
+    </div></div>
+</div></section>
+
+<section class="slide" data-title="Diagrama unifilar"><div class="body">
+  <h2>Diagrama <em>unifilar</em> del tablero</h2>
+  <div class="cols" style="margin-top:6px;grid-template-columns:2.4fr 1fr">
+    <div><svg viewBox="0 0 1000 560" width="100%" role="img" aria-label="Diagrama unifilar del tablero TG-1"><rect width="1000" height="560" rx="18" fill="#F4F7F9"/>
+<rect x="20" y="245" width="130" height="60" rx="8" fill="#00304D"/><text x="85" y="272" font-size="16" font-weight="800" text-anchor="middle" fill="#fff">Red del</text><text x="85" y="292" font-size="16" font-weight="800" text-anchor="middle" fill="#fff">operador</text>
+<path d="M150 275H215" stroke="#00304D" stroke-width="5"/><text x="182" y="262" font-size="13" font-weight="700" text-anchor="middle" fill="#5C6B77">2F+N</text>
+<circle cx="245" cy="275" r="28" fill="#fff" stroke="#00304D" stroke-width="5"/><text x="245" y="283" font-size="24" font-weight="800" text-anchor="middle" fill="#00304D">M</text>
+<path d="M273 275H320" stroke="#00304D" stroke-width="5"/>
+<rect x="320" y="250" width="86" height="50" rx="6" fill="#fff" stroke="#C0392B" stroke-width="5"/><text x="363" y="272" font-size="15" font-weight="800" text-anchor="middle" fill="#C0392B">General</text><text x="363" y="291" font-size="15" font-weight="800" text-anchor="middle" fill="#C0392B">2×100 A</text>
+<path d="M406 275H440" stroke="#00304D" stroke-width="5"/>
+<path d="M440 40V520" stroke="#00304D" stroke-width="12" stroke-linecap="round"/><text x="440" y="545" font-size="14" font-weight="800" text-anchor="middle" fill="#00304D">Barras L1 · L2 · N · PE</text>
+<path d="M446 62H500" stroke="#00304D" stroke-width="4"/><rect x="500" y="48" width="34" height="28" rx="4" fill="#fff" stroke="#00304D" stroke-width="3"/><path d="M534 62H560" stroke="#00304D" stroke-width="4"/>
+<rect x="560" y="41" width="420" height="42" rx="8" fill="#fff" stroke="#D9E1E6" stroke-width="2"/>
+<text x="572" y="59" font-size="15" font-weight="800" fill="#2B8200">C1–C2</text><text x="650" y="59" font-size="15" font-weight="700" fill="#1D2B36">Alumbrado social y privado</text><text x="572" y="76" font-size="13" fill="#5C6B77">1×15 A · 14 AWG</text>
+<path d="M446 114H500" stroke="#00304D" stroke-width="4"/><rect x="500" y="100" width="34" height="28" rx="4" fill="#fff" stroke="#00304D" stroke-width="3"/><path d="M534 114H560" stroke="#00304D" stroke-width="4"/>
+<rect x="560" y="93" width="420" height="42" rx="8" fill="#fff" stroke="#D9E1E6" stroke-width="2"/>
+<text x="572" y="111" font-size="15" font-weight="800" fill="#2B8200">C3–C5</text><text x="650" y="111" font-size="15" font-weight="700" fill="#1D2B36">Tomas generales y baños (GFCI)</text><text x="572" y="128" font-size="13" fill="#5C6B77">1×20 A · 12 AWG</text>
+<path d="M446 166H500" stroke="#00304D" stroke-width="4"/><rect x="500" y="152" width="34" height="28" rx="4" fill="#fff" stroke="#00304D" stroke-width="3"/><path d="M534 166H560" stroke="#00304D" stroke-width="4"/>
+<rect x="560" y="145" width="420" height="42" rx="8" fill="#fff" stroke="#D9E1E6" stroke-width="2"/>
+<text x="572" y="163" font-size="15" font-weight="800" fill="#2B8200">C6–C7</text><text x="650" y="163" font-size="15" font-weight="700" fill="#1D2B36">Pequeños artefactos de cocina (GFCI)</text><text x="572" y="180" font-size="13" fill="#5C6B77">2 × 1×20 A · 12 AWG</text>
+<path d="M446 218H500" stroke="#00304D" stroke-width="4"/><rect x="500" y="204" width="34" height="28" rx="4" fill="#fff" stroke="#00304D" stroke-width="3"/><path d="M534 218H560" stroke="#00304D" stroke-width="4"/>
+<rect x="560" y="197" width="420" height="42" rx="8" fill="#fff" stroke="#D9E1E6" stroke-width="2"/>
+<text x="572" y="215" font-size="15" font-weight="800" fill="#2B8200">C8</text><text x="650" y="215" font-size="15" font-weight="700" fill="#1D2B36">Nevera</text><text x="572" y="232" font-size="13" fill="#5C6B77">1×20 A · 12 AWG</text>
+<path d="M446 270H500" stroke="#00304D" stroke-width="4"/><rect x="500" y="256" width="34" height="28" rx="4" fill="#fff" stroke="#00304D" stroke-width="3"/><path d="M534 270H560" stroke="#00304D" stroke-width="4"/>
+<rect x="560" y="249" width="420" height="42" rx="8" fill="#fff" stroke="#D9E1E6" stroke-width="2"/>
+<text x="572" y="267" font-size="15" font-weight="800" fill="#2B8200">C9</text><text x="650" y="267" font-size="15" font-weight="700" fill="#1D2B36">Microondas</text><text x="572" y="284" font-size="13" fill="#5C6B77">1×20 A · 12 AWG</text>
+<path d="M446 322H500" stroke="#00304D" stroke-width="4"/><rect x="500" y="308" width="34" height="28" rx="4" fill="#fff" stroke="#00304D" stroke-width="3"/><path d="M534 322H560" stroke="#00304D" stroke-width="4"/>
+<rect x="560" y="301" width="420" height="42" rx="8" fill="#fff" stroke="#D9E1E6" stroke-width="2"/>
+<text x="572" y="319" font-size="15" font-weight="800" fill="#2B8200">C10</text><text x="650" y="319" font-size="15" font-weight="700" fill="#1D2B36">Lavadora-secadora</text><text x="572" y="336" font-size="13" fill="#5C6B77">1×20 A · 12 AWG</text>
+<path d="M446 374H500" stroke="#00304D" stroke-width="4"/><rect x="500" y="360" width="34" height="28" rx="4" fill="#fff" stroke="#00304D" stroke-width="3"/><path d="M534 374H560" stroke="#00304D" stroke-width="4"/>
+<rect x="560" y="353" width="420" height="42" rx="8" fill="#fff" stroke="#D9E1E6" stroke-width="2"/>
+<text x="572" y="371" font-size="15" font-weight="800" fill="#2B8200">C11</text><text x="650" y="371" font-size="15" font-weight="700" fill="#1D2B36">Horno de convección</text><text x="572" y="388" font-size="13" fill="#5C6B77">2×20 A · 12 AWG</text>
+<path d="M446 426H500" stroke="#00304D" stroke-width="4"/><rect x="500" y="412" width="34" height="28" rx="4" fill="#fff" stroke="#00304D" stroke-width="3"/><path d="M534 426H560" stroke="#00304D" stroke-width="4"/>
+<rect x="560" y="405" width="420" height="42" rx="8" fill="#fff" stroke="#D9E1E6" stroke-width="2"/>
+<text x="572" y="423" font-size="15" font-weight="800" fill="#2B8200">C12</text><text x="650" y="423" font-size="15" font-weight="700" fill="#1D2B36">Cooktop de inducción</text><text x="572" y="440" font-size="13" fill="#5C6B77">2×40 A · 8 AWG</text>
+<path d="M446 478H500" stroke="#00304D" stroke-width="4"/><rect x="500" y="464" width="34" height="28" rx="4" fill="#fff" stroke="#00304D" stroke-width="3"/><path d="M534 478H560" stroke="#00304D" stroke-width="4"/>
+<rect x="560" y="457" width="420" height="42" rx="8" fill="#fff" stroke="#D9E1E6" stroke-width="2"/>
+<text x="572" y="475" font-size="15" font-weight="800" fill="#2B8200">C13–C15</text><text x="650" y="475" font-size="15" font-weight="700" fill="#1D2B36">Aires acondicionados (3)</text><text x="572" y="492" font-size="13" fill="#5C6B77">3 × 2×20 A · 12 AWG</text>
+<g stroke="#2B8200" stroke-width="4"><path d="M85 305V470M85 470H20"/></g><path d="M85 470V500M62 500H108M70 510H100M78 520H92" stroke="#2B8200" stroke-width="4" fill="none"/><text x="130" y="505" font-size="14" font-weight="700" fill="#2B8200">Electrodo y</text><text x="130" y="522" font-size="14" font-weight="700" fill="#2B8200">conductor PE</text>
+<path d="M85 305V470" stroke="#2B8200" stroke-width="3" stroke-dasharray="6 6" fill="none"/>
+</svg></div>
+    <div>
+      <div class="card az" style="padding:16px 26px"><h3 style="font-size:27px">Qué muestra</h3>
+        <ul style="font-size:23px;padding-left:24px"><li>Acometida, medidor y protección general de <b>2×100 A</b>.</li><li>Barras <b>L1, L2, N y PE</b>.</li><li>Cada circuito con su breaker y calibre.</li><li>Puesta a tierra y electrodo.</li></ul></div><br>
+      <div class="note" style="padding:12px 24px;font-size:22px"><span class="lab">Consistencia</span>Los datos del unifilar deben coincidir con el cuadro de cargas y con los rótulos del plano.</div>
+    </div></div>
+</div></section>
+
+<section class="slide" data-title="Lista de verificación"><div class="body"><h2>Lista de verificación <em>antes de entregar</em></h2><p class="lead" style="font-size:26px;margin-bottom:12px">Revisen su paquete de diseño con estos diez puntos. Un punto sin cumplir es un hallazgo para corregir.</p><div class="grid g2" style="gap:12px"><div class="step" style="margin:0;padding:12px 24px"><div class="num" style="width:50px;height:50px;font-size:26px">✓</div><div><p style="font-size:24px;color:var(--texto);line-height:1.3">Cada circuito del cuadro aparece en el plano y en el unifilar.</p></div></div><div class="step" style="margin:0;padding:12px 24px"><div class="num" style="width:50px;height:50px;font-size:26px">✓</div><div><p style="font-size:24px;color:var(--texto);line-height:1.3">El breaker protege al conductor (240.4(D)).</p></div></div><div class="step" style="margin:0;padding:12px 24px"><div class="num" style="width:50px;height:50px;font-size:26px">✓</div><div><p style="font-size:24px;color:var(--texto);line-height:1.3">Caída de tensión menor al 3 % en cada ramal.</p></div></div><div class="step" style="margin:0;padding:12px 24px"><div class="num" style="width:50px;height:50px;font-size:26px">✓</div><div><p style="font-size:24px;color:var(--texto);line-height:1.3">Ocupación de cada tubería menor al 40 %.</p></div></div><div class="step" style="margin:0;padding:12px 24px"><div class="num" style="width:50px;height:50px;font-size:26px">✓</div><div><p style="font-size:24px;color:var(--texto);line-height:1.3">Desbalance entre L1 y L2 menor al 5 %.</p></div></div><div class="step" style="margin:0;padding:12px 24px"><div class="num" style="width:50px;height:50px;font-size:26px">✓</div><div><p style="font-size:24px;color:var(--texto);line-height:1.3">GFCI en baños, mesón, exteriores y lavandería; AFCI donde corresponde.</p></div></div><div class="step" style="margin:0;padding:12px 24px"><div class="num" style="width:50px;height:50px;font-size:26px">✓</div><div><p style="font-size:24px;color:var(--texto);line-height:1.3">Cuadro de convenciones completo y símbolos coherentes.</p></div></div><div class="step" style="margin:0;padding:12px 24px"><div class="num" style="width:50px;height:50px;font-size:26px">✓</div><div><p style="font-size:24px;color:var(--texto);line-height:1.3">Tablero con espacio de trabajo y reserva acotados.</p></div></div><div class="step" style="margin:0;padding:12px 24px"><div class="num" style="width:50px;height:50px;font-size:26px">✓</div><div><p style="font-size:24px;color:var(--texto);line-height:1.3">Puesta a tierra definida y con medición prevista.</p></div></div><div class="step" style="margin:0;padding:12px 24px"><div class="num" style="width:50px;height:50px;font-size:26px">✓</div><div><p style="font-size:24px;color:var(--texto);line-height:1.3">Directorio de circuitos y rótulos de tramos legibles.</p></div></div></div></div></section>
+
+<section class="slide" data-title="Taller c2"><div class="body">
+  <h2>Taller: <em>su paquete de diseño</em></h2>
+  <div class="cols" style="margin-top:13px">
+    <div><h3>Trabajo en equipos (3 personas)</h3>
+      <ul style="font-size:30px"><li>Matriz de hallazgos con su <b>propuesta</b> completa.</li><li><b>Cuadro propuesto</b> en hoja de cálculo con fórmulas.</li><li>Memoria con <b>caída de tensión</b> y <b>ocupación de tubería</b> de tres circuitos.</li><li><b>Plano de planta</b> a escala 1:50 con convenciones y tramos rotulados.</li><li><b>Unifilar</b> del tablero TG-1.</li></ul></div>
+    <div><div class="card" style="padding:26px 34px"><h3 style="font-size:29px">Criterios de evaluación</h3><ul style="font-size:25px;padding-left:26px"><li>Propuestas coherentes con la norma</li><li>Cálculos correctos y trazables</li><li>Balanceo menor al 5 %</li><li>Plano legible y consistente con el cuadro</li><li>Lista de verificación completa</li></ul></div>
+      <div class="warn"><span class="lab">Herramienta</span>Dibujen en el software CAD del curso. Lleven el archivo y el cuadro a la próxima clase.</div></div>
+  </div>
+</div></section>
+
+<section class="slide cover" data-title="Cierre c2">
+  <svg class="phi" viewBox="-0.02 -0.02 1.658 1.04" aria-hidden="true"><g fill="none" stroke="#50E5F9" stroke-width=".003"><g stroke-opacity=".3"><rect x="0.0000" y="0.0000" width="1.0000" height="1.0000"/><rect x="1.0000" y="0.3820" width="0.6180" height="0.6180"/><rect x="1.2361" y="0.0000" width="0.3820" height="0.3820"/><rect x="1.0000" y="0.0000" width="0.2361" height="0.2361"/><rect x="1.0000" y="0.2361" width="0.1459" height="0.1459"/><rect x="1.1459" y="0.2918" width="0.0902" height="0.0902"/><rect x="1.1803" y="0.2361" width="0.0557" height="0.0557"/><rect x="1.1459" y="0.2361" width="0.0344" height="0.0344"/><rect x="1.1459" y="0.2705" width="0.0213" height="0.0213"/></g><path d="M0.0000,0.0000 A1.0000,1.0000 0 0 0 1.0000,1.0000 A0.6180,0.6180 0 0 0 1.6180,0.3820 A0.3820,0.3820 0 0 0 1.2361,0.0000 A0.2361,0.2361 0 0 0 1.0000,0.2361 A0.1459,0.1459 0 0 0 1.1459,0.3820 A0.0902,0.0902 0 0 0 1.2361,0.2918 A0.0557,0.0557 0 0 0 1.1803,0.2361 A0.0344,0.0344 0 0 0 1.1459,0.2705 A0.0213,0.0213 0 0 0 1.1672,0.2918 " stroke="#39A900" stroke-width=".012" stroke-linecap="round"/></g><path fill="#50E5F9" fill-opacity=".14" transform="translate(.2 .2) scale(.006)" d="M58 2 20 56h24l-8 42 44-58H54z"/></svg><div class="logobox"><svg><use href="#sena"/></svg></div>
+  <div class="txt"><div class="kicker">Lo que nos llevamos</div>
+    <h1 style="font-size:55px">Corregir, calcular y <span>dibujar con criterio</span></h1>
+    <div class="sub" style="font-size:30px;line-height:1.5;max-width:1100px">
+      • Cada hallazgo se convierte en una <b style="color:#fff">propuesta</b>.<br>
+      • Un circuito por carga grande; <b style="color:#fff">L1 y L2 balanceadas</b>.<br>
+      • Caída de tensión y ocupación se <b style="color:#fff">calculan</b>, no se adivinan.<br>
+      • El plano, el cuadro y el unifilar <b style="color:#fff">cuentan la misma historia</b>.<br>
+      • Siguiente misión: <b style="color:#fff">iluminación y RETILAP</b>.
+    </div></div>
+  <div class="who"><b>Andrés Felipe Valencia</b><br><span>Tecnología en Gestión Eficiente de la Energía · SENA</span></div>
+  <div class="stripe"></div></section>
+
+</div></div>
+
+<button class="btn" id="prev" aria-label="Anterior">‹</button>
+<button class="btn" id="next" aria-label="Siguiente">›</button>
+<div class="hud"><i id="bar"></i></div>
+<div class="help">← → navegar · F pantalla completa · R descubrir respuesta · D descargar .html · Inicio/Fin</div>
+<button class="dl" id="dl" type="button">⬇ Descargar .html</button>
+</div>
+
+<script id="deck-js">
+(function(){
+  const stage=document.getElementById('stage');
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.getElementById('bar');
+  let cur=0;
+
+  // Encabezado y pie automáticos en las diapositivas de contenido
+  slides.forEach((s,i)=>{
+    if(s.classList.contains('cover')) return;
+    const top=document.createElement('div');
+    top.className='top';
+    top.innerHTML='<svg class="logo"><use href="#sena"/></svg><div class="prog">Servicio Nacional de Aprendizaje<small>Tecnología en Gestión Eficiente de la Energía</small></div><div class="tag">Clase 2 · Replanteo y planos</div>';
+    s.prepend(top);
+    const foot=document.createElement('div');
+    foot.className='foot';
+    foot.innerHTML='<span>Instalaciones eléctricas en Colombia · NTC 2050 y RETIE</span><span class="n">'+(i+1)+' / '+slides.length+'</span>';
+    s.append(foot);
+  });
+
+  function fit(){
+    const k=Math.min(innerWidth/1920,innerHeight/1080);
+    stage.style.transform='scale('+k+')';
+  }
+  function show(n){
+    cur=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+    bar.style.width=((cur+1)/slides.length*100)+'%';
+    history.replaceState(null,'','#'+(cur+1));
+  }
+  function revealNext(){
+    const s=slides[cur];
+    const b=s.querySelector('.rvbox:not(.shown)');
+    if(b) b.classList.add('shown');
+  }
+  document.querySelectorAll('.rv-btn').forEach(btn=>{
+    btn.dataset.l=btn.textContent;
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const box=document.getElementById(btn.dataset.rv);
+      box.classList.toggle('shown');
+      btn.textContent=box.classList.contains('shown')?'✓ Respuesta visible (clic para ocultar)':btn.dataset.l;
+    });
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.target.tagName==='BUTTON'&&[' ','Enter'].includes(e.key))return;
+    if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(cur+1)}
+    else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(cur-1)}
+    else if(e.key==='Home')show(0);
+    else if(e.key==='End')show(slides.length-1);
+    else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+    else if(e.key==='r'||e.key==='R')revealNext();
+    else if(e.key==='d'||e.key==='D')descargar();
+  });
+  document.getElementById('prev').onclick=()=>show(cur-1);
+  document.getElementById('next').onclick=()=>show(cur+1);
+  let x0=null;
+  addEventListener('touchstart',e=>x0=e.touches[0].clientX);
+  addEventListener('touchend',e=>{if(x0===null)return;const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>60)show(cur+(d<0?1:-1));x0=null});
+  // Descarga: regenera un .html independiente a partir de esta misma página
+  function standalone(){
+    const app=document.getElementById('app').cloneNode(true);
+    app.querySelectorAll('.top,.foot').forEach(e=>e.remove());
+    app.querySelector('.stage').removeAttribute('style');
+    app.querySelectorAll('.slide').forEach(e=>e.classList.remove('active'));
+    app.querySelectorAll('.rvbox').forEach(e=>e.classList.remove('shown'));
+    app.querySelectorAll('.rv-btn').forEach(b=>{b.textContent=b.dataset.l});
+    app.querySelector('#bar').removeAttribute('style');
+    return '<!DOCTYPE html>\n<html lang="es">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Clase 2 · Replanteo y planos · SENA</title>\n'
+      +'<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">\n'
+      +'<style id="deck-css">\n'+document.getElementById('deck-css').textContent+'</style>\n</head>\n<body>\n'
+      +app.outerHTML+'\n<script id="deck-js">\n'+document.getElementById('deck-js').textContent+'<\/script>\n</body>\n</html>\n';
+  }
+  async function descargar(){
+    const html=standalone(),name='clase2-replanteo-y-planos.html';
+    try{
+      const d=window.claude&&window.claude.use?await window.claude.use('downloads'):null;
+      if(d){await d.save({filename:name,data:html});return}
+    }catch(e){if(e&&e.code==='declined')return}
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+    a.download=name;document.body.appendChild(a);a.click();a.remove();
+  }
+  document.getElementById('dl').addEventListener('click',e=>{e.stopPropagation();descargar()});
+  addEventListener('resize',fit);
+  fit();
+  const h=parseInt(location.hash.slice(1));
+  show(isNaN(h)?0:h-1);
+})();
+</script>
+</body>
+</html>
