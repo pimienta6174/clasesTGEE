@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 3 · Iluminación · SENA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style id="deck-css">
+/* Escala áurea: φ = 1,618 · espaciado Fibonacci 8-13-21-34-55-89 · columnas 61,8 % / 38,2 % */
+:root{
+  --f13:13px; --f21:21px; --f34:34px; --f55:55px; --f89:89px;
+  --verde:#39A900; --verde-osc:#2B8200; --verde-claro:#EAF6E1;
+  --azul:#00304D; --azul-2:#0A4A70;
+  --cian:#50E5F9; --amarillo:#FDC300; --naranja:#FF6C00;
+  --texto:#1D2B36; --gris:#5C6B77; --linea:#D9E1E6; --fondo:#F4F7F9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#071a26;font-family:'Work Sans',system-ui,sans-serif;color:var(--texto);overflow:hidden}
+.viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+.stage{position:relative;width:1920px;height:1080px;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;background:#fff;display:none;overflow:hidden}
+.slide.active{display:block;animation:in .45s ease}
+@keyframes in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+
+/* ---------- Estructura común ---------- */
+.top{position:absolute;left:0;right:0;top:0;height:110px;padding:0 var(--f89);display:flex;align-items:center;gap:28px;border-bottom:6px solid var(--verde);background:#fff}
+.top .logo{width:78px;height:78px;color:var(--verde)}
+.top .prog{font-size:24px;font-weight:600;color:var(--azul);line-height:1.15}
+.top .prog small{display:block;font-weight:400;color:var(--gris);font-size:20px}
+.top .tag{margin-left:auto;font-size:22px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--azul);padding:10px 22px;border-radius:40px}
+.body{position:absolute;left:var(--f89);right:var(--f89);top:144px;bottom:89px}
+.foot{position:absolute;left:var(--f89);right:var(--f89);bottom:0;height:70px;display:flex;align-items:center;justify-content:space-between;color:var(--gris);font-size:20px}
+.foot .n{font-weight:700;color:var(--azul)}
+h1,h2,h3{color:var(--azul);letter-spacing:-.01em}
+h2{font-size:55px;font-weight:800;line-height:1.08;margin-bottom:var(--f21)}
+h2 em{font-style:normal;color:var(--verde)}
+.lead{font-size:30px;line-height:1.4;color:var(--gris);max-width:1500px;margin-bottom:var(--f21)}
+h3{font-size:32px;font-weight:700;margin-bottom:10px}
+p,li{font-size:29px;line-height:1.42}
+ul{padding-left:34px}
+li{margin-bottom:10px}
+li::marker{color:var(--verde)}
+b,strong{color:var(--azul)}
+.grid{display:grid;gap:var(--f21)}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(5,1fr)}
+.cols{display:grid;grid-template-columns:1.618fr 1fr;gap:var(--f55)}
+.cols.rev{grid-template-columns:1fr 1.618fr}
+.card{background:var(--fondo);border-radius:21px;padding:21px 34px;border-top:7px solid var(--verde)}
+.card.az{border-top-color:var(--azul)}.card.na{border-top-color:var(--naranja)}.card.am{border-top-color:var(--amarillo)}.card.ci{border-top-color:var(--cian)}
+.card h3{font-size:30px}.card p,.card li{font-size:25px}
+.big{font-size:70px;font-weight:800;color:var(--verde);line-height:1}
+.pill{display:inline-block;font-weight:700;font-size:22px;padding:6px 16px;border-radius:30px;background:var(--verde-claro);color:var(--verde-osc);margin-right:8px}
+.pill.az{background:#DCEBF4;color:var(--azul)}.pill.na{background:#FFE9D9;color:#B84A00}
+code,.mono{font-family:'JetBrains Mono',monospace;font-weight:700}
+sub,sup{font-size:.65em}
+
+/* Fórmulas y bloques didácticos */
+.formula{background:var(--azul);color:#fff;border-radius:20px;padding:22px 34px;font-size:40px;font-weight:600;line-height:1.5;margin:12px 0}
+.formula b{color:var(--cian)}.formula small{display:block;font-size:23px;font-weight:400;color:#B9D6E6}
+.formula .row{display:flex;gap:56px;flex-wrap:wrap}
+.ex,.turn,.note,.warn{border-radius:18px;padding:20px 28px;margin:12px 0;font-size:27px;line-height:1.45}
+.ex{background:var(--verde-claro);border-left:10px solid var(--verde)}
+.turn{background:#FFF3E8;border-left:10px solid var(--naranja)}
+.note{background:#EAF6FB;border-left:10px solid var(--azul)}
+.warn{background:#FFF8DB;border-left:10px solid var(--amarillo)}
+.ex .lab,.turn .lab,.note .lab,.warn .lab{display:block;font-size:20px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.ex .lab{color:var(--verde-osc)}.turn .lab{color:#C24F00}.note .lab{color:var(--azul)}.warn .lab{color:#8A6A00}
+.steps div{margin:3px 0}
+.res{font-weight:800;color:var(--verde-osc)}
+
+/* Descubrir respuesta */
+.rvbox .ans{filter:blur(13px);opacity:.25;transition:all .5s ease;user-select:none}
+.rvbox.shown .ans{filter:none;opacity:1;user-select:auto}
+.rv-btn{font-family:inherit;font-size:22px;font-weight:700;background:var(--naranja);color:#fff;border:none;border-radius:40px;padding:10px 26px;cursor:pointer;margin-top:8px;box-shadow:0 4px 0 #B84A00}
+.rv-btn:active{transform:translateY(3px);box-shadow:none}
+.rvbox.shown .rv-btn{background:var(--verde);box-shadow:0 4px 0 var(--verde-osc)}
+
+/* Tablas */
+table{width:100%;border-collapse:collapse;font-size:24px}
+th{background:var(--azul);color:#fff;font-weight:600;padding:9px 12px;text-align:left}
+td{padding:7px 12px;border-bottom:1px solid var(--linea)}
+tr:nth-child(even) td{background:#F8FAFB}
+td.r,th.r{text-align:right}
+td.c,th.c{text-align:center}
+tfoot td{background:var(--verde-claro)!important;font-weight:700;color:var(--azul)}
+.l1{color:#fff;background:#C0392B;border-radius:6px;padding:2px 10px;font-weight:700;font-size:21px}
+.l2{color:#fff;background:var(--azul-2);border-radius:6px;padding:2px 10px;font-weight:700;font-size:21px}
+.l12{color:#fff;background:#6C3483;border-radius:6px;padding:2px 10px;font-weight:700;font-size:21px}
+
+/* Portada */
+.cover{background:linear-gradient(120deg,#00304D 0%,#00304D 55%,#0A4A70 100%)}
+.cover .phi{position:absolute;right:80px;top:230px;width:760px}
+.cover .stripe{position:absolute;left:0;bottom:0;width:100%;height:26px;background:linear-gradient(90deg,var(--verde) 0 62%,var(--amarillo) 62% 81%,var(--cian) 81% 100%)}
+.cover .logobox{position:absolute;left:110px;top:89px;width:210px;height:210px;background:#fff;border-radius:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.cover .logobox svg{width:170px;height:170px;color:var(--verde)}
+.cover .txt{position:absolute;left:110px;top:382px;width:940px;color:#fff}
+.cover .kicker{font-size:30px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--cian)}
+.cover h1{color:#fff;font-size:89px;line-height:1.02;font-weight:800;margin:20px 0 26px}
+.cover h1 span{color:var(--verde)}
+.cover .sub{font-size:34px;font-weight:300;line-height:1.4;max-width:1000px;color:#D6E8F2}
+.cover .who{position:absolute;left:110px;bottom:100px;color:#fff;font-size:30px;line-height:1.5}
+.cover .who b{color:#fff;font-size:36px}.cover .who span{color:var(--cian)}
+.cover .chip{position:absolute;right:110px;bottom:100px;background:var(--verde);color:#fff;font-weight:800;font-size:34px;padding:18px 40px;border-radius:50px}
+
+/* Ruta de misiones */
+.mission{border-radius:22px;padding:28px;background:var(--fondo);position:relative;border-top:8px solid var(--linea)}
+.mission .no{font-size:24px;font-weight:800;letter-spacing:.1em;color:var(--gris)}
+.mission h3{font-size:30px;margin:8px 0}
+.mission p{font-size:24px;color:var(--gris)}
+.mission.on{background:var(--azul);border-top-color:var(--verde);transform:translateY(-14px);box-shadow:0 18px 40px rgba(0,48,77,.3)}
+.mission.on h3,.mission.on .no{color:#fff}.mission.on p{color:#CFE3EE}
+.mission.on::after{content:"HOY";position:absolute;right:22px;top:20px;background:var(--verde);color:#fff;font-weight:800;font-size:20px;padding:5px 16px;border-radius:30px}
+
+/* Pirámide normativa */
+.layers{display:flex;flex-direction:column;gap:12px}
+.layer{border-radius:16px;padding:16px 26px;color:#fff;display:flex;align-items:center;gap:24px}
+.layer b{color:#fff;font-size:32px;min-width:330px}.layer span{font-size:25px;line-height:1.3}
+
+/* Pasos */
+.step{display:flex;gap:21px;align-items:flex-start;background:var(--fondo);border-radius:21px;padding:21px 34px;margin-bottom:21px}
+.step .num{flex:none;width:64px;height:64px;border-radius:50%;background:var(--verde);color:#fff;font-weight:800;font-size:34px;display:flex;align-items:center;justify-content:center}
+.step h3{font-size:30px;margin:0}.step p{font-size:24px;color:var(--gris);line-height:1.3}
+
+/* Barras */
+.bars{display:flex;align-items:flex-end;gap:70px;height:380px;border-bottom:4px solid var(--azul);padding:0 40px;margin-top:10px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.bar .b{width:100%;border-radius:14px 14px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:14px;color:#fff;font-weight:800;font-size:34px}
+.bar .t{margin-top:10px;font-size:26px;font-weight:700;color:var(--azul)}
+
+
+/* Ajustes por lámina para equilibrar el espacio (proyección en aula) */
+.slide[data-title="Objetivos"] .card{padding:26px 40px}
+.slide[data-title="Objetivos"] .card p{font-size:30px}
+.slide[data-title="Objetivos"] .card h3{font-size:36px}
+.slide[data-title="Objetivos"] .big{font-size:76px}
+.slide[data-title="Riesgo eléctrico"] .card{padding:34px 40px}
+.slide[data-title="Riesgo eléctrico"] .card h3{font-size:36px;margin-bottom:13px}
+.slide[data-title="Riesgo eléctrico"] .card p{font-size:30px}
+.slide[data-title="Tu turno: potencia y corriente"] table{font-size:31px}
+.slide[data-title="Tu turno: potencia y corriente"] th,.slide[data-title="Tu turno: potencia y corriente"] td{padding:17px 18px}
+.slide[data-title="Tu turno: potencia y corriente"] .turn{font-size:31px;margin-top:34px}
+.slide[data-title="Circuitos requeridos en vivienda"] table{font-size:25px}
+.slide[data-title="Circuitos requeridos en vivienda"] th,.slide[data-title="Circuitos requeridos en vivienda"] td{padding:10px 18px}
+.slide[data-title="Circuitos requeridos en vivienda"] .note{font-size:27px;margin-top:21px}
+.slide[data-title="Taller y entregable"] li{font-size:34px;margin-bottom:21px}
+.slide[data-title="Taller y entregable"] .card li{font-size:29px;margin-bottom:13px}
+.slide[data-title="Taller y entregable"] .card{padding:34px 40px}
+.slide[data-title="Taller y entregable"] .warn,.slide[data-title="Taller y entregable"] h3{font-size:31px}
+.slide[data-title="Ruta de misiones"] .mission{padding:34px}
+.slide[data-title="Ruta de misiones"] .mission p{font-size:27px}
+.slide[data-title="Ruta de misiones"] .mission h3{font-size:34px}
+.slide[data-title="RETIE y el levantamiento"] .card{padding:20px 30px}
+.slide[data-title="RETIE y el levantamiento"] .card h3{font-size:30px}
+.slide[data-title="RETIE y el levantamiento"] .card p{font-size:24px}
+.slide[data-title="Magnitudes eléctricas"] .card{padding:30px 38px}
+.slide[data-title="Magnitudes eléctricas"] .card h3{font-size:34px}
+.slide[data-title="Magnitudes eléctricas"] .card p{font-size:28px}
+.slide[data-title="Mapa de la NTC 2050"] .card{padding:20px 30px!important}
+.slide[data-title="Mapa de la NTC 2050"] .card h3{font-size:29px!important}
+.slide[data-title="Mapa de la NTC 2050"] .card p{font-size:24px!important}
+.slide[data-title="Marco normativo"] .layer span{font-size:27px}
+.st{display:inline-block;font-weight:800;font-size:19px;letter-spacing:.04em;padding:3px 12px;border-radius:30px;color:#fff;white-space:nowrap}
+.st.c{background:#C0392B}.st.m{background:var(--naranja)}.st.n{background:#8A6A00}.st.ok{background:var(--verde-osc)}
+.sub-st{display:block;font-size:19px;font-weight:500;color:var(--gris);margin-top:2px;white-space:normal}
+.slide[data-title="Cuadro de cargas encontrado"] td,.slide[data-title="Cuadro de cargas encontrado"] th{padding:5px 10px}
+.slide[data-title="Cuadro de cargas encontrado"] td.c{white-space:nowrap}
+.slide[data-title="Cuadro de cargas encontrado"] .sub-st{font-size:17px;margin-top:0}
+.slide[data-title="Balanceo de líneas"] .formula{font-size:30px!important;padding:12px 26px!important;margin:8px 0}
+.slide[data-title="Carga demandada Art. 220"] td,.slide[data-title="Carga demandada Art. 220"] th{padding:5px 12px}
+
+.slide[data-title="RETIE y RETILAP"] .step p{font-size:26px}
+.slide[data-title="RETIE y RETILAP"] .step h3{font-size:30px}
+.slide[data-title="RETIE y RETILAP"] .card p,.slide[data-title="RETIE y RETILAP"] .warn{font-size:26px}
+.slide[data-title="Método de lúmenes"] .ex{font-size:30px!important}
+.slide[data-title="Método de lúmenes"] .card p{font-size:26px!important}
+.slide[data-title="Método de lúmenes"] .note{font-size:25px!important}
+.slide[data-title="Iluminancia"] .ex,.slide[data-title="Iluminancia"] .turn{font-size:29px}
+.slide[data-title="Tu turno lúmenes"] td,.slide[data-title="Tu turno lúmenes"] th{padding:10px 14px}
+.slide[data-title="Tabla de cálculo de iluminación"] td,.slide[data-title="Tabla de cálculo de iluminación"] th{padding:7px 10px;font-size:24px}
+.slide[data-title="Niveles por espacio"] td,.slide[data-title="Niveles por espacio"] th{padding:5px 12px}
+.slide[data-title="Plano de iluminación"] li{font-size:23px!important}
+.slide[data-title="Carga de alumbrado"] .ex,.slide[data-title="Carga de alumbrado"] .turn{font-size:26px}
+.slide[data-title="Lista de verificación c3"] .step{margin-bottom:10px}
+.slide[data-title="Taller c3"] li{margin-bottom:16px}
+/* Navegación */
+.hud{position:fixed;left:0;right:0;bottom:0;height:6px;background:rgba(255,255,255,.12);z-index:10}
+.hud i{display:block;height:100%;width:0;background:var(--verde);transition:width .3s}
+.btn{position:fixed;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;border:none;background:rgba(255,255,255,.14);color:#fff;font-size:26px;cursor:pointer;z-index:10;opacity:.0;transition:.2s}
+.viewport:hover~.btn,.btn:hover{opacity:1}
+#prev{left:12px}#next{right:12px}
+.dl{position:fixed;left:50%;transform:translateX(-50%);bottom:30px;z-index:11;font:600 15px "Work Sans",system-ui,sans-serif;color:#fff;background:rgba(0,48,77,.88);border:1px solid rgba(80,229,249,.55);border-radius:30px;padding:8px 18px;cursor:pointer;opacity:0;transition:.2s}
+.dl:hover,.dl:focus-visible{opacity:1;background:var(--verde)}
+:fullscreen .dl{display:none}
+.help{position:fixed;right:14px;top:10px;color:#9fb6c3;font-size:13px;z-index:10;opacity:.0;transition:.3s}
+body:hover .help{opacity:.8}
+
+@media print{
+  html,body{overflow:visible;background:#fff;height:auto}
+  .viewport{position:static;display:block}
+  .stage{transform:none!important;width:1920px;height:auto}
+  .slide{display:block!important;position:relative;height:1080px;page-break-after:always;animation:none}
+  .btn,.hud,.help,.rv-btn,.dl{display:none}
+  .rvbox .ans{filter:none;opacity:1}
+  @page{size:1920px 1080px;margin:0}
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+<!-- Logo SENA (símbolo reutilizable) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="sena" viewBox="0 0 1000 1000">
+    <path fill="currentColor" d="M504.2,20.5c-58.3,0.1-105.6,47.4-105.5,105.8c0.1,58.3,47.4,105.6,105.7,105.6 c58.3,0,105.6-47.3,105.6-105.7V126C609.9,67.6,562.6,20.4,504.2,20.5z M155.6,264.6c-18.6,0.1-37.5,1.1-55.2,5.6 c-11.7,3-23,7.8-30.3,15.4c-9.2,9.5-10.4,22.3-5.9,33.3c4,9.7,14.8,16.9,26.8,21.1c25.9,8.9,54.6,10.7,81.8,16.3 c5,1.2,10.6,2.6,13.7,6c3.2,4.1,1.3,9.7-4,12.2c-8.8,4.5-20.1,4.5-30.4,4.4c-9.4-0.4-19.7-1.2-27.2-5.9c-5.5-3.4-6.5-9.1-5.2-14.1 l-60.6,0c-0.2,9.2,1.6,18.9,8.4,26.8c5.6,6.8,14.8,11.5,24.6,14.4c15.7,4.6,32.7,6,49.4,6.4c22.7,0.4,45.8-0.3,67.6-5.4 c13-3.2,25.8-8.3,34.1-16.6c14.8-14.8,11.3-38.3-8.3-49.8c-9.8-5.7-21.5-9.2-33.4-11.5c-17.5-3.6-35.3-6.3-52.9-9.2 c-6.2-1.2-12.8-2.3-18-5.2c-5.5-2.9-5.9-9.8-0.3-12.9c7.2-4.1,16.8-4,25.4-4c9.1,0.2,19,0.7,26.5,5c4.2,2.3,5.9,6.3,5.9,10.1 l57.6-0.1c-0.2-7.3-1.6-14.9-6.9-21.2c-6.2-7.8-17.1-12.7-28.3-15.5C192.8,265.6,174.1,264.7,155.6,264.6L155.6,264.6z M280.6,268.9 l0,137.7l168.1,0l0-30H342.3v-26.7h94.9v-29.3h-94.9l0-21.9l102.6,0l-0.1-29.7L280.6,268.9z M557.5,269c0,0-51.9,0-77.9,0l0,137.7 l59,0l0-92.7l80.8,92.6l81,0.1l0-137.7l-59.1,0l0.1,92L557.5,269z M805.6,269.2c0,0-63.6,91.9-95.6,137.7l61.9,0l14.9-24.8h95.7 l13.9,24.9l68.8,0L874,269.2L805.6,269.2z M836.6,302.1l29.4,49.9l-60.7,0.1L836.6,302.1z M10.6,445.6l0.5,75l280.1-1 c14.3,3.1,22.6,12.4,19.7,33.5L138.6,854.7l56.1,52.5l266.9-461.6L10.6,445.6z M545.2,446.2l262.4,459.6l58-52.1L691.3,552.9 c-2.9-21.2,5.4-30.6,19.7-33.7l280.2,1l-0.1-73.7L545.2,446.2z M500.9,522.3L254.8,944.7l65.4,31.9L484.4,699 c5.7-4.6,11.4-7.1,17.1-7.3c6-0.2,12.2,2,18.3,6.8l163.8,278.4l67.4-35.2L500.9,522.3z"/>
+  </symbol>
+</svg>
+
+<div class="viewport"><div class="stage" id="stage">
+
+<section class="slide cover" data-title="Portada c3">
+  <svg class="phi" viewBox="-0.02 -0.02 1.658 1.04" aria-hidden="true"><g fill="none" stroke="#50E5F9" stroke-width=".003"><g stroke-opacity=".3"><rect x="0.0000" y="0.0000" width="1.0000" height="1.0000"/><rect x="1.0000" y="0.3820" width="0.6180" height="0.6180"/><rect x="1.2361" y="0.0000" width="0.3820" height="0.3820"/><rect x="1.0000" y="0.0000" width="0.2361" height="0.2361"/><rect x="1.0000" y="0.2361" width="0.1459" height="0.1459"/><rect x="1.1459" y="0.2918" width="0.0902" height="0.0902"/><rect x="1.1803" y="0.2361" width="0.0557" height="0.0557"/><rect x="1.1459" y="0.2361" width="0.0344" height="0.0344"/><rect x="1.1459" y="0.2705" width="0.0213" height="0.0213"/></g><path d="M0.0000,0.0000 A1.0000,1.0000 0 0 0 1.0000,1.0000 A0.6180,0.6180 0 0 0 1.6180,0.3820 A0.3820,0.3820 0 0 0 1.2361,0.0000 A0.2361,0.2361 0 0 0 1.0000,0.2361 A0.1459,0.1459 0 0 0 1.1459,0.3820 A0.0902,0.0902 0 0 0 1.2361,0.2918 A0.0557,0.0557 0 0 0 1.1803,0.2361 A0.0344,0.0344 0 0 0 1.1459,0.2705 A0.0213,0.0213 0 0 0 1.1672,0.2918 " stroke="#39A900" stroke-width=".012" stroke-linecap="round"/></g><path fill="#50E5F9" fill-opacity=".14" transform="translate(.2 .2) scale(.006)" d="M58 2 20 56h24l-8 42 44-58H54z"/></svg><div class="logobox"><svg><use href="#sena"/></svg></div>
+  <div class="txt"><div class="kicker">Clase 3 · Misión 3</div>
+    <h1>Diseño de la <span>iluminación</span></h1>
+    <div class="sub">Cuánta luz necesita cada espacio, cuántas luminarias y cómo entran al cuadro: <b style="color:#fff">RETIE</b> y <b style="color:#fff">RETILAP</b>.</div></div>
+  <div class="who"><b>Andrés Felipe Valencia</b><br><span>Instructor · Tecnología en Gestión Eficiente de la Energía</span></div>
+  <div class="chip">SENA</div><div class="stripe"></div></section>
+
+<section class="slide" data-title="De la Misión 2 a la 3"><div class="body">
+  <h2>De la Misión 2 a la Misión 3: <em>la luz también se calcula</em></h2>
+  <p class="lead">En la Misión 2 supusimos <b>15 luminarias</b> (450 VA). Hoy comprobamos si esa suposición alcanza.</p>
+  <div style="display:flex;gap:13px;margin-top:34px;align-items:stretch">
+    <div style="flex:1;background:var(--fondo);border-radius:21px;padding:26px 24px;border-top:8px solid var(--verde)"><div style="font-weight:800;letter-spacing:.1em;font-size:20px;color:var(--gris)">MISIÓN 2</div><div style="font-size:30px;font-weight:800;color:var(--azul);margin:6px 0">Cuadro de cargas</div><div style="font-size:23px;color:var(--gris)">C1 y C2 con 15 luminarias.</div></div><div style="align-self:center;font-size:44px;color:var(--verde);font-weight:800">›</div>
+    <div style="flex:1;background:var(--azul);border-radius:21px;padding:26px 24px;border-top:8px solid var(--verde)"><div style="font-weight:800;letter-spacing:.1em;font-size:20px;color:#CFE3EE">PASO 1</div><div style="font-size:30px;font-weight:800;color:#fff;margin:6px 0">Cuánta luz</div><div style="font-size:23px;color:#CFE3EE">Nivel en lux por espacio.</div></div><div style="align-self:center;font-size:44px;color:var(--verde);font-weight:800">›</div>
+    <div style="flex:1;background:var(--azul);border-radius:21px;padding:26px 24px;border-top:8px solid var(--verde)"><div style="font-weight:800;letter-spacing:.1em;font-size:20px;color:#CFE3EE">PASO 2</div><div style="font-size:30px;font-weight:800;color:#fff;margin:6px 0">Cuántas luminarias</div><div style="font-size:23px;color:#CFE3EE">Método de lúmenes.</div></div><div style="align-self:center;font-size:44px;color:var(--verde);font-weight:800">›</div>
+    <div style="flex:1;background:var(--azul);border-radius:21px;padding:26px 24px;border-top:8px solid var(--verde)"><div style="font-weight:800;letter-spacing:.1em;font-size:20px;color:#CFE3EE">PASO 3</div><div style="font-size:30px;font-weight:800;color:#fff;margin:6px 0">Plano</div><div style="font-size:23px;color:#CFE3EE">Ubicación y controles.</div></div><div style="align-self:center;font-size:44px;color:var(--verde);font-weight:800">›</div>
+    <div style="flex:1;background:var(--azul);border-radius:21px;padding:26px 24px;border-top:8px solid var(--verde)"><div style="font-weight:800;letter-spacing:.1em;font-size:20px;color:#CFE3EE">PASO 4</div><div style="font-size:30px;font-weight:800;color:#fff;margin:6px 0">Cuadro</div><div style="font-size:23px;color:#CFE3EE">Carga, circuitos y balanceo.</div></div>
+  </div>
+  <div class="note" style="margin-top:55px"><span class="lab">Regla de oro (la misma de siempre)</span>Fórmula, ejemplo resuelto, <b>ustedes calculan a mano</b> y solo al final <b>descubrimos la respuesta</b>.</div>
+</div></section>
+
+<section class="slide" data-title="Objetivos c3"><div class="body">
+  <h2>Al terminar esta clase <em>ustedes podrán…</em></h2>
+  <div class="grid g2" style="margin-top:21px">
+    <div class="card" style="padding:26px 40px"><div class="big" style="font-size:76px">1</div><h3 style="font-size:36px">Medir la luz</h3><p style="font-size:30px">Usar <b>lumen, lux y eficacia</b> y calcular la iluminancia de un espacio.</p></div>
+    <div class="card" style="padding:26px 40px"><div class="big" style="font-size:76px">2</div><h3 style="font-size:36px">Dimensionar</h3><p style="font-size:30px">Calcular con el <b>método de lúmenes</b> cuántas luminarias necesita cada espacio.</p></div>
+    <div class="card" style="padding:26px 40px"><div class="big" style="font-size:76px">3</div><h3 style="font-size:36px">Ubicar</h3><p style="font-size:30px">Distribuir luminarias e interruptores en el <b>plano de iluminación</b>.</p></div>
+    <div class="card" style="padding:26px 40px"><div class="big" style="font-size:76px">4</div><h3 style="font-size:36px">Integrar</h3><p style="font-size:30px">Pasar de W a VA, definir los circuitos y <b>revisar el balanceo</b> del cuadro.</p></div>
+  </div>
+  <div class="warn" style="margin-top:26px"><span class="lab">Entregable de la clase</span>Paquete de iluminación: <b>tabla de cálculo, plano de iluminación, carga de alumbrado y cuadro actualizado</b>.</div>
+</div></section>
+
+<section class="slide" data-title="RETIE y RETILAP"><div class="body">
+  <h2>Qué exigen el <em>RETIE</em> y el <em>RETILAP</em></h2>
+  <div class="cols" style="margin-top:13px">
+    <div>
+      <div class="step"><div class="num">1</div><div><h3>El RETILAP es obligatorio</h3><p>Rige la iluminación propiamente dicha: niveles de luz y confort visual (RETIE, Libro 3, art. 3.14.1).</p></div></div>
+      <div class="step"><div class="num">2</div><div><h3>Sin diseño de iluminación, no hay diseño eléctrico</h3><p>El diseñador eléctrico debe abstenerse: la iluminación es un insumo del diseño eléctrico (3.14.1, lit. a).</p></div></div>
+      <div class="step"><div class="num">3</div><div><h3>Salidas e interruptores en el lugar correcto</h3><p>Aunque no se exija diseño detallado, se ubican las salidas y los controles para una iluminación eficiente y segura (lit. b).</p></div></div>
+      <div class="step"><div class="num">4</div><div><h3>Zonas especiales</h3><p>Zonas húmedas, piscinas, emergencia y áreas peligrosas deben cumplir el RETILAP y el RETIE (lit. d).</p></div></div>
+    </div>
+    <div>
+      <div class="card az"><h3>Dos reglamentos, una instalación</h3><p>El <b>RETILAP</b> dice cuánta luz. El <b>RETIE</b> y la <b>NTC 2050</b> dicen cómo se alimenta con seguridad.</p></div><br>
+      <div class="warn"><span class="lab">Verifique</span>El RETILAP no está en nuestros archivos. Los niveles de luz de esta clase son <b>valores didácticos</b>: confírmelos en el RETILAP.</div>
+    </div>
+  </div>
+</div></section>
+
+<section class="slide" data-title="Magnitudes de la luz"><div class="body">
+  <h2>Las magnitudes de <em>la luz</em></h2>
+  <p class="lead" style="font-size:26px;margin-bottom:12px">Piense en una regadera: el agua que sale es el flujo; lo que moja el piso es la iluminancia.</p>
+  <div class="grid g3" style="gap:16px">
+    <div class="card" style="padding:20px 28px"><h3 style="font-size:29px">Flujo luminoso Φ <span style="color:var(--verde-osc)">[lm]</span></h3><p style="font-size:24px">Toda la luz que emite una lámpara (el agua que sale de la regadera).</p></div>
+    <div class="card" style="padding:20px 28px"><h3 style="font-size:29px">Iluminancia E <span style="color:var(--verde-osc)">[lx]</span></h3><p style="font-size:24px">Luz que llega a una superficie: 1 lx = 1 lm sobre 1 m². Es lo que exige la norma.</p></div>
+    <div class="card" style="padding:20px 28px"><h3 style="font-size:29px">Eficacia <span style="color:var(--verde-osc)">[lm/W]</span></h3><p style="font-size:24px">Luz producida por cada vatio consumido. Más lm/W, menos energía.</p></div>
+    <div class="card" style="padding:20px 28px"><h3 style="font-size:29px">Intensidad I <span style="color:var(--verde-osc)">[cd]</span></h3><p style="font-size:24px">Cuánta luz sale hacia una dirección. Importa en luminarias dirigidas.</p></div>
+    <div class="card" style="padding:20px 28px"><h3 style="font-size:29px">Temperatura de color <span style="color:var(--verde-osc)">[K]</span></h3><p style="font-size:24px">Tono de la luz: 2700 K cálida (amarilla), 4000 K neutra, 6500 K fría (azulada).</p></div>
+    <div class="card" style="padding:20px 28px"><h3 style="font-size:29px">IRC <span style="color:var(--verde-osc)">[0–100]</span></h3><p style="font-size:24px">Qué tan fieles se ven los colores. Más cerca de 100, mejor.</p></div>
+  </div>
+  <div class="note" style="margin-top:21px;font-size:24px"><span class="lab">Para esta clase</span>Trabajaremos con tres: <b>lm</b>, <b>lx</b> y <b>lm/W</b>.</div>
+</div></section>
+
+<section class="slide" data-title="Iluminancia"><div class="body">
+  <h2>Iluminancia: <em>cuánta luz llega al piso o a la mesa</em></h2>
+  <div class="formula" style="font-size:44px"><b>E</b> = Φ ÷ A<small>E en lux (lx) · Φ en lúmenes (lm) que llegan a la superficie · A en m²</small></div>
+  <div class="ex"><span class="lab">Ejemplo resuelto</span>Una zona de 10 m² recibe 3000 lm: E = 3000 ÷ 10 = <span class="res">300 lx</span>.</div>
+  <div class="turn rvbox" id="c3r1"><span class="lab">Tu turno · ¿cumple el nivel pedido?</span>
+    <div><b>a)</b> Alcoba 2 (11,85 m²) recibe 1800 lm; se pide 150 lx. &nbsp; <b>b)</b> Cocina (5,90 m²) recibe 1200 lm; se pide 300 lx. &nbsp; <b>c)</b> Baño social (3,78 m²) recibe 600 lm; se pide 200 lx.</div>
+    <div class="ans" style="margin-top:8px"><b>a)</b> 1800 ÷ 11,85 = <span class="res">151,9 lx</span> → cumple. &nbsp; <b>b)</b> 1200 ÷ 5,90 = <span class="res">203,4 lx</span> → no cumple (faltan ≈ 97 lx). &nbsp; <b>c)</b> 600 ÷ 3,78 = <span class="res">158,7 lx</span> → no cumple.</div>
+    <button class="rv-btn" data-rv="c3r1">▶ Descubrir respuesta</button></div>
+</div></section>
+
+<section class="slide" data-title="Niveles por espacio"><div class="body">
+  <h2>Cuánta luz pide <em>cada espacio</em></h2>
+  <div class="cols" style="grid-template-columns:1.2fr 1fr;margin-top:6px">
+    <div><table style="font-size:24px"><thead><tr><th>Espacio</th><th class="r">Área [m²]</th><th class="r">E objetivo [lx]</th></tr></thead><tbody><tr><td>Sala</td><td class="r">22,59</td><td class="r"><b>150</b></td></tr><tr><td>Comedor</td><td class="r">10,75</td><td class="r"><b>150</b></td></tr><tr><td>Cocina</td><td class="r">5,90</td><td class="r"><b>300</b></td></tr><tr><td>Desayunador</td><td class="r">9,60</td><td class="r"><b>200</b></td></tr><tr><td>Lavandería</td><td class="r">8,38</td><td class="r"><b>200</b></td></tr><tr><td>Alcoba principal</td><td class="r">19,14</td><td class="r"><b>150</b></td></tr><tr><td>Vestier</td><td class="r">3,66</td><td class="r"><b>100</b></td></tr><tr><td>Baño principal</td><td class="r">4,74</td><td class="r"><b>200</b></td></tr><tr><td>Alcoba 2</td><td class="r">11,85</td><td class="r"><b>150</b></td></tr><tr><td>Baño social</td><td class="r">3,78</td><td class="r"><b>200</b></td></tr><tr><td>Garaje</td><td class="r">39,04</td><td class="r"><b>100</b></td></tr><tr><td>Terraza</td><td class="r">17,81</td><td class="r"><b>75</b></td></tr></tbody></table></div>
+    <div>
+      <div class="card az" style="padding:20px 28px"><h3 style="font-size:28px">Lógica</h3><ul style="font-size:24px;padding-left:24px"><li><b>Más lux</b> donde hay tareas visuales: cocina, lavandería, baños.</li><li><b>Menos lux</b> donde se descansa o se circula: alcobas, garaje, terraza.</li></ul></div><br>
+      <div class="warn" style="font-size:23px"><span class="lab">Valores didácticos</span>No son los del RETILAP. El área viene del plano (medidas en pies convertidas a metros). Confirme los niveles en el RETILAP.</div>
+    </div></div>
+</div></section>
+
+<section class="slide" data-title="Método de lúmenes"><div class="body">
+  <h2>Método de lúmenes: <em>cuántas luminarias</em></h2>
+  <div class="formula" style="font-size:36px;padding:14px 30px"><b>N</b> = (E · A) ÷ (Φ<sub>L</sub> · CU · FM)<small>N = luminarias · Φ<sub>L</sub> = lúmenes de cada luminaria · CU = coeficiente de utilización · FM = factor de mantenimiento</small></div>
+  <div class="grid g2" style="gap:16px;margin:6px 0">
+    <div class="card" style="padding:14px 24px"><h3 style="font-size:26px">CU = 0,5</h3><p style="font-size:22px">De cada 100 lm, solo ~50 llegan al plano de trabajo (el resto se pierde en paredes y techo).</p></div>
+    <div class="card" style="padding:14px 24px"><h3 style="font-size:26px">FM = 0,8</h3><p style="font-size:22px">La luminaria se ensucia y envejece: se diseña con 20 % de margen.</p></div>
+  </div>
+  <div class="ex" style="padding:14px 28px;font-size:25px"><span class="lab">Ejemplo resuelto · sala (Φ<sub>L</sub> = 1200 lm, LED de 12 W)</span>Φ requerido = 150 × 22,59 ÷ (0,5 × 0,8) = <span class="res">8 473 lm</span> → N = 8 473 ÷ 1200 = 7,06 → <span class="res">8 luminarias</span> (se redondea hacia arriba). E real = 8 × 1200 × 0,4 ÷ 22,59 = <span class="res">170 lx</span>.</div>
+  <div class="note" style="margin-top:8px;padding:10px 24px;font-size:22px">CU y FM son valores del curso para espacios claros. En obra se toman del fabricante y del índice del local. Luminaria del curso: LED de 12 W y 1200 lm (100 lm/W).</div>
+</div></section>
+
+<section class="slide" data-title="Tu turno lúmenes"><div class="body">
+  <h2>Tu turno: <em>calcule las luminarias</em></h2>
+  <p class="lead" style="font-size:27px">Con LED de 1200 lm, CU = 0,5 y FM = 0,8, calcule N para tres espacios.</p>
+  <div class="rvbox turn" id="c3r2">
+  <table style="font-size:28px"><thead><tr><th>Espacio</th><th class="r">Área [m²]</th><th class="r">E [lx]</th><th class="r">Φ requerido [lm]</th><th class="r">N</th></tr></thead><tbody>
+  <tr><td>Cocina</td><td class="r">5,90</td><td class="r">300</td><td class="r ans">4 428</td><td class="r ans"><b>3,69 → 4</b></td></tr><tr><td>Alcoba principal</td><td class="r">19,14</td><td class="r">150</td><td class="r ans">7 177</td><td class="r ans"><b>5,98 → 6</b></td></tr><tr><td>Terraza</td><td class="r">17,81</td><td class="r">75</td><td class="r ans">3 339</td><td class="r ans"><b>2,78 → 3</b></td></tr>
+  </tbody></table>
+  <div class="ans" style="margin-top:12px;font-size:23px">Se redondea hacia arriba para no quedar por debajo del nivel pedido. La terraza queda en 81 lx con 3 luminarias; la alcoba principal, en 150 lx.</div>
+  <button class="rv-btn" data-rv="c3r2">▶ Descubrir respuesta</button></div>
+</div></section>
+
+<section class="slide" data-title="Distribución de luminarias"><div class="body">
+  <h2>Dónde van las luminarias: <em>malla regular</em></h2>
+  <div class="formula" style="font-size:34px;padding:14px 30px"><div class="row"><div>x<sub>i</sub> = (2i − 1) · L ÷ (2n)</div><div>separación = L ÷ n</div></div><small>L = lado del espacio (m) · n = luminarias en ese lado · i = 1, 2, … n · distancia a la pared = media separación</small></div>
+  <div class="ex" style="font-size:26px"><span class="lab">Ejemplo resuelto · sala 4,32 × 5,23 m con 8 luminarias (2 × 4)</span>Lado de 4,32 m (n = 2): x = <span class="res">1,08 m</span> y <span class="res">3,24 m</span>, separación 2,16 m. Lado de 5,23 m (n = 4): y = <span class="res">0,65 · 1,96 · 3,27 · 4,58 m</span>, separación 1,31 m.</div>
+  <div class="turn rvbox" id="c3r3" style="font-size:26px"><span class="lab">Tu turno</span>
+    <div>Comedor de 4,32 × 2,49 m con 4 luminarias en malla 2 × 2. ¿En qué coordenadas van y qué separación hay?</div>
+    <div class="ans" style="margin-top:6px">Lado 4,32 m (n = 2): x = <span class="res">1,08 y 3,24 m</span>. Lado 2,49 m (n = 2): y = 2,49 ÷ 4 = <span class="res">0,62 m</span> y 3 × 2,49 ÷ 4 = <span class="res">1,87 m</span>. Separaciones: 2,16 m y 1,25 m.</div>
+    <button class="rv-btn" data-rv="c3r3">▶ Descubrir respuesta</button></div>
+  <div class="note" style="margin-top:6px;padding:10px 24px;font-size:22px">Regla práctica: la separación no debería pasar de ~1,5 veces la altura sobre el plano de trabajo (techo de 2,4 m − mesa de 0,8 m = 1,6 m → máx. ≈ 2,4 m).</div>
+</div></section>
+
+<section class="slide" data-title="Tabla de cálculo de iluminación"><div class="body">
+  <h2>Tabla de cálculo <em>de la casa</em></h2>
+  <p class="lead" style="margin-bottom:6px;font-size:24px"><b style="color:var(--naranja)">Tu turno:</b> calculen N y la potencia de cada espacio y luego descubran la tabla.</p>
+  <div class="rvbox" id="c3r4"><table style="font-size:20px"><thead><tr><th>Espacio</th><th class="r">A [m²]</th><th class="r">E [lx]</th><th class="r">Φ req. [lm]</th><th class="r">N</th><th class="r">P [W]</th><th class="c">Cto</th></tr></thead><tbody><tr><td>Sala</td><td class="r">22,59</td><td class="r">150</td><td class="r">8 473</td><td class="r ans"><b>8</b></td><td class="r ans">96</td><td class="c ans">C1</td></tr><tr><td>Comedor</td><td class="r">10,75</td><td class="r">150</td><td class="r">4 031</td><td class="r ans"><b>4</b></td><td class="r ans">48</td><td class="c ans">C1</td></tr><tr><td>Cocina</td><td class="r">5,90</td><td class="r">300</td><td class="r">4 428</td><td class="r ans"><b>4</b></td><td class="r ans">48</td><td class="c ans">C1</td></tr><tr><td>Desayunador</td><td class="r">9,60</td><td class="r">200</td><td class="r">4 798</td><td class="r ans"><b>4</b></td><td class="r ans">48</td><td class="c ans">C1</td></tr><tr><td>Lavandería</td><td class="r">8,38</td><td class="r">200</td><td class="r">4 191</td><td class="r ans"><b>4</b></td><td class="r ans">48</td><td class="c ans">C1</td></tr><tr><td>Alcoba principal</td><td class="r">19,14</td><td class="r">150</td><td class="r">7 177</td><td class="r ans"><b>6</b></td><td class="r ans">72</td><td class="c ans">C2</td></tr><tr><td>Vestier</td><td class="r">3,66</td><td class="r">100</td><td class="r">915</td><td class="r ans"><b>1</b></td><td class="r ans">12</td><td class="c ans">C2</td></tr><tr><td>Baño principal</td><td class="r">4,74</td><td class="r">200</td><td class="r">2 370</td><td class="r ans"><b>2</b></td><td class="r ans">24</td><td class="c ans">C2</td></tr><tr><td>Alcoba 2</td><td class="r">11,85</td><td class="r">150</td><td class="r">4 442</td><td class="r ans"><b>4</b></td><td class="r ans">48</td><td class="c ans">C2</td></tr><tr><td>Baño social</td><td class="r">3,78</td><td class="r">200</td><td class="r">1 890</td><td class="r ans"><b>2</b></td><td class="r ans">24</td><td class="c ans">C2</td></tr><tr><td>Garaje</td><td class="r">39,04</td><td class="r">100</td><td class="r">9 760</td><td class="r ans"><b>9</b></td><td class="r ans">108</td><td class="c ans">C1</td></tr><tr><td>Terraza</td><td class="r">17,81</td><td class="r">75</td><td class="r">3 339</td><td class="r ans"><b>3</b></td><td class="r ans">36</td><td class="c ans">C1</td></tr></tbody>
+  <tfoot><tr><td colspan="4">TOTAL</td><td class="r">51</td><td class="r">612</td><td class="c">C1 432 W · C2 180 W</td></tr></tfoot></table><button class="rv-btn" data-rv="c3r4">▶ Descubrir la tabla</button></div>
+</div></section>
+
+<section class="slide" data-title="Plano de iluminación"><div class="body">
+  <h2>Plano de <em>iluminación</em></h2>
+  <div class="cols" style="margin-top:2px;grid-template-columns:2.05fr 1fr">
+    <div><svg viewBox="0 0 1010 660" width="100%" role="img" aria-label="Plano de iluminación de la casa"><rect x="0" y="0" width="1010" height="660" rx="18" fill="#F4F7F9"/><defs><pattern id="scr" width="9" height="9" patternUnits="userSpaceOnUse"><path d="M0 0H9M0 0V9" stroke="#C9D6DE" stroke-width="1"/></pattern></defs>
+<rect x="10" y="190" width="935" height="380" fill="#F6FAFD"/>
+<rect x="640" y="265" width="305" height="305" fill="#ECEFF2"/>
+<rect x="272" y="12" width="240" height="178" fill="url(#scr)"/>
+<path d="M10 190H272V12H512V152H680V185H945V570H10Z" fill="none" stroke="#00304D" stroke-width="6" stroke-linejoin="miter"/>
+<path d="M272 190H515V152" fill="none" stroke="#00304D" stroke-width="5"/>
+<path d="M88 190V312M10 312H160M178 312H190M190 190V322M190 352V570" stroke="#00304D" stroke-width="4" fill="none"/>
+<path d="M402 195V232M402 290V325H575" stroke="#00304D" stroke-width="4" fill="none"/>
+<rect x="580" y="292" width="56" height="33" stroke="#00304D" stroke-width="4" fill="none"/><rect x="540" y="330" width="35" height="45" stroke="#00304D" stroke-width="4" fill="none"/><rect x="580" y="330" width="56" height="45" stroke="#00304D" stroke-width="4" fill="none"/>
+<rect x="403" y="375" width="82" height="122" stroke="#00304D" stroke-width="4" fill="none"/><rect x="458" y="497" width="27" height="56" stroke="#00304D" stroke-width="4" fill="none"/>
+<path d="M488 375V570M638 375V570M488 375H500M522 375H638" stroke="#00304D" stroke-width="4" fill="none"/>
+<path d="M640 265V570M640 265H945M683 185V225M683 250V262" stroke="#00304D" stroke-width="4" fill="none"/>
+<path d="M190 313H402" stroke="#9FB3BF" stroke-width="2" stroke-dasharray="7 6"/>
+<g fill="#fff" stroke="#0A4A70" stroke-width="2"><rect x="445" y="291" width="66" height="28"/><circle cx="460" cy="305" r="6"/><circle cx="478" cy="305" r="6"/><circle cx="496" cy="305" r="6"/><rect x="426" y="198" width="28" height="22" rx="3"/><rect x="520" y="284" width="52" height="38"/><rect x="800" y="190" width="28" height="22" rx="3"/><rect x="845" y="190" width="30" height="30"/><rect x="883" y="190" width="30" height="30"/><rect x="408" y="458" width="72" height="34" rx="12"/><rect x="408" y="380" width="22" height="22" rx="4"/><rect x="92" y="194" width="56" height="58"/><path d="M92 194L148 252M148 194L92 252"/><rect x="110" y="282" width="22" height="22" rx="4"/><rect x="160" y="196" width="22" height="26" rx="8"/></g>
+<g font-size="11" font-weight="700" fill="#0A4A70" text-anchor="middle"><text x="859" y="209">L</text><text x="898" y="209">S</text><text x="546" y="307">Nev.</text></g>
+<rect x="282" y="9" width="100" height="6" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="392" y="9" width="100" height="6" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="228" y="187" width="38" height="6" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="160" y="187" width="28" height="6" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="7" y="335" width="6" height="40" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="70" y="567" width="60" height="6" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="222" y="567" width="58" height="6" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="525" y="567" width="60" height="6" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="660" y="567" width="245" height="6" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="942" y="330" width="6" height="60" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="942" y="225" width="6" height="26" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="568" y="149" width="60" height="6" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<rect x="509" y="60" width="6" height="70" fill="#fff" stroke="#0A4A70" stroke-width="2"/>
+<path d="M385 570H420" stroke="#F6FAFD" stroke-width="8"/><path d="M402 585l-9 -14h18z" fill="#39A900"/><text x="402" y="602" font-size="13" font-weight="700" text-anchor="middle" fill="#2B8200">Entrada</text><text x="198" y="330" font-size="13" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3.5" paint-order="stroke">Sala</text><text x="198" y="207" font-size="13" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3.5" paint-order="stroke">Comedor</text><text x="410" y="209" font-size="13" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3.5" paint-order="stroke">Cocina</text><text x="523" y="169" font-size="13" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3.5" paint-order="stroke">Desayunador</text><text x="691" y="206" font-size="13" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3.5" paint-order="stroke">Lavandería</text><text x="18" y="329" font-size="13" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3.5" paint-order="stroke">Alcoba principal</text><text x="496" y="392" font-size="13" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3.5" paint-order="stroke">Alcoba 2</text><text x="411" y="392" font-size="13" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3.5" paint-order="stroke">Baño social</text><text x="648" y="282" font-size="13" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3.5" paint-order="stroke">Garaje</text><text x="280" y="29" font-size="13" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3.5" paint-order="stroke">Terraza</text><text x="14" y="206" font-size="11" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3" paint-order="stroke">Vestier</text><text x="94" y="206" font-size="11" font-weight="800" fill="#00304D" stroke="#F6FAFD" stroke-width="3" paint-order="stroke">Baño princ.</text><g transform="translate(243.0 345.1)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(349.0 345.1)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(243.0 409.4)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(349.0 409.4)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(243.0 473.6)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(349.0 473.6)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(243.0 537.9)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(349.0 537.9)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(196 562)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(243.0 220.8)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(349.0 220.8)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(243.0 282.2)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(349.0 282.2)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(196 245)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(430.2 224.5)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(486.8 224.5)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(430.2 289.5)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(486.8 289.5)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(409 300)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(556.8 186.8)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(640.2 186.8)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(556.8 256.2)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(640.2 256.2)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(522 205)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(715.8 227.0)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(781.2 227.0)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(846.8 227.0)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(912.2 227.0)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(690 255)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(55.0 355.0)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(145.0 355.0)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(55.0 441.0)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(145.0 441.0)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(55.0 527.0)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(145.0 527.0)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(182 330)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(49.0 251.0)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(76 298)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(139.0 220.5)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(139.0 281.5)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(182 300)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(525.5 423.8)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(600.5 423.8)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(525.5 521.2)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(600.5 521.2)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(632 383)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(445.5 405.5)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(445.5 466.5)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><g transform="translate(480 368)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(690.8 315.8)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(792.5 315.8)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(894.2 315.8)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(690.8 417.5)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(792.5 417.5)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(894.2 417.5)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(690.8 519.2)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(792.5 519.2)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(894.2 519.2)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(652 305)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g transform="translate(312.0 101.0)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(392.0 101.0)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(472.0 101.0)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><g transform="translate(282 180)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><g font-size="13" font-weight="800" fill="#1D2B36"><g transform="translate(30 640)"><circle r="8" fill="#fff" stroke="#0A4A70" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#0A4A70" stroke-width="2.6"/></g><text x="46" y="645">Circuito C1 (36)</text><g transform="translate(190 640)"><circle r="8" fill="#fff" stroke="#C24F00" stroke-width="2.6"/><path d="M-5.5 -5.5L5.5 5.5M-5.5 5.5L5.5 -5.5" stroke="#C24F00" stroke-width="2.6"/></g><text x="206" y="645">Circuito C2 (15)</text><g transform="translate(350 640)"><circle r="8" fill="#fff" stroke="#00304D" stroke-width="2.5"/><text y="4.5" font-size="12" font-weight="800" text-anchor="middle" fill="#00304D">S</text></g><text x="366" y="645">Interruptor (12)</text><text x="560" y="645" font-weight="600" fill="#5C6B77">Posiciones: malla regular de cada espacio</text></g></svg></div>
+    <div>
+      <div class="card" style="padding:16px 26px"><h3 style="font-size:27px">Cómo leerlo</h3>
+        <ul style="font-size:23px;padding-left:24px"><li><b>51 luminarias</b> LED de 12 W, en malla regular por espacio.</li><li>Azul: circuito <b>C1</b> (social y servicio). Naranja: <b>C2</b> (privado).</li><li>Un <b>interruptor</b> por espacio, junto a la puerta (posición indicativa).</li></ul></div><br>
+      <div class="warn" style="padding:12px 24px;font-size:22px"><span class="lab">Tu tarea</span>Redibujarlo a escala 1:50, con cuadro de convenciones y los interruptores en su sitio real.</div>
+    </div></div>
+</div></section>
+
+<section class="slide" data-title="Carga de alumbrado"><div class="body">
+  <h2>Carga de alumbrado: <em>de vatios a VA</em></h2>
+  <div class="formula" style="font-size:36px;padding:14px 30px"><div class="row"><div><b>S</b> = P ÷ FP</div><div><b>I</b> = S ÷ 120</div><div><b>I<sub>diseño</sub></b> = I × 1,25</div></div><small>FP del driver LED del curso = 0,9 (valor típico: use el del catálogo) · la iluminación es carga continua</small></div>
+  <div class="ex" style="padding:12px 26px"><span class="lab">Ejemplo resuelto · una luminaria</span>P = 12 W → S = 12 ÷ 0,9 = <span class="res">13,3 VA</span> → I = 13,3 ÷ 120 = <span class="res">0,11 A</span>.</div>
+  <div class="turn rvbox" id="c3r5"><span class="lab">Tu turno · circuitos C1 (36 luminarias) y C2 (15 luminarias)</span>
+    <div>Calculen P, S, I, I<sub>diseño</sub>, breaker y calibre de cada circuito (breaker mínimo 15 A, 14 AWG).</div>
+    <div class="ans" style="margin-top:8px"><b>C1:</b> P = 36 × 12 = 432 W → S = 432 ÷ 0,9 = <span class="res">480 VA</span> → I = <span class="res">4,00 A</span> → ×1,25 = 5,00 A → <span class="res">1×15 A, 14 AWG</span>.<br><b>C2:</b> P = 15 × 12 = 180 W → S = <span class="res">200 VA</span> → I = <span class="res">1,67 A</span> → ×1,25 = 2,08 A → <span class="res">1×15 A, 14 AWG</span>.<br>Antes (Misión 2): 270 + 180 = 450 VA. Ahora: 680 VA.</div>
+    <button class="rv-btn" data-rv="c3r5">▶ Descubrir respuesta</button></div>
+</div></section>
+
+<section class="slide" data-title="Impacto en el cuadro"><div class="body">
+  <h2>Impacto en el cuadro de la <em>Misión 2</em></h2>
+  <div class="cols" style="margin-top:6px">
+  <div>
+    <div class="card" style="padding:18px 28px"><h3 style="font-size:28px">Qué cambia</h3><ul style="font-size:24px;padding-left:24px"><li>C1: 270 → <b>480 VA</b> (L1).</li><li>C2: 180 → <b>200 VA</b> (L2).</li><li>Carga de diseño: 25 455 → <b>25 685 VA</b>.</li></ul></div><br>
+    <div class="note" style="font-size:23px;padding:14px 26px"><span class="lab">La acometida no cambia</span>La demanda usa 33 VA/m² de alumbrado general (Art. 220), no las luminarias reales. Sigue 20 334 VA y 2×100 A.</div>
+  </div>
+  <div>
+    <div class="turn rvbox" id="c3r6" style="font-size:25px;padding:14px 26px"><span class="lab">Tu turno · ¿sigue balanceado?</span>
+      <div>Antes: L1 = 12 741 VA y L2 = 12 714 VA, con 5474 y 5447 VA de circuitos de 1 polo y 7267 VA de 2 polos en cada línea. Recalculen L1, L2, desbalance y corriente del neutro.</div>
+      <div class="ans" style="margin-top:6px">1 polo en L1 = 5474 − 270 + 480 = 5 684 VA · en L2 = 5447 − 180 + 200 = 5 467 VA.<br>L1 = 5 684 + 7267 = <span class="res">12 951 VA</span> · L2 = 5 467 + 7267 = <span class="res">12 734 VA</span>.<br>Desbalance = 217 ÷ 12 842,5 × 100 = <span class="res">1,69 %</span> (menor a 5 %).<br>I<sub>N</sub> = 217 ÷ 120 = <span class="res">1,81 A</span>.</div>
+      <button class="rv-btn" data-rv="c3r6">▶ Descubrir respuesta</button></div>
+  </div></div>
+</div></section>
+
+<section class="slide" data-title="Controles de iluminación"><div class="body">
+  <h2>Controles: <em>el interruptor corta la fase</em></h2>
+  <div class="cols" style="margin-top:6px;grid-template-columns:1.3fr 1fr">
+    <div><svg viewBox="0 0 600 190" width="100%" role="img" aria-label="Esquema: la fase pasa por el interruptor hacia la luminaria; el neutro va directo"><rect width="600" height="190" rx="14" fill="#F4F7F9"/>
+<text x="20" y="48" font-size="22" font-weight="800" fill="#222">Fase (L)</text><path d="M110 42H230" stroke="#222" stroke-width="5"/>
+<g transform="translate(230 42)"><circle r="6" fill="#00304D"/><path d="M6 -2L50 -24" stroke="#00304D" stroke-width="5" stroke-linecap="round"/><circle cx="60" r="6" fill="#00304D"/></g>
+<text x="250" y="22" font-size="17" font-weight="700" fill="#00304D">Interruptor</text>
+<path d="M296 42H400V84" stroke="#222" stroke-width="5" fill="none"/>
+<g transform="translate(400 105)"><circle r="21" fill="#fff" stroke="#0A4A70" stroke-width="4"/><path d="M-14 -14L14 14M-14 14L14 -14" stroke="#0A4A70" stroke-width="4"/></g>
+<text x="436" y="112" font-size="18" font-weight="700" fill="#0A4A70">Luminaria</text>
+<path d="M400 126V152H110" stroke="#9AA7B0" stroke-width="5" fill="none"/><text x="20" y="158" font-size="22" font-weight="800" fill="#5C6B77">Neutro (N)</text>
+</svg>
+      <div class="turn rvbox" id="c3r7" style="font-size:25px;padding:14px 26px"><span class="lab">Tu turno</span><div>¿Qué riesgo hay si el interruptor corta el <b>neutro</b> en lugar de la fase?</div>
+        <div class="ans" style="margin-top:6px">La luminaria <span class="res">apagada sigue con la fase presente</span> en el portalámparas: quien cambie el bombillo puede recibir una descarga.</div><button class="rv-btn" data-rv="c3r7">▶ Descubrir respuesta</button></div>
+    </div>
+    <div>
+      <div class="card" style="padding:16px 26px"><h3 style="font-size:27px">Tipos de control</h3><ul style="font-size:23px;padding-left:24px"><li><b>Sencillo:</b> un punto, una luminaria.</li><li><b>Conmutable:</b> controla desde dos puntos (pasillos).</li><li><b>Sensor de presencia:</b> baños, garaje, lavandería; ahorra energía.</li><li><b>Atenuador (dimmer):</b> solo con luminarias regulables.</li></ul></div><br>
+      <div class="note" style="padding:12px 24px;font-size:22px"><span class="lab">Plano</span>Cada espacio muestra su punto de iluminación y el interruptor que lo controla (esquema constructivo, literal f).</div>
+    </div></div>
+</div></section>
+
+<section class="slide" data-title="Eficiencia energética"><div class="body">
+  <h2>Eficiencia: <em>los mismos lúmenes, menos energía</em></h2>
+  <div class="formula" style="font-size:34px;padding:14px 30px"><b>P</b> = Φ ÷ eficacia &nbsp;·&nbsp; <b>E<sub>mes</sub></b> = P × horas/día × 30 ÷ 1000<small>Supuesto didáctico: todas las luminarias encendidas 5 h al día. Eficacias típicas: incandescente 15, fluorescente compacta 60, LED 100 lm/W.</small></div>
+  <div class="ex" style="font-size:26px;padding:12px 26px"><span class="lab">Ejemplo resuelto · LED</span>Φ total = 51 × 1200 = 61 200 lm → P = 61 200 ÷ 100 = <span class="res">612 W</span> → E = 612 × 5 × 30 ÷ 1000 = <span class="res">91,8 kWh/mes</span>.</div>
+  <div class="turn rvbox" id="c3r8" style="font-size:26px;padding:12px 26px"><span class="lab">Tu turno · incandescente y fluorescente</span><div>Calculen P y kWh/mes con la misma luz, y el ahorro del LED frente a la incandescente.</div>
+    <div class="ans" style="margin-top:6px"><b>Incandescente:</b> 61 200 ÷ 15 = <span class="res">4 080 W</span> → <span class="res">612 kWh/mes</span>. <b>Fluorescente:</b> 61 200 ÷ 60 = <span class="res">1 020 W</span> → <span class="res">153 kWh/mes</span>. <b>Ahorro LED vs incandescente:</b> 520,2 kWh/mes = <span class="res">85 %</span>. Multiplique por la tarifa de su factura.</div><button class="rv-btn" data-rv="c3r8">▶ Descubrir respuesta</button></div>
+</div></section>
+
+<section class="slide" data-title="Confort visual"><div class="body">
+  <h2>Confort visual: <em>no solo es cuestión de lux</em></h2>
+  <div class="cols" style="margin-top:6px">
+  <div>
+    <div class="card" style="padding:16px 26px"><h3 style="font-size:27px">Cuatro cuidados</h3><ul style="font-size:23px;padding-left:24px"><li><b>Uniformidad:</b> sin zonas muy claras junto a zonas oscuras.</li><li><b>Deslumbramiento:</b> no ver la fuente de frente (difusores, ubicación).</li><li><b>Color de luz (K):</b> según el uso del espacio.</li><li><b>IRC:</b> alto (≥ 80) donde importa ver colores.</li></ul></div><br>
+    <div class="warn" style="font-size:22px;padding:12px 24px"><span class="lab">Verifique</span>Los valores de K e IRC son referencias habituales; los exigidos están en el RETILAP.</div>
+  </div>
+  <div>
+    <div class="turn rvbox" id="c3r9" style="font-size:24px;padding:14px 22px"><span class="lab">Tu turno · elijan el color de luz</span>
+      <table style="font-size:23px"><thead><tr><th>Espacio</th><th class="c">K</th><th>Por qué</th></tr></thead><tbody><tr><td>Sala, comedor, alcobas</td><td class="c ans"><b>2700–3000 K</b></td><td class="ans">Luz cálida: ambiente de descanso.</td></tr><tr><td>Cocina, lavandería, baños</td><td class="c ans"><b>3500–4000 K</b></td><td class="ans">Luz neutra: tareas y buena percepción de colores.</td></tr><tr><td>Garaje, exterior</td><td class="c ans"><b>4000 K</b></td><td class="ans">Luz neutra: seguridad y visibilidad.</td></tr></tbody></table><button class="rv-btn" data-rv="c3r9">▶ Descubrir respuesta</button></div>
+  </div></div>
+</div></section>
+
+<section class="slide" data-title="Zonas húmedas"><div class="body">
+  <h2>Zonas húmedas y <em>exteriores</em></h2>
+  <p class="lead" style="font-size:26px">El RETIE (3.14.1, lit. d) manda que la iluminación de zonas húmedas cumpla el RETILAP y el RETIE.</p>
+  <div class="grid g3" style="gap:18px;margin-top:10px">
+    <div class="card" style="padding:22px 28px"><h3 style="font-size:30px">Baños</h3><p style="font-size:25px">Luminaria apta para humedad, lejos del chorro de la ducha. Tomas con GFCI (210.8(A)).</p></div>
+    <div class="card" style="padding:22px 28px"><h3 style="font-size:30px">Terraza</h3><p style="font-size:25px">Luminaria para exterior con protección contra agua y polvo (grado IP) y tomas con GFCI.</p></div>
+    <div class="card" style="padding:22px 28px"><h3 style="font-size:30px">Garaje</h3><p style="font-size:25px">Humedad y polvo posibles: luminaria robusta, sensor de presencia y tomas con GFCI.</p></div>
+  </div>
+  <div class="turn rvbox" id="c3r10" style="margin-top:21px;font-size:26px"><span class="lab">Tu turno</span><div>De los 12 espacios de la casa, ¿cuáles son zonas húmedas o exteriores?</div>
+    <div class="ans" style="margin-top:6px"><span class="res">Baño principal, baño social, terraza</span> y, por su uso, <span class="res">garaje y lavandería</span>. La cocina cuenta por el mesón y el fregadero.</div><button class="rv-btn" data-rv="c3r10">▶ Descubrir respuesta</button></div>
+  <div class="note" style="margin-top:8px;padding:10px 24px;font-size:22px">El grado IP mínimo de cada zona lo define el RETILAP y el fabricante: no lo invente.</div>
+</div></section>
+
+<section class="slide" data-title="Lista de verificación c3"><div class="body">
+  <h2>Lista de verificación <em>antes de entregar</em></h2>
+  <div class="cols" style="margin-top:6px"><div><div class="step" style="padding:14px 24px"><div class="num">1</div><div><p style="font-size:26px;margin:0">Cada espacio tiene su nivel de iluminancia objetivo.</p></div></div><div class="step" style="padding:14px 24px"><div class="num">2</div><div><p style="font-size:26px;margin:0">N se redondeó hacia arriba y el E real cumple.</p></div></div><div class="step" style="padding:14px 24px"><div class="num">3</div><div><p style="font-size:26px;margin:0">La malla de luminarias es regular y simétrica.</p></div></div><div class="step" style="padding:14px 24px"><div class="num">4</div><div><p style="font-size:26px;margin:0">Cada espacio tiene punto de iluminación e interruptor.</p></div></div><div class="step" style="padding:14px 24px"><div class="num">5</div><div><p style="font-size:26px;margin:0">El interruptor corta la fase.</p></div></div></div><div><div class="step" style="padding:14px 24px"><div class="num">6</div><div><p style="font-size:26px;margin:0">P pasó a VA con el FP del catálogo.</p></div></div><div class="step" style="padding:14px 24px"><div class="num">7</div><div><p style="font-size:26px;margin:0">I × 1,25 cabe en el breaker y el calibre.</p></div></div><div class="step" style="padding:14px 24px"><div class="num">8</div><div><p style="font-size:26px;margin:0">El cuadro se actualizó y el desbalance sigue < 5 %.</p></div></div><div class="step" style="padding:14px 24px"><div class="num">9</div><div><p style="font-size:26px;margin:0">Zonas húmedas con luminarias y GFCI adecuados.</p></div></div><div class="step" style="padding:14px 24px"><div class="num">10</div><div><p style="font-size:26px;margin:0">Plano, tabla y cuadro cuentan la misma historia.</p></div></div></div></div>
+</div></section>
+
+<section class="slide" data-title="Taller c3"><div class="body">
+  <h2>Taller: <em>su paquete de iluminación</em></h2>
+  <div class="cols" style="margin-top:13px">
+    <div><h3>Trabajo en equipos (3 personas)</h3>
+      <ul style="font-size:30px"><li><b>Tabla de cálculo</b> en hoja de cálculo, con fórmulas.</li><li><b>Plano de iluminación</b> a escala 1:50 con convenciones e interruptores.</li><li><b>Carga de alumbrado:</b> W, VA, I, breaker y calibre de C1 y C2.</li><li><b>Cuadro actualizado</b> y balanceo recalculado.</li><li>Un cambio de luminaria (p. ej. 18 W y 1800 lm) y su efecto en N y en kWh/mes.</li></ul></div>
+    <div><div class="card" style="padding:26px 34px"><h3 style="font-size:29px">Criterios de evaluación</h3><ul style="font-size:25px;padding-left:26px"><li>Cálculos correctos y trazables</li><li>Plano legible y simétrico</li><li>Cuadro y balanceo coherentes</li><li>Lista de verificación completa</li></ul></div><br>
+      <div class="warn"><span class="lab">Herramienta</span>Usen la hoja de cálculo y el CAD del curso. Lleven los archivos a la próxima clase.</div></div>
+  </div>
+</div></section>
+
+<section class="slide cover" data-title="Cierre c3">
+  <svg class="phi" viewBox="-0.02 -0.02 1.658 1.04" aria-hidden="true"><g fill="none" stroke="#50E5F9" stroke-width=".003"><g stroke-opacity=".3"><rect x="0.0000" y="0.0000" width="1.0000" height="1.0000"/><rect x="1.0000" y="0.3820" width="0.6180" height="0.6180"/><rect x="1.2361" y="0.0000" width="0.3820" height="0.3820"/><rect x="1.0000" y="0.0000" width="0.2361" height="0.2361"/><rect x="1.0000" y="0.2361" width="0.1459" height="0.1459"/><rect x="1.1459" y="0.2918" width="0.0902" height="0.0902"/><rect x="1.1803" y="0.2361" width="0.0557" height="0.0557"/><rect x="1.1459" y="0.2361" width="0.0344" height="0.0344"/><rect x="1.1459" y="0.2705" width="0.0213" height="0.0213"/></g><path d="M0.0000,0.0000 A1.0000,1.0000 0 0 0 1.0000,1.0000 A0.6180,0.6180 0 0 0 1.6180,0.3820 A0.3820,0.3820 0 0 0 1.2361,0.0000 A0.2361,0.2361 0 0 0 1.0000,0.2361 A0.1459,0.1459 0 0 0 1.1459,0.3820 A0.0902,0.0902 0 0 0 1.2361,0.2918 A0.0557,0.0557 0 0 0 1.1803,0.2361 A0.0344,0.0344 0 0 0 1.1459,0.2705 A0.0213,0.0213 0 0 0 1.1672,0.2918 " stroke="#39A900" stroke-width=".012" stroke-linecap="round"/></g><path fill="#50E5F9" fill-opacity=".14" transform="translate(.2 .2) scale(.006)" d="M58 2 20 56h24l-8 42 44-58H54z"/></svg><div class="logobox"><svg><use href="#sena"/></svg></div>
+  <div class="txt"><div class="kicker">Lo que nos llevamos</div>
+    <h1 style="font-size:55px">Luz suficiente, <span>con la menor energía</span></h1>
+    <div class="sub" style="font-size:30px;line-height:1.5;max-width:1100px">
+      • La luz se mide en <b style="color:#fff">lux</b> y se calcula con el <b style="color:#fff">método de lúmenes</b>.<br>
+      • Cada luminaria tiene su sitio: <b style="color:#fff">malla regular</b> e <b style="color:#fff">interruptor en la fase</b>.<br>
+      • La iluminación real <b style="color:#fff">actualiza el cuadro</b>; la acometida no cambia.<br>
+      • El <b style="color:#fff">LED</b> da la misma luz con una fracción de la energía.<br>
+      • Siguiente misión: <b style="color:#fff">pruebas e inspección</b>.
+    </div></div>
+  <div class="who"><b>Andrés Felipe Valencia</b><br><span>Tecnología en Gestión Eficiente de la Energía · SENA</span></div>
+  <div class="stripe"></div></section>
+
+</div></div>
+
+<button class="btn" id="prev" aria-label="Anterior">‹</button>
+<button class="btn" id="next" aria-label="Siguiente">›</button>
+<div class="hud"><i id="bar"></i></div>
+<div class="help">← → navegar · F pantalla completa · R descubrir respuesta · D descargar .html · Inicio/Fin</div>
+<button class="dl" id="dl" type="button">⬇ Descargar .html</button>
+</div>
+
+<script id="deck-js">
+(function(){
+  const stage=document.getElementById('stage');
+  const slides=[...document.querySelectorAll('.slide')];
+  const bar=document.getElementById('bar');
+  let cur=0;
+
+  // Encabezado y pie automáticos en las diapositivas de contenido
+  slides.forEach((s,i)=>{
+    if(s.classList.contains('cover')) return;
+    const top=document.createElement('div');
+    top.className='top';
+    top.innerHTML='<svg class="logo"><use href="#sena"/></svg><div class="prog">Servicio Nacional de Aprendizaje<small>Tecnología en Gestión Eficiente de la Energía</small></div><div class="tag">Clase 3 · Iluminación</div>';
+    s.prepend(top);
+    const foot=document.createElement('div');
+    foot.className='foot';
+    foot.innerHTML='<span>Instalaciones eléctricas en Colombia · NTC 2050 y RETIE</span><span class="n">'+(i+1)+' / '+slides.length+'</span>';
+    s.append(foot);
+  });
+
+  function fit(){
+    const k=Math.min(innerWidth/1920,innerHeight/1080);
+    stage.style.transform='scale('+k+')';
+  }
+  function show(n){
+    cur=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+    bar.style.width=((cur+1)/slides.length*100)+'%';
+    history.replaceState(null,'','#'+(cur+1));
+  }
+  function revealNext(){
+    const s=slides[cur];
+    const b=s.querySelector('.rvbox:not(.shown)');
+    if(b) b.classList.add('shown');
+  }
+  document.querySelectorAll('.rv-btn').forEach(btn=>{
+    btn.dataset.l=btn.textContent;
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const box=document.getElementById(btn.dataset.rv);
+      box.classList.toggle('shown');
+      btn.textContent=box.classList.contains('shown')?'✓ Respuesta visible (clic para ocultar)':btn.dataset.l;
+    });
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.target.tagName==='BUTTON'&&[' ','Enter'].includes(e.key))return;
+    if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(cur+1)}
+    else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(cur-1)}
+    else if(e.key==='Home')show(0);
+    else if(e.key==='End')show(slides.length-1);
+    else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+    else if(e.key==='r'||e.key==='R')revealNext();
+    else if(e.key==='d'||e.key==='D')descargar();
+  });
+  document.getElementById('prev').onclick=()=>show(cur-1);
+  document.getElementById('next').onclick=()=>show(cur+1);
+  let x0=null;
+  addEventListener('touchstart',e=>x0=e.touches[0].clientX);
+  addEventListener('touchend',e=>{if(x0===null)return;const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>60)show(cur+(d<0?1:-1));x0=null});
+  // Descarga: regenera un .html independiente a partir de esta misma página
+  function standalone(){
+    const app=document.getElementById('app').cloneNode(true);
+    app.querySelectorAll('.top,.foot').forEach(e=>e.remove());
+    app.querySelector('.stage').removeAttribute('style');
+    app.querySelectorAll('.slide').forEach(e=>e.classList.remove('active'));
+    app.querySelectorAll('.rvbox').forEach(e=>e.classList.remove('shown'));
+    app.querySelectorAll('.rv-btn').forEach(b=>{b.textContent=b.dataset.l});
+    app.querySelector('#bar').removeAttribute('style');
+    return '<!DOCTYPE html>\n<html lang="es">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Clase 3 · Iluminación · SENA</title>\n'
+      +'<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">\n'
+      +'<style id="deck-css">\n'+document.getElementById('deck-css').textContent+'</style>\n</head>\n<body>\n'
+      +app.outerHTML+'\n<script id="deck-js">\n'+document.getElementById('deck-js').textContent+'<\/script>\n</body>\n</html>\n';
+  }
+  async function descargar(){
+    const html=standalone(),name='clase3-iluminacion.html';
+    try{
+      const d=window.claude&&window.claude.use?await window.claude.use('downloads'):null;
+      if(d){await d.save({filename:name,data:html});return}
+    }catch(e){if(e&&e.code==='declined')return}
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+    a.download=name;document.body.appendChild(a);a.click();a.remove();
+  }
+  document.getElementById('dl').addEventListener('click',e=>{e.stopPropagation();descargar()});
+  addEventListener('resize',fit);
+  fit();
+  const h=parseInt(location.hash.slice(1));
+  show(isNaN(h)?0:h-1);
+})();
+</script>
+</body>
+</html>
