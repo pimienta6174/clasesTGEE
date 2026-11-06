@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bingo técnico TGEE · Panel del instructor</title>
+<style>
+:root{--verde:#39A900;--azul:#00324D;--gris:#303030;--borde:#dfe3e6;--fondo:#f3f6f4;--m1:#2E8B00;--m2:#0A6FB5;--m3:#C26A00}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fondo);color:var(--gris);line-height:1.5}
+header{background:var(--azul);color:#fff;padding:14px 24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:20px}
+header small{color:#b8d6e6;display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase}
+.barra{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border:0;border-radius:6px;padding:10px 16px;font-weight:bold}
+.b-main{background:var(--verde);color:#fff;font-size:18px;padding:14px 26px}
+.b-sec{background:#fff;color:var(--azul);border:2px solid var(--azul)}
+.b-peligro{background:#fff;color:#a30000;border:2px solid #a30000}
+header button{font-size:14px}
+button:disabled{opacity:.45;cursor:not-allowed}
+main{max-width:1250px;margin:0 auto;padding:20px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.panel{background:#fff;border:1px solid var(--borde);border-radius:10px;padding:22px}
+.bola-fila{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.bola{width:150px;height:150px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;background:#9aa5ab;box-shadow:inset 0 -10px 18px rgba(0,0,0,.18),0 4px 12px rgba(0,0,0,.2);flex:none}
+.bola b{font-size:62px;line-height:1}
+.bola span{font-size:13px;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.bola-info h2{margin:0;font-size:24px;color:var(--azul)}
+.bola-info p{margin:4px 0 0;color:#5b6770}
+.pregunta{font-size:24px;font-weight:bold;color:var(--azul);margin:22px 0 14px;line-height:1.35}
+.opc{display:flex;gap:12px;align-items:flex-start;border:2px solid var(--borde);border-radius:8px;padding:12px 14px;margin:8px 0;font-size:19px}
+.opc i{font-style:normal;font-weight:bold;background:var(--azul);color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:15px}
+.opc.ok{border-color:var(--verde);background:#eef9e6}
+.opc.ok i{background:var(--verde)}
+.opc.no{opacity:.45}
+.fb{margin-top:16px;border-left:5px solid var(--verde);background:#f3faed;padding:14px 18px;font-size:17px;border-radius:0 8px 8px 0}
+.acciones{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;align-items:center}
+.timer{height:10px;background:#e6ebe8;border-radius:5px;overflow:hidden;margin-top:18px}
+.timer div{height:100%;background:var(--verde);width:100%;transition:width .25s linear}
+.timer.poco div{background:#d98200}
+.timer.fin div{background:#b30000}
+.tiempo-txt{font-size:14px;color:#5b6770;margin-top:4px;display:flex;justify-content:space-between}
+.vacio{text-align:center;color:#6c7880;padding:50px 10px}
+h3{margin:0 0 12px;color:var(--azul);font-size:17px}
+.tablero{display:grid;grid-template-columns:repeat(5,46px);gap:8px;justify-content:start}
+.tablero .fila-titulo{grid-column:1/-1;font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-top:8px}
+.num{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:15px;background:#eef1f0;color:#9aa5ab}
+.num.sale{color:#fff}
+.num.actual{outline:3px solid var(--azul);outline-offset:2px}
+.recientes{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:4px 12px;border-radius:14px;color:#fff;font-weight:bold;font-size:15px}
+.stats{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:16px}
+.stats div{font-size:13px;color:#5b6770}.stats b{display:block;font-size:26px;color:var(--azul)}
+select{font:inherit;padding:8px;border-radius:6px;border:2px solid var(--borde)}
+dialog{border:0;border-radius:10px;padding:0;max-width:760px;width:94%}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+.dlg{padding:22px;max-height:80vh;overflow:auto}
+.dlg h2{margin-top:0;color:var(--azul)}
+.banco p{margin:0 0 4px}.banco div{border-bottom:1px solid var(--borde);padding:10px 0;font-size:14px}
+.nota{font-size:13px;color:#6c7880}
+</style>
+</head>
+<body>
+<header>
+  <div><small>SENA · CIES · TGEE</small><h1>Bingo técnico · Panel del instructor</h1></div>
+  <div class="barra">
+    <button class="b-sec" id="btnBanco">Banco de preguntas</button>
+    <button class="b-peligro" id="btnNueva">Nueva partida</button>
+  </div>
+</header>
+<main>
+  <section class="panel" id="escena">
+    <div class="bola-fila">
+      <div class="bola" id="bola"><b>?</b><span>Listo</span></div>
+      <div class="bola-info">
+        <h2 id="titBola">Pulsa «Sacar bolita» para empezar</h2>
+        <p id="subBola">Atajos: Espacio = sacar bolita · R = revelar respuesta</p>
+      </div>
+    </div>
+    <div id="contenido"></div>
+    <div class="timer" id="timer"><div></div></div>
+    <div class="tiempo-txt"><span id="tiempoTxt">&nbsp;</span>
+      <span>Tiempo por pregunta: <select id="seg"><option value="30">30 s</option><option value="45">45 s</option><option value="60" selected>60 s</option><option value="90">90 s</option><option value="120">120 s</option></select></span>
+    </div>
+    <div class="acciones">
+      <button class="b-main" id="btnSacar">Sacar bolita</button>
+      <button class="b-sec" id="btnRevelar" disabled>Revelar respuesta</button>
+      <button class="b-sec" id="btnDeshacer" disabled>Deshacer última</button>
+    </div>
+  </section>
+  <aside class="panel">
+    <div class="stats"><div>Bolitas<b id="stCant">0 / 45</b></div><div>Faltan<b id="stFal">45</b></div></div>
+    <h3>Últimas bolitas</h3>
+    <div class="recientes" id="recientes"><span class="nota">Aún no ha salido ninguna.</span></div>
+    <h3 style="margin-top:20px">Tablero</h3>
+    <div class="tablero" id="tablero"></div>
+  </aside>
+</main>
+
+<dialog id="dlgBanco"><div class="dlg"><h2>Banco de preguntas</h2>
+  <p class="nota">⚠ Muestra las respuestas. No lo abras mientras compartes pantalla.</p>
+  <div class="banco" id="listaBanco"></div><div class="acciones"><button class="b-sec" onclick="dlgBanco.close()">Cerrar</button></div></div></dialog>
+<dialog id="dlgNueva"><div class="dlg"><h2>¿Empezar una partida nueva?</h2>
+  <p>Se borrarán todas las bolitas sacadas. Esta acción no se puede deshacer.</p>
+  <div class="acciones"><button class="b-peligro" id="siNueva">Sí, borrar y empezar</button><button class="b-sec" onclick="dlgNueva.close()">Cancelar</button></div></div></dialog>
+
+<script>
+const PREGUNTAS = [{"n": 1, "q": "¿Qué es un levantamiento?", "ok": "Registrar lo que realmente hay instalado en una casa que ya existe, antes de diseñar", "otros": ["Diseñar la instalación nueva desde cero", "Calcular el costo de los materiales", "Medir la tensión de la red del operador"], "fb": "Levantar es registrar lo que hay (espacios, salidas, equipos, tablero, circuitos). No se corrige lo que no se ha entendido: primero se diagnostica."}, {"n": 2, "q": "¿Por qué el garaje y la terraza no entran en el área para calcular el alumbrado general?", "ok": "Porque la norma excluye garajes y porches abiertos del área de vivienda (Art. 220.12)", "otros": ["Porque no tienen luminarias", "Porque son más pequeños que 10 m²", "Porque van en otro circuito de 240 V"], "fb": "El Art. 220.12 de la NTC 2050 calcula el alumbrado general sobre el área de vivienda; garajes y porches abiertos no cuentan. En el caso de la casa del bulevar el área de cálculo es de unos 110 m²."}, {"n": 3, "q": "¿Cuántos metros son 10 pies?", "ok": "3,048 m", "otros": ["30,48 m", "0,3048 m", "12 m"], "fb": "1 pie = 0,3048 m, entonces 10 pies = 3,048 m. El plano original venía en pies y pulgadas y lo convertimos a metros."}, {"n": 4, "q": "¿Quién expide el RETIE?", "ok": "El Ministerio de Minas y Energía", "otros": ["El ICONTEC", "El SENA", "La CREG"], "fb": "El RETIE lo expide el Ministerio de Minas y Energía y es de obligatorio cumplimiento. El ICONTEC publica la NTC 2050, que explica cómo hacer bien una instalación."}, {"n": 5, "q": "¿Qué trata el artículo 220 de la NTC 2050?", "ok": "El cálculo de cargas", "otros": ["La puesta a tierra", "Las canalizaciones", "Los tomacorrientes de baños"], "fb": "La NTC 2050 es como un mapa: el Art. 210 trata los circuitos ramales, el 220 el cálculo de cargas y el 240 la protección contra sobrecorriente."}, {"n": 6, "q": "¿Qué es lo que calienta un cable: la tensión o la corriente?", "ok": "La corriente", "otros": ["La tensión", "Los dos por igual", "Ninguno, el cable no se calienta"], "fb": "Lo que calienta el cable es la corriente (amperios). Por eso cables y breakers se dimensionan con la corriente que calculamos a partir de la potencia aparente (VA)."}, {"n": 7, "q": "En un sistema 120/240 V, ¿cuántos voltios hay entre L1 y L2?", "ok": "240 V", "otros": ["120 V", "208 V", "360 V"], "fb": "Entre L1 y neutro, o L2 y neutro, hay 120 V; entre L1 y L2 hay 240 V. Un aire acondicionado de 240 V usa 2 polos (L1 y L2)."}, {"n": 8, "q": "Un equipo de 600 W con factor de potencia 0,8 a 120 V: ¿cuántos VA y cuántos A consume?", "ok": "750 VA y 6,25 A", "otros": ["480 VA y 4 A", "600 VA y 5 A", "750 VA y 3,13 A"], "fb": "S = P ÷ FP = 600 ÷ 0,8 = 750 VA. Luego I = S ÷ V = 750 ÷ 120 = 6,25 A."}, {"n": 9, "q": "Si el factor de potencia es 1, ¿cuánto vale la potencia reactiva Q?", "ok": "Cero", "otros": ["Es igual a la potencia aparente", "Es igual a la potencia real", "120"], "fb": "En el triángulo de potencias S es la hipotenusa. Con FP = 1, S = P y no hay componente reactiva: Q = 0 (es el caso de una resistencia, como el cooktop)."}, {"n": 10, "q": "¿Qué instrumento mide la corriente de un cable sin cortarlo?", "ok": "La pinza amperimétrica", "otros": ["El megóhmetro", "El luxómetro", "El telurómetro"], "fb": "En el levantamiento, el paso cuatro es registrar placas y medir. La pinza amperimétrica mide corriente sin abrir el circuito."}, {"n": 11, "q": "¿Cuántos circuitos de lavandería exige la norma en una vivienda?", "ok": "Al menos uno de 20 A, exclusivo (210.11(C)(2))", "otros": ["Ninguno, va con las tomas generales", "Dos de 15 A", "Uno de 15 A compartido con la cocina"], "fb": "La lavandería requiere como mínimo un circuito ramal de 20 A exclusivo para ella (Art. 210.11(C)(2))."}, {"n": 12, "q": "¿Cada cuánto máximo deben quedar los tomacorrientes a lo largo de una pared de vivienda (Art. 210.52)?", "ok": "3,6 m", "otros": ["1,8 m", "6 m", "0,9 m"], "fb": "Ningún punto de la pared debe quedar a más de 1,8 m de un toma, lo que equivale a una separación máxima de 3,6 m entre tomas."}, {"n": 13, "q": "¿Qué breaker máximo puede proteger un conductor de cobre 14 AWG (Art. 240.4(D))?", "ok": "15 A", "otros": ["20 A", "30 A", "40 A"], "fb": "Límites para memorizar: 14 AWG → 15 A, 12 AWG → 20 A, 10 AWG → 30 A. Un breaker de 20 A sobre un 14 AWG es un error."}, {"n": 14, "q": "Un cooktop de 7200 VA conectado a 240 V, ¿qué corriente consume?", "ok": "30 A", "otros": ["15 A", "60 A", "7,2 A"], "fb": "I = S ÷ V = 7200 ÷ 240 = 30 A. Luego, con el factor 1,25, la corriente de diseño es 37,5 A y el breaker es de 2 polos y 40 A."}, {"n": 15, "q": "¿Cuál es la protección y acometida mínima para una vivienda unifamiliar (225.39(C))?", "ok": "100 A", "otros": ["60 A", "50 A", "200 A"], "fb": "El mínimo para una vivienda unifamiliar es 100 A. En el caso del bulevar la demanda da 84,7 A: cabe, pero con poca holgura."}, {"n": 16, "q": "En la Misión 2, ¿qué se hace primero: el plano o los cálculos y el cuadro de cargas?", "ok": "Los cálculos y el cuadro: el plano refleja decisiones ya tomadas", "otros": ["El plano, y luego se ajusta el cuadro", "Los dos al tiempo sin orden", "La lista de verificación final"], "fb": "El plano debe reflejar decisiones ya tomadas. Primero circuitos, cargas, protecciones y balanceo; después se dibuja."}, {"n": 17, "q": "Un cable 14 AWG tiene un breaker de 20 A. ¿Cómo se corrige?", "ok": "Cambiar el cable a 12 AWG o bajar el breaker a 15 A", "otros": ["Subir el breaker a 30 A", "Dejarlo así si no ha disparado", "Poner dos cables 14 AWG en paralelo sin más"], "fb": "El breaker nunca debe superar lo que el cable aguanta. Con un 14 AWG el máximo es 15 A (Art. 240.4(D))."}, {"n": 18, "q": "¿Cuántos circuitos de 20 A exige la norma para el mesón de la cocina?", "ok": "Mínimo dos (210.11(C)(1))", "otros": ["Uno solo, compartido con la nevera", "Ninguno, va con alumbrado", "Tres de 15 A"], "fb": "Los pequeños artefactos de cocina requieren como mínimo dos circuitos de 20 A (210.11(C)(1))."}, {"n": 19, "q": "¿Qué calibre mínimo de cobre puede llevar un breaker de 20 A?", "ok": "12 AWG", "otros": ["14 AWG", "16 AWG", "18 AWG"], "fb": "12 AWG → 20 A máximo. Un 14 AWG solo se protege hasta 15 A."}, {"n": 20, "q": "¿Por qué los circuitos C6 y C7 de pequeños artefactos aparecen con 1500 VA en el cuadro?", "ok": "Porque la norma obliga a contar 1500 VA por cada circuito de pequeños artefactos (220.52(A))", "otros": ["Porque tienen 15 salidas", "Porque son de 240 V", "Porque así lo mide la pinza"], "fb": "Aunque la carga real sea menor, el Art. 220.52(A) manda contar 1500 VA por cada circuito de pequeños artefactos."}, {"n": 21, "q": "Si las líneas L1 y L2 están perfectamente balanceadas, ¿qué corriente lleva el neutro?", "ok": "Prácticamente cero", "otros": ["La suma de L1 y L2", "El doble de L1", "240 A"], "fb": "El neutro lleva la diferencia de corriente entre L1 y L2. Por eso la meta del curso es un desbalance menor al 5 %."}, {"n": 22, "q": "¿Cuántos espacios ocupa en el tablero un breaker de 2 polos?", "ok": "Dos", "otros": ["Uno", "Tres", "Cuatro"], "fb": "Un breaker de 2 polos ocupa dos espacios. Al contar espacios del tablero hay que dejar además reserva para ampliar."}, {"n": 23, "q": "¿Qué carga se usa para dimensionar la acometida?", "ok": "La demandada (20 334 VA en el caso)", "otros": ["La conectada, sin factores", "Solo la de alumbrado", "La del circuito más grande"], "fb": "La acometida se dimensiona con la carga demandada, es decir con los factores del Art. 220. En el caso: 20 334 VA ÷ 240 V = 84,7 A."}, {"n": 24, "q": "En la fórmula de caída de tensión ΔV = 2·ρ·L·I ÷ S, ¿qué significa el 2?", "ok": "Que la corriente va y vuelve: hay dos conductores", "otros": ["Que el circuito tiene 2 polos", "Que se usan dos tubos", "Que hay dos breakers"], "fb": "La corriente recorre el conductor de ida y el de regreso. Si la caída pasa del límite: subir un calibre, acortar el recorrido, dividir el circuito o mover el tablero."}, {"n": 25, "q": "¿Cuál es la caída de tensión de un ramal de 25 m, 16 A, cable 12 AWG (3,31 mm²) a 120 V? (ρ = 0,0175 Ω·mm²/m)", "ok": "4,23 V (3,5 %)", "otros": ["2,12 V (1,8 %)", "8,46 V (7 %)", "1,76 V (1,5 %)"], "fb": "ΔV = 2 × 0,0175 × 25 × 16 ÷ 3,31 = 4,23 V, que son 3,5 % de 120 V. Supera el 3 % recomendado para el ramal: conviene un calibre mayor."}, {"n": 26, "q": "¿Qué porcentaje máximo de ocupación se permite en una tubería con tres conductores?", "ok": "40 %", "otros": ["31 %", "53 %", "80 %"], "fb": "Límites del Capítulo 9, Tabla 1: 53 % con un conductor, 31 % con dos y 40 % con más de dos. El conductor de protección también cuenta."}, {"n": 27, "q": "¿Qué calibre de conductor de protección (PE) lleva un circuito de 20 A?", "ok": "12 AWG", "otros": ["14 AWG", "10 AWG", "8 AWG"], "fb": "El PE se elige según el breaker del circuito, no según el cable activo. Por eso el cooktop (breaker de 40 A) lleva PE 10 AWG aunque sus cables sean 8 AWG."}, {"n": 28, "q": "¿Qué documentos deben coincidir entre sí en el paquete de diseño?", "ok": "Unifilar, cuadro de cargas y plano", "otros": ["Solo el plano y la factura", "Unifilar y la cédula del cliente", "Cuadro de cargas y catálogo de luminarias"], "fb": "Antes de entregar se verifica que unifilar, cuadro de cargas y plano cuenten la misma historia (protección general 2×100 A, circuitos, calibres)."}, {"n": 29, "q": "Además de la planta, ¿qué tres documentos debe llevar el plano?", "ok": "Cuadro de convenciones, cuadro de cargas y espacios de montaje", "otros": ["Lista de precios, contrato y fotos", "Cuadro de convenciones, factura y catálogo", "Solo el diagrama unifilar"], "fb": "El cuadro de convenciones permite que cualquiera lea el plano; el cuadro de cargas y los espacios de montaje completan la información."}, {"n": 30, "q": "¿Qué desbalance máximo entre L1 y L2 usa el curso como meta?", "ok": "Menos de 5 %", "otros": ["Menos de 20 %", "Menos de 50 %", "No importa, siempre que no dispare"], "fb": "Un cuadro bien balanceado reparte la carga entre las dos líneas y deja el neutro casi sin corriente."}, {"n": 31, "q": "¿Quién define cuánta luz debe tener un espacio?", "ok": "El RETILAP", "otros": ["El RETIE", "La NTC 2050", "El fabricante de la luminaria"], "fb": "El RETILAP define los niveles de iluminación; el RETIE y la NTC 2050 dicen cómo alimentar las luminarias con seguridad."}, {"n": 32, "q": "¿Qué es 1 lux?", "ok": "1 lumen sobre 1 metro cuadrado", "otros": ["1 vatio por metro cuadrado", "1 lumen por vatio", "1 candela por segundo"], "fb": "El lux mide iluminancia: E = Φ ÷ A. Si el área se duplica con el mismo flujo, la iluminancia baja a la mitad."}, {"n": 33, "q": "¿Qué mide la eficacia luminosa?", "ok": "Lúmenes por cada vatio", "otros": ["Lux por cada metro", "Vatios por metro cuadrado", "Voltios por lumen"], "fb": "La eficacia (lm/W) dice cuánta luz da una luminaria por cada vatio. Por eso el LED, con unos 100 lm/W en el curso, gasta menos para la misma luz."}, {"n": 34, "q": "Si el área de un espacio se duplica y el flujo luminoso es el mismo, ¿qué pasa con la iluminancia E?", "ok": "Baja a la mitad", "otros": ["Se duplica", "Queda igual", "Se vuelve cero"], "fb": "E = Φ ÷ A: el flujo se reparte sobre el doble de superficie, así que la iluminancia queda a la mitad."}, {"n": 35, "q": "En el método de lúmenes, ¿por qué el número de luminarias se redondea hacia arriba?", "ok": "Para no quedar por debajo del nivel de iluminancia pedido", "otros": ["Porque no existen fracciones de vatio", "Para gastar más energía", "Porque lo exige el RETIE"], "fb": "N = E·A ÷ (flujo·CU·FM). Si da 7,06, se ponen 8 luminarias: con 7 el espacio quedaría con menos luz de la requerida."}, {"n": 36, "q": "¿Qué representa el factor de mantenimiento FM = 0,8?", "ok": "Un margen del 20 % por suciedad y envejecimiento", "otros": ["Que el 80 % de la luz se pierde en la pared", "La eficacia del LED", "El factor de potencia del driver"], "fb": "Con el tiempo la luminaria se ensucia y envejece; se diseña con un margen del 20 %. El CU (0,5 en el curso) es otra cosa: la parte de flujo que llega al plano de trabajo."}, {"n": 37, "q": "Sala de 22,59 m², 150 lux, luminarias LED de 1200 lm, CU = 0,5 y FM = 0,8. ¿Cuántas luminarias hacen falta?", "ok": "8", "otros": ["7", "6", "12"], "fb": "Φ requerido = 150 × 22,59 ÷ 0,4 = 8 473 lm. N = 8 473 ÷ 1200 = 7,06, que se redondea hacia arriba: 8 luminarias (170 lux reales)."}, {"n": 38, "q": "¿A qué distancia de la pared va la primera luminaria en una distribución uniforme?", "ok": "A media separación", "otros": ["Pegada a la pared", "A una separación completa", "A 3 m siempre"], "fb": "En la distribución regular la distancia a la pared es la mitad de la separación entre luminarias, para repartir la luz de manera pareja."}, {"n": 39, "q": "¿Cuántas luminarias suma toda la casa en la tabla de cálculo?", "ok": "51", "otros": ["15", "36", "66"], "fb": "Se repartieron en C1 (zona social y de servicio, 36 luminarias) y C2 (zona privada, 15). Total: 36 + 15 = 51."}, {"n": 40, "q": "¿Por qué la corriente del alumbrado se multiplica por 1,25 para elegir el breaker?", "ok": "Porque la iluminación es carga continua (3 horas o más)", "otros": ["Porque tiene factor de potencia 0,5", "Porque va a 240 V", "Porque es carga de pequeños artefactos"], "fb": "Las cargas continuas, que funcionan tres horas o más seguidas, se multiplican por 1,25 al seleccionar el breaker."}, {"n": 41, "q": "¿Qué conductor debe cortar el interruptor de una luminaria?", "ok": "La fase", "otros": ["El neutro", "La tierra", "Cualquiera de los tres"], "fb": "El interruptor se instala en la fase: con el interruptor abierto la luminaria queda sin tensión y se puede intervenir con seguridad."}, {"n": 42, "q": "Para obtener los mismos lúmenes, ¿qué tecnología consume menos energía?", "ok": "El LED", "otros": ["La incandescente", "La halógena", "Todas consumen igual"], "fb": "Con los mismos lúmenes, el LED consume mucho menos: ahorra energía, reduce la carga en los circuitos y libera capacidad."}, {"n": 43, "q": "¿Qué color de luz es mejor para descansar, como en una alcoba?", "ok": "Cálida, de unos 2700 K", "otros": ["Fría, de unos 6500 K", "Neutra, de unos 4000 K", "Da igual"], "fb": "Las temperaturas de color bajas (2700 K) dan luz cálida y relajante; las altas (6500 K) dan luz fría, más adecuada para tareas de concentración."}, {"n": 44, "q": "¿Qué protección deben llevar las tomas de las zonas húmedas?", "ok": "GFCI (Art. 210.8(A))", "otros": ["AFCI", "Solo un breaker de 15 A", "Ninguna si hay tierra"], "fb": "El GFCI protege a las personas contra choque por fuga a tierra. El AFCI, en cambio, protege contra arcos en alcobas, salas y similares."}, {"n": 45, "q": "Una luminaria LED de 12 W con driver de factor de potencia 0,9, ¿cuántos VA consume?", "ok": "13,3 VA", "otros": ["10,8 VA", "12 VA", "24 VA"], "fb": "S = P ÷ FP = 12 ÷ 0,9 = 13,3 VA, y I = 13,3 ÷ 120 = 0,11 A. Se divide entre 120 V porque las luminarias son de 120 V."}];
+const MISIONES = {
+  1: {nombre: 'Misión 1', tema: 'Levantamiento y diagnóstico', color: '#2E8B00'},
+  2: {nombre: 'Misión 2', tema: 'Replanteo y planos', color: '#0A6FB5'},
+  3: {nombre: 'Misión 3', tema: 'Iluminación y RETILAP', color: '#C26A00'}
+};
+const LETRAS = ['A', 'B', 'C', 'D'];
+const misionDe = n => Math.ceil(n / 15);
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function hashStr(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function norm(s) {
+  return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+}
+function preguntaDe(n) { return PREGUNTAS.find(p => p.n === n); }
+/* Orden fijo de las opciones de cada pregunta (igual en el panel y en el aprendiz) */
+function opcionesDe(p) {
+  const r = mulberry32(p.n * 7919 + 13);
+  const a = [{t: p.ok, ok: true}].concat(p.otros.map(t => ({t: t, ok: false})));
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(r() * (i + 1));
+    const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+}
+function guardar(clave, valor) { try { localStorage.setItem(clave, JSON.stringify(valor)); return true; } catch (e) { return false; } }
+function leer(clave) { try { const v = localStorage.getItem(clave); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+function borrar(clave) { try { localStorage.removeItem(clave); } catch (e) {} }
+function hora(ts) {
+  return new Date(ts).toLocaleTimeString('es-CO', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+}
+
+const CLAVE = 'bingo_tgee_instructor_v1';
+let estado = leer(CLAVE) || {sacadas: [], revelada: false, inicio: 0};
+let temporizador = null, animando = false;
+const $ = id => document.getElementById(id);
+
+function persistir() { guardar(CLAVE, estado); }
+function actual() { return estado.sacadas.length ? estado.sacadas[estado.sacadas.length - 1] : null; }
+
+function pintarTablero() {
+  let h = '';
+  for (let m = 1; m <= 3; m++) {
+    h += '<div class="fila-titulo" style="color:' + MISIONES[m].color + '">' + MISIONES[m].nombre + ' · ' + MISIONES[m].tema + '</div>';
+    for (let k = 1; k <= 15; k++) {
+      const n = (m - 1) * 15 + k, sale = estado.sacadas.includes(n);
+      h += '<div class="num' + (sale ? ' sale' : '') + (n === actual() ? ' actual' : '') + '"' +
+           (sale ? ' style="background:' + MISIONES[m].color + '"' : '') + '>' + n + '</div>';
+    }
+  }
+  $('tablero').innerHTML = h;
+  // 15 por misión en rejilla de 5 columnas
+  $('stCant').textContent = estado.sacadas.length + ' / 45';
+  $('stFal').textContent = 45 - estado.sacadas.length;
+  const rec = estado.sacadas.slice(-8).reverse();
+  $('recientes').innerHTML = rec.length ? rec.map(n => '<span class="chip" style="background:' + MISIONES[misionDe(n)].color + '">' + n + '</span>').join('') : '<span class="nota">Aún no ha salido ninguna.</span>';
+}
+
+function pintarEscena() {
+  const n = actual();
+  const bola = $('bola');
+  if (n === null) {
+    bola.style.background = '#9aa5ab'; bola.innerHTML = '<b>?</b><span>Listo</span>';
+    $('titBola').textContent = 'Pulsa «Sacar bolita» para empezar';
+    $('subBola').textContent = 'Atajos: Espacio = sacar bolita · R = revelar respuesta';
+    $('contenido').innerHTML = '<div class="vacio">Cuando saques una bolita, aquí aparecerá la pregunta para el grupo.</div>';
+  } else {
+    const p = preguntaDe(n), m = misionDe(n), ops = opcionesDe(p);
+    bola.style.background = MISIONES[m].color;
+    bola.innerHTML = '<b>' + n + '</b><span>' + MISIONES[m].nombre + '</span>';
+    $('titBola').textContent = 'Bolita ' + n + ' · ' + MISIONES[m].nombre;
+    $('subBola').textContent = MISIONES[m].tema;
+    let h = '<div class="pregunta">' + esc(p.q) + '</div>';
+    ops.forEach((o, i) => {
+      const cls = estado.revelada ? (o.ok ? ' ok' : ' no') : '';
+      h += '<div class="opc' + cls + '"><i>' + LETRAS[i] + '</i><span>' + esc(o.t) + '</span></div>';
+    });
+    if (estado.revelada) h += '<div class="fb"><b>Retroalimentación:</b> ' + esc(p.fb) + '</div>';
+    $('contenido').innerHTML = h;
+  }
+  $('btnRevelar').disabled = n === null || estado.revelada;
+  $('btnDeshacer').disabled = n === null;
+  $('btnSacar').disabled = estado.sacadas.length >= 45 || animando;
+  $('btnSacar').textContent = estado.sacadas.length >= 45 ? 'Ya salieron las 45' : 'Sacar bolita';
+}
+
+function detenerTimer() { clearInterval(temporizador); temporizador = null; }
+function iniciarTimer() {
+  detenerTimer();
+  const total = parseInt($('seg').value, 10) * 1000;
+  const barra = $('timer');
+  const tick = () => {
+    const resta = Math.max(0, total - (Date.now() - estado.inicio));
+    barra.firstElementChild.style.width = (resta / total * 100) + '%';
+    barra.className = 'timer' + (resta === 0 ? ' fin' : resta < total * 0.25 ? ' poco' : '');
+    $('tiempoTxt').textContent = resta === 0 ? '¡Se acabó el tiempo!' : 'Quedan ' + Math.ceil(resta / 1000) + ' s';
+    if (resta === 0 || estado.revelada) detenerTimer();
+  };
+  tick(); temporizador = setInterval(tick, 250);
+}
+function limpiarTimer() { detenerTimer(); $('timer').className = 'timer'; $('timer').firstElementChild.style.width = '100%'; $('tiempoTxt').innerHTML = '&nbsp;'; }
+
+function sacar() {
+  if (animando || estado.sacadas.length >= 45) return;
+  const quedan = []; for (let n = 1; n <= 45; n++) if (!estado.sacadas.includes(n)) quedan.push(n);
+  const elegido = quedan[Math.floor(Math.random() * quedan.length)];
+  animando = true; $('btnSacar').disabled = true; detenerTimer();
+  const bola = $('bola'); let veces = 0;
+  const giro = setInterval(() => {
+    const r = Math.ceil(Math.random() * 45);
+    bola.style.background = MISIONES[misionDe(r)].color; bola.innerHTML = '<b>' + r + '</b><span>…</span>';
+    if (++veces >= 14) {
+      clearInterval(giro); animando = false;
+      estado.sacadas.push(elegido); estado.revelada = false; estado.inicio = Date.now(); persistir();
+      pintarTablero(); pintarEscena(); iniciarTimer();
+    }
+  }, 60);
+}
+function revelar() { if (actual() === null) return; estado.revelada = true; persistir(); pintarEscena(); detenerTimer(); }
+function deshacer() {
+  if (actual() === null) return;
+  estado.sacadas.pop(); estado.revelada = false; persistir(); limpiarTimer(); pintarTablero(); pintarEscena();
+}
+
+$('btnSacar').onclick = sacar;
+$('btnRevelar').onclick = revelar;
+$('btnDeshacer').onclick = deshacer;
+$('btnNueva').onclick = () => $('dlgNueva').showModal();
+$('siNueva').onclick = () => { estado = {sacadas: [], revelada: false, inicio: 0}; persistir(); limpiarTimer(); pintarTablero(); pintarEscena(); $('dlgNueva').close(); };
+$('btnBanco').onclick = () => {
+  $('listaBanco').innerHTML = PREGUNTAS.map(p => '<div><p><b>' + p.n + ' · ' + MISIONES[misionDe(p.n)].nombre + '.</b> ' + esc(p.q) + '</p><p>✔ ' + esc(p.ok) + '</p></div>').join('');
+  $('dlgBanco').showModal();
+};
+document.addEventListener('keydown', e => {
+  if (document.querySelector('dialog[open]') || e.target.tagName === 'SELECT') return;
+  if (e.code === 'Space') { e.preventDefault(); sacar(); }
+  if (e.key === 'r' || e.key === 'R') revelar();
+});
+pintarTablero(); pintarEscena();
+if (actual() !== null && !estado.revelada) { $('tiempoTxt').innerHTML = '&nbsp;'; }
+</script>
+</body>
+</html>

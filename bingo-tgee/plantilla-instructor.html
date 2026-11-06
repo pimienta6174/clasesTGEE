@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bingo técnico TGEE · Panel del instructor</title>
+<style>
+:root{--verde:#39A900;--azul:#00324D;--gris:#303030;--borde:#dfe3e6;--fondo:#f3f6f4;--m1:#2E8B00;--m2:#0A6FB5;--m3:#C26A00}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fondo);color:var(--gris);line-height:1.5}
+header{background:var(--azul);color:#fff;padding:14px 24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:20px}
+header small{color:#b8d6e6;display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase}
+.barra{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border:0;border-radius:6px;padding:10px 16px;font-weight:bold}
+.b-main{background:var(--verde);color:#fff;font-size:18px;padding:14px 26px}
+.b-sec{background:#fff;color:var(--azul);border:2px solid var(--azul)}
+.b-peligro{background:#fff;color:#a30000;border:2px solid #a30000}
+header button{font-size:14px}
+button:disabled{opacity:.45;cursor:not-allowed}
+main{max-width:1250px;margin:0 auto;padding:20px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.panel{background:#fff;border:1px solid var(--borde);border-radius:10px;padding:22px}
+.bola-fila{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.bola{width:150px;height:150px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;background:#9aa5ab;box-shadow:inset 0 -10px 18px rgba(0,0,0,.18),0 4px 12px rgba(0,0,0,.2);flex:none}
+.bola b{font-size:62px;line-height:1}
+.bola span{font-size:13px;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.bola-info h2{margin:0;font-size:24px;color:var(--azul)}
+.bola-info p{margin:4px 0 0;color:#5b6770}
+.pregunta{font-size:24px;font-weight:bold;color:var(--azul);margin:22px 0 14px;line-height:1.35}
+.opc{display:flex;gap:12px;align-items:flex-start;border:2px solid var(--borde);border-radius:8px;padding:12px 14px;margin:8px 0;font-size:19px}
+.opc i{font-style:normal;font-weight:bold;background:var(--azul);color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;font-size:15px}
+.opc.ok{border-color:var(--verde);background:#eef9e6}
+.opc.ok i{background:var(--verde)}
+.opc.no{opacity:.45}
+.fb{margin-top:16px;border-left:5px solid var(--verde);background:#f3faed;padding:14px 18px;font-size:17px;border-radius:0 8px 8px 0}
+.acciones{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;align-items:center}
+.timer{height:10px;background:#e6ebe8;border-radius:5px;overflow:hidden;margin-top:18px}
+.timer div{height:100%;background:var(--verde);width:100%;transition:width .25s linear}
+.timer.poco div{background:#d98200}
+.timer.fin div{background:#b30000}
+.tiempo-txt{font-size:14px;color:#5b6770;margin-top:4px;display:flex;justify-content:space-between}
+.vacio{text-align:center;color:#6c7880;padding:50px 10px}
+h3{margin:0 0 12px;color:var(--azul);font-size:17px}
+.tablero{display:grid;grid-template-columns:repeat(5,46px);gap:8px;justify-content:start}
+.tablero .fila-titulo{grid-column:1/-1;font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-top:8px}
+.num{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:15px;background:#eef1f0;color:#9aa5ab}
+.num.sale{color:#fff}
+.num.actual{outline:3px solid var(--azul);outline-offset:2px}
+.recientes{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:4px 12px;border-radius:14px;color:#fff;font-weight:bold;font-size:15px}
+.stats{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:16px}
+.stats div{font-size:13px;color:#5b6770}.stats b{display:block;font-size:26px;color:var(--azul)}
+select{font:inherit;padding:8px;border-radius:6px;border:2px solid var(--borde)}
+dialog{border:0;border-radius:10px;padding:0;max-width:760px;width:94%}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+.dlg{padding:22px;max-height:80vh;overflow:auto}
+.dlg h2{margin-top:0;color:var(--azul)}
+.banco p{margin:0 0 4px}.banco div{border-bottom:1px solid var(--borde);padding:10px 0;font-size:14px}
+.nota{font-size:13px;color:#6c7880}
+</style>
+</head>
+<body>
+<header>
+  <div><small>SENA · CIES · TGEE</small><h1>Bingo técnico · Panel del instructor</h1></div>
+  <div class="barra">
+    <button class="b-sec" id="btnBanco">Banco de preguntas</button>
+    <button class="b-peligro" id="btnNueva">Nueva partida</button>
+  </div>
+</header>
+<main>
+  <section class="panel" id="escena">
+    <div class="bola-fila">
+      <div class="bola" id="bola"><b>?</b><span>Listo</span></div>
+      <div class="bola-info">
+        <h2 id="titBola">Pulsa «Sacar bolita» para empezar</h2>
+        <p id="subBola">Atajos: Espacio = sacar bolita · R = revelar respuesta</p>
+      </div>
+    </div>
+    <div id="contenido"></div>
+    <div class="timer" id="timer"><div></div></div>
+    <div class="tiempo-txt"><span id="tiempoTxt">&nbsp;</span>
+      <span>Tiempo por pregunta: <select id="seg"><option value="30">30 s</option><option value="45">45 s</option><option value="60" selected>60 s</option><option value="90">90 s</option><option value="120">120 s</option></select></span>
+    </div>
+    <div class="acciones">
+      <button class="b-main" id="btnSacar">Sacar bolita</button>
+      <button class="b-sec" id="btnRevelar" disabled>Revelar respuesta</button>
+      <button class="b-sec" id="btnDeshacer" disabled>Deshacer última</button>
+    </div>
+  </section>
+  <aside class="panel">
+    <div class="stats"><div>Bolitas<b id="stCant">0 / 45</b></div><div>Faltan<b id="stFal">45</b></div></div>
+    <h3>Últimas bolitas</h3>
+    <div class="recientes" id="recientes"><span class="nota">Aún no ha salido ninguna.</span></div>
+    <h3 style="margin-top:20px">Tablero</h3>
+    <div class="tablero" id="tablero"></div>
+  </aside>
+</main>
+
+<dialog id="dlgBanco"><div class="dlg"><h2>Banco de preguntas</h2>
+  <p class="nota">⚠ Muestra las respuestas. No lo abras mientras compartes pantalla.</p>
+  <div class="banco" id="listaBanco"></div><div class="acciones"><button class="b-sec" onclick="dlgBanco.close()">Cerrar</button></div></div></dialog>
+<dialog id="dlgNueva"><div class="dlg"><h2>¿Empezar una partida nueva?</h2>
+  <p>Se borrarán todas las bolitas sacadas. Esta acción no se puede deshacer.</p>
+  <div class="acciones"><button class="b-peligro" id="siNueva">Sí, borrar y empezar</button><button class="b-sec" onclick="dlgNueva.close()">Cancelar</button></div></div></dialog>
+
+<script>
+const PREGUNTAS = /*__PREGUNTAS__*/;
+/*__COMUN__*/
+const CLAVE = 'bingo_tgee_instructor_v1';
+let estado = leer(CLAVE) || {sacadas: [], revelada: false, inicio: 0};
+let temporizador = null, animando = false;
+const $ = id => document.getElementById(id);
+
+function persistir() { guardar(CLAVE, estado); }
+function actual() { return estado.sacadas.length ? estado.sacadas[estado.sacadas.length - 1] : null; }
+
+function pintarTablero() {
+  let h = '';
+  for (let m = 1; m <= 3; m++) {
+    h += '<div class="fila-titulo" style="color:' + MISIONES[m].color + '">' + MISIONES[m].nombre + ' · ' + MISIONES[m].tema + '</div>';
+    for (let k = 1; k <= 15; k++) {
+      const n = (m - 1) * 15 + k, sale = estado.sacadas.includes(n);
+      h += '<div class="num' + (sale ? ' sale' : '') + (n === actual() ? ' actual' : '') + '"' +
+           (sale ? ' style="background:' + MISIONES[m].color + '"' : '') + '>' + n + '</div>';
+    }
+  }
+  $('tablero').innerHTML = h;
+  // 15 por misión en rejilla de 5 columnas
+  $('stCant').textContent = estado.sacadas.length + ' / 45';
+  $('stFal').textContent = 45 - estado.sacadas.length;
+  const rec = estado.sacadas.slice(-8).reverse();
+  $('recientes').innerHTML = rec.length ? rec.map(n => '<span class="chip" style="background:' + MISIONES[misionDe(n)].color + '">' + n + '</span>').join('') : '<span class="nota">Aún no ha salido ninguna.</span>';
+}
+
+function pintarEscena() {
+  const n = actual();
+  const bola = $('bola');
+  if (n === null) {
+    bola.style.background = '#9aa5ab'; bola.innerHTML = '<b>?</b><span>Listo</span>';
+    $('titBola').textContent = 'Pulsa «Sacar bolita» para empezar';
+    $('subBola').textContent = 'Atajos: Espacio = sacar bolita · R = revelar respuesta';
+    $('contenido').innerHTML = '<div class="vacio">Cuando saques una bolita, aquí aparecerá la pregunta para el grupo.</div>';
+  } else {
+    const p = preguntaDe(n), m = misionDe(n), ops = opcionesDe(p);
+    bola.style.background = MISIONES[m].color;
+    bola.innerHTML = '<b>' + n + '</b><span>' + MISIONES[m].nombre + '</span>';
+    $('titBola').textContent = 'Bolita ' + n + ' · ' + MISIONES[m].nombre;
+    $('subBola').textContent = MISIONES[m].tema;
+    let h = '<div class="pregunta">' + esc(p.q) + '</div>';
+    ops.forEach((o, i) => {
+      const cls = estado.revelada ? (o.ok ? ' ok' : ' no') : '';
+      h += '<div class="opc' + cls + '"><i>' + LETRAS[i] + '</i><span>' + esc(o.t) + '</span></div>';
+    });
+    if (estado.revelada) h += '<div class="fb"><b>Retroalimentación:</b> ' + esc(p.fb) + '</div>';
+    $('contenido').innerHTML = h;
+  }
+  $('btnRevelar').disabled = n === null || estado.revelada;
+  $('btnDeshacer').disabled = n === null;
+  $('btnSacar').disabled = estado.sacadas.length >= 45 || animando;
+  $('btnSacar').textContent = estado.sacadas.length >= 45 ? 'Ya salieron las 45' : 'Sacar bolita';
+}
+
+function detenerTimer() { clearInterval(temporizador); temporizador = null; }
+function iniciarTimer() {
+  detenerTimer();
+  const total = parseInt($('seg').value, 10) * 1000;
+  const barra = $('timer');
+  const tick = () => {
+    const resta = Math.max(0, total - (Date.now() - estado.inicio));
+    barra.firstElementChild.style.width = (resta / total * 100) + '%';
+    barra.className = 'timer' + (resta === 0 ? ' fin' : resta < total * 0.25 ? ' poco' : '');
+    $('tiempoTxt').textContent = resta === 0 ? '¡Se acabó el tiempo!' : 'Quedan ' + Math.ceil(resta / 1000) + ' s';
+    if (resta === 0 || estado.revelada) detenerTimer();
+  };
+  tick(); temporizador = setInterval(tick, 250);
+}
+function limpiarTimer() { detenerTimer(); $('timer').className = 'timer'; $('timer').firstElementChild.style.width = '100%'; $('tiempoTxt').innerHTML = '&nbsp;'; }
+
+function sacar() {
+  if (animando || estado.sacadas.length >= 45) return;
+  const quedan = []; for (let n = 1; n <= 45; n++) if (!estado.sacadas.includes(n)) quedan.push(n);
+  const elegido = quedan[Math.floor(Math.random() * quedan.length)];
+  animando = true; $('btnSacar').disabled = true; detenerTimer();
+  const bola = $('bola'); let veces = 0;
+  const giro = setInterval(() => {
+    const r = Math.ceil(Math.random() * 45);
+    bola.style.background = MISIONES[misionDe(r)].color; bola.innerHTML = '<b>' + r + '</b><span>…</span>';
+    if (++veces >= 14) {
+      clearInterval(giro); animando = false;
+      estado.sacadas.push(elegido); estado.revelada = false; estado.inicio = Date.now(); persistir();
+      pintarTablero(); pintarEscena(); iniciarTimer();
+    }
+  }, 60);
+}
+function revelar() { if (actual() === null) return; estado.revelada = true; persistir(); pintarEscena(); detenerTimer(); }
+function deshacer() {
+  if (actual() === null) return;
+  estado.sacadas.pop(); estado.revelada = false; persistir(); limpiarTimer(); pintarTablero(); pintarEscena();
+}
+
+$('btnSacar').onclick = sacar;
+$('btnRevelar').onclick = revelar;
+$('btnDeshacer').onclick = deshacer;
+$('btnNueva').onclick = () => $('dlgNueva').showModal();
+$('siNueva').onclick = () => { estado = {sacadas: [], revelada: false, inicio: 0}; persistir(); limpiarTimer(); pintarTablero(); pintarEscena(); $('dlgNueva').close(); };
+$('btnBanco').onclick = () => {
+  $('listaBanco').innerHTML = PREGUNTAS.map(p => '<div><p><b>' + p.n + ' · ' + MISIONES[misionDe(p.n)].nombre + '.</b> ' + esc(p.q) + '</p><p>✔ ' + esc(p.ok) + '</p></div>').join('');
+  $('dlgBanco').showModal();
+};
+document.addEventListener('keydown', e => {
+  if (document.querySelector('dialog[open]') || e.target.tagName === 'SELECT') return;
+  if (e.code === 'Space') { e.preventDefault(); sacar(); }
+  if (e.key === 'r' || e.key === 'R') revelar();
+});
+pintarTablero(); pintarEscena();
+if (actual() !== null && !estado.revelada) { $('tiempoTxt').innerHTML = '&nbsp;'; }
+</script>
+</body>
+</html>
