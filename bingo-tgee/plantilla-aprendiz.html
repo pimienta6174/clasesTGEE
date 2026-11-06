@@ -105,7 +105,7 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
     </div>
     <div class="panel">
       <div class="carton" id="carton"></div>
-      <p class="nota" style="margin-bottom:0">Las casillas azules que laten son bolitas ya cantadas: toca la casilla y responde. Si aciertas, se marca; si fallas, queda bloqueada. Tienes una oportunidad por casilla.</p>
+      <p class="nota" style="margin-bottom:0">Gana la línea quien completa una <b>fila</b> (una casilla de cada misión). Las casillas azules que laten son bolitas ya cantadas: toca la casilla y responde. Si aciertas, se marca; si fallas, queda bloqueada. Tienes una oportunidad por casilla.</p>
     </div>
     <div class="panel fila">
       <button class="b-sec" onclick="window.print()">Guardar / imprimir PDF</button>
@@ -140,7 +140,6 @@ function generarCarton(nombre, apellido, ficha) {
 const marcada = n => S.resp[n] && S.resp[n].ok;
 function hayLinea() {
   for (let f = 0; f < 5; f++) if ([0, 1, 2].every(m => marcada(S.carton[m][f]))) return true;
-  for (let m = 0; m < 3; m++) if (S.carton[m].every(marcada)) return true;
   return false;
 }
 function hayLleno() { return S.carton.every(c => c.every(marcada)); }
